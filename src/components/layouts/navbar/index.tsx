@@ -17,7 +17,7 @@ export const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(prev => !prev);
 
   return (
-    <header className='bg-secondary/95 supports-[backdrop-filter]:bg-secondary/60 sticky top-0 z-40 w-full backdrop-blur'>
+    <header className='bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 w-full backdrop-blur'>
       <div className='flex h-16 items-center justify-between gap-12'>
         <div className='flex w-full items-center justify-between'>
           <Logo />

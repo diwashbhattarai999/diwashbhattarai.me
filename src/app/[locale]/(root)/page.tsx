@@ -1,11 +1,13 @@
 import { Footer } from '@/components/layouts/footer';
 import { Navbar } from '@/components/layouts/navbar';
 
+import { Education } from './_components/education';
+import { Experience } from './_components/experience';
 import { Hero } from './_components/hero';
 
 const HomePage = () => {
   return (
-    <main className='bg-secondary'>
+    <main className='bg-background'>
       <div className='flex min-h-screen flex-col'>
         <div className='max-container border-x'>
           <Navbar />
@@ -16,9 +18,18 @@ const HomePage = () => {
 
         <div className='max-container size-full flex-1 border-x'>
           <Hero />
-          {/* <Education />
-        <Experience />
-        <Projects showViewAll limit={3} />
+
+          {/* Seperator */}
+          <div className='border-b' />
+
+          <Experience />
+
+          {/* Seperator */}
+          <div className='border-b' />
+
+          <Education />
+
+          {/* <Projects showViewAll limit={3} />
         <Skills />
         <Contact /> */}
         </div>

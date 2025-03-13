@@ -17,8 +17,8 @@ export const NavItem = ({ name, path, className }: NavItemProps) => {
       href={path}
       key={path}
       className={cn(
-        'hover:text-primary hover:bg-muted/50 rounded-md px-4 py-1 transition-colors',
-        pathname === path ? 'text-primary bg-muted/50' : 'text-foreground/60',
+        'hover:text-primary hover:bg-muted rounded-md px-4 py-1 transition-colors',
+        pathname === path ? 'text-primary bg-muted' : 'text-foreground/60',
         className
       )}
     >
