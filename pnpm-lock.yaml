@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@calcom/embed-react':
+        specifier: ^1.5.2
+        version: 1.5.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-dropdown-menu':
         specifier: ^2.1.5
         version: 2.1.5(@types/react-dom@19.0.2(@types/react@19.0.2))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -300,6 +303,18 @@ packages:
   '@babel/types@7.26.3':
     resolution: {integrity: sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==}
     engines: {node: '>=6.9.0'}
+
+  '@calcom/embed-core@1.5.2':
+    resolution: {integrity: sha512-y1mpVDfcaVdLJ/CN17c7N2SyJAMiM3u9NYvL5mWFDBe4aa5HLTDc5g/DBbO2oCq859W3bxs11voC/E3KkJH3Iw==}
+
+  '@calcom/embed-react@1.5.2':
+    resolution: {integrity: sha512-DgY3RySiXOrbIVX1LiV/ucKilG+TkvqhP4/0nLlKPLOlk642cSO30xSu4nOmVgR60FLqMyp7Vlg/Xd6J5ijETg==}
+    peerDependencies:
+      react: ^18.2.0
+      react-dom: ^18.2.0
+
+  '@calcom/embed-snippet@1.3.2':
+    resolution: {integrity: sha512-EmW/ZjaQD0HjLI8yFNA5Mtb8zCOQQnj9RhChujuMijUK8EVyE1KtU9t3xIxm1hBMNHr4R1qMaBo2QYaZqQhzsw==}
 
   '@commitlint/cli@19.6.1':
     resolution: {integrity: sha512-8hcyA6ZoHwWXC76BoC8qVOSr8xHy00LZhZpauiD0iO0VYbVhMnED0da85lTfIULxl7Lj4c6vZgF0Wu/ed1+jlQ==}
@@ -4100,6 +4115,19 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
+
+  '@calcom/embed-core@1.5.2': {}
+
+  '@calcom/embed-react@1.5.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      '@calcom/embed-core': 1.5.2
+      '@calcom/embed-snippet': 1.3.2
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+
+  '@calcom/embed-snippet@1.3.2':
+    dependencies:
+      '@calcom/embed-core': 1.5.2
 
   '@commitlint/cli@19.6.1(@types/node@20.17.11)(typescript@5.7.2)':
     dependencies:

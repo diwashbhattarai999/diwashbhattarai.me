@@ -1,10 +1,12 @@
 import { Footer } from '@/components/layouts/footer';
 import { Navbar } from '@/components/layouts/navbar';
 
+import { Contact } from './_components/contact';
 import { Education } from './_components/education';
 import { Experience } from './_components/experience';
 import { Hero } from './_components/hero';
 import { Projects } from './_components/projects';
+import { Skills } from './_components/skills';
 
 const HomePage = () => {
   return (
@@ -35,8 +37,15 @@ const HomePage = () => {
 
           <Projects showViewAll limit={3} />
 
-          {/* <Skills />
-        <Contact /> */}
+          {/* Seperator  */}
+          <div className='border-b' />
+
+          <Skills />
+
+          {/* Seperator  */}
+          <div className='border-b' />
+
+          <Contact />
         </div>
 
         {/* Seperator */}
