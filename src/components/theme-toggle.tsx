@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useTheme } from 'next-themes';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Moon, Sun } from 'lucide-react';
+import { MoonStar, Sun } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import useIsMounted from '@/hooks/use-is-mounted';
@@ -37,7 +37,7 @@ export const ThemeToggle = () => {
             key='dark'
             transition={{ duration: 0.1, ease: 'easeInOut' }}
           >
-            <Moon className='size-5' />
+            <MoonStar className='size-5' />
           </motion.div>
         ) : (
           <motion.div
@@ -46,7 +46,7 @@ export const ThemeToggle = () => {
             exit={{ rotate: 90, scale: 0 }}
             initial={{ rotate: -90, scale: 0 }}
             key='light'
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.1, ease: 'easeInOut' }}
           >
             <Sun className='size-5' />
           </motion.div>

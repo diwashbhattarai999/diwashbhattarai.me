@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Roboto_Flex } from 'next/font/google';
+import { League_Spartan } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -13,9 +13,9 @@ import { routing, TLocales } from '@/i18n/routing';
 
 import '@/styles/globals.css';
 
-const robotoFlex = Roboto_Flex({
-  variable: '--font-roboto',
+const robotoFlex = League_Spartan({
   subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
 /** The `metadata` object is used to provide metadata to the client */
@@ -43,12 +43,12 @@ export default async function LocaleLayout({
 
   return (
     <html suppressHydrationWarning lang={locale}>
-      <body className={`${robotoFlex.variable} antialiased`}>
+      <body className={`${robotoFlex.className} antialiased`}>
         <ThemeProvider
           disableTransitionOnChange
           enableSystem
           attribute='class'
-          defaultTheme='light'
+          defaultTheme='dark'
         >
           <NextIntlClientProvider messages={messages}>
             <TanstackQueryProvider>

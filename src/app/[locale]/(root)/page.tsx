@@ -1,19 +1,36 @@
-import { useTranslations } from 'next-intl';
+import { Footer } from '@/components/layouts/footer';
+import { Navbar } from '@/components/layouts/navbar';
 
-import { LocaleSwitcher } from '@/components/locale-switcher';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { Hero } from './_components/hero';
 
 const HomePage = () => {
-  const t = useTranslations('HomePage');
-
   return (
-    <div className='flex min-h-svh flex-col items-center justify-center gap-8 text-4xl'>
-      <h1>{t('welcome')}</h1>
-      <div className='flex items-center gap-4'>
-        <LocaleSwitcher />
-        <ThemeToggle />
+    <main className='bg-secondary'>
+      <div className='flex min-h-screen flex-col'>
+        <div className='max-container border-x'>
+          <Navbar />
+        </div>
+
+        {/* Seperator */}
+        <div className='border-b' />
+
+        <div className='max-container size-full flex-1 border-x'>
+          <Hero />
+          {/* <Education />
+        <Experience />
+        <Projects showViewAll limit={3} />
+        <Skills />
+        <Contact /> */}
+        </div>
+
+        {/* Seperator */}
+        <div className='border-b' />
+
+        <div className='max-container border-x'>
+          <Footer />
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 
