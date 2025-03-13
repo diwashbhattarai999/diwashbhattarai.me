@@ -4,10 +4,11 @@ import { Navbar } from '@/components/layouts/navbar';
 import { Education } from './_components/education';
 import { Experience } from './_components/experience';
 import { Hero } from './_components/hero';
+import { Projects } from './_components/projects';
 
 const HomePage = () => {
   return (
-    <main className='bg-background'>
+    <main className='bg-background relative'>
       <div className='flex min-h-screen flex-col'>
         <div className='max-container border-x'>
           <Navbar />
@@ -29,8 +30,12 @@ const HomePage = () => {
 
           <Education />
 
-          {/* <Projects showViewAll limit={3} />
-        <Skills />
+          {/* Seperator */}
+          <div className='border-b' />
+
+          <Projects showViewAll limit={3} />
+
+          {/* <Skills />
         <Contact /> */}
         </div>
 

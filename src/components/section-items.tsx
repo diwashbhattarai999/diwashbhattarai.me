@@ -1,6 +1,15 @@
 import { LucideIcon } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
+export const SectionTitle = ({
+  children,
+  className,
+}: {
+  children: string;
+  className?: string;
+}) => <h2 className={cn('text-3xl font-bold', className)}>{children}</h2>;
 
 interface ISectionProps {
   title: string;
@@ -10,7 +19,7 @@ interface ISectionProps {
 export const Section: React.FC<ISectionProps> = ({ title, children }) => {
   return (
     <section className='border-border/40 border-t py-12'>
-      <h2 className='mb-8 text-3xl font-bold'>{title}</h2>
+      <SectionTitle className='mb-8'>{title}</SectionTitle>
       {children}
     </section>
   );

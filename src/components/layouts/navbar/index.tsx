@@ -1,47 +1,94 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Menu } from 'lucide-react';
+import { motion, useScroll } from 'framer-motion';
 
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from '@/components/theme-toggle';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { navItems } from '@/data/navbar';
+import { Link } from '@/i18n/routing';
+import { cn } from '@/lib/utils';
 
-import MobileMenu from './mobile-menu';
 import { NavItem } from './nav-item';
-export const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Toggle the menu
-  const toggleMenu = () => setIsMenuOpen(prev => !prev);
+export const Navbar = () => {
+  const [floating, setFloating] = useState(false);
+  const { scrollY } = useScroll();
+
+  // Floating Navbar on Scroll (Large Screens Only)
+  useEffect(() => {
+    const updateFloating = () => setFloating(scrollY.get() > 50);
+    const unsubscribe = scrollY.onChange(updateFloating);
+    return () => unsubscribe();
+  }, [scrollY]);
 
   return (
-    <header className='bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 w-full backdrop-blur'>
-      <div className='flex h-16 items-center justify-between gap-12'>
-        <div className='flex w-full items-center justify-between'>
-          <Logo />
+    <>
+      {/* Desktop Navbar (Large Screens) */}
+      <nav
+        className={cn(
+          'z-40 hidden items-center gap-6 px-6 py-3 md:flex',
+          floating
+            ? 'bg-background/80 border-border/40 fixed top-4 left-1/2 -translate-x-1/2 rounded-full border shadow-lg backdrop-blur-md'
+            : 'bg-background border-border/40 w-full border-b shadow'
+        )}
+      >
+        <Logo />
 
-          {/* Desktop View */}
-          <nav className='hidden items-center space-x-6 font-medium md:flex'>
-            {navItems.map(item => (
-              <NavItem key={item.path} name={item.name} path={item.path} />
-            ))}
-          </nav>
-
-          {/* Mobile View */}
-          <MobileMenu isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+        <div className='flex flex-1 items-center justify-center space-x-6 font-medium'>
+          {navItems.map(item => (
+            <NavItem key={item.path} name={item.name} path={item.path} />
+          ))}
         </div>
 
-        <div className='flex items-center gap-6 md:gap-0'>
-          <ThemeToggle />
+        <ThemeToggle />
+      </nav>
 
-          {/* Hamburger Icon for Mobile */}
-          <div className='md:hidden'>
-            <Menu onClick={toggleMenu} />
-          </div>
-        </div>
+      <div className='my-5 flex items-center justify-between md:hidden'>
+        <Logo />
+        <ThemeToggle />
       </div>
-    </header>
+
+      {/* Floating Bottom Navbar (Small Screens) */}
+      <motion.nav
+        animate={{ opacity: floating ? 1 : 0, y: floating ? 0 : 20 }}
+        transition={{ duration: 0.4, ease: 'easeInOut' }}
+        className={cn(
+          'bg-background/80 border-border/40 fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-full border px-4 py-2 shadow-lg backdrop-blur-md md:hidden'
+        )}
+        initial={{
+          opacity: floating ? 0 : 1,
+          y: floating ? 20 : 0,
+          display: floating ? 'block' : 'none',
+        }}
+      >
+        {navItems.map(item => (
+          <TooltipProvider key={item.path}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  className='hover:bg-muted text-foreground/80 hover:text-secondary-foreground relative cursor-default rounded-md p-2.5 transition-colors'
+                  href={item.path}
+                  key={item.path}
+                >
+                  <item.icon className='size-4' />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{item.name}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ))}
+        <ThemeToggle />
+      </motion.nav>
+    </>
   );
 };
