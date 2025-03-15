@@ -83,7 +83,7 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
 
       <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
         {displayedProjects.map(project => (
-          <Card className='overflow-hidden' key={project.id}>
+          <Card className='overflow-hidden pt-0' key={project.id}>
             <Link
               className='relative block h-48 w-full overflow-hidden'
               href={`/projects/${project.id}`}
@@ -91,7 +91,7 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
               <Image
                 fill
                 alt={project.title}
-                className='object-cover transition-transform duration-500 hover:scale-105'
+                className='object-cover object-top transition-transform duration-500 hover:scale-105'
                 src={project.image || '/placeholder.svg'}
               />
             </Link>
