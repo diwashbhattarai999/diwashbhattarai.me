@@ -90,8 +90,9 @@ export const CustomCursor = () => {
       y: mousePosition.y - 16,
       height: 32,
       width: 32,
-      backgroundColor: 'color-mix(in oklab, var(--primary) 10%, transparent)',
+      backgroundColor: 'color-mix(in oklab, var(--primary) 20%, transparent)',
       border: '1px solid color-mix(in oklab, var(--primary) 30%, transparent)',
+      backdropFilter: 'blur(1px)',
       mixBlendMode: 'normal',
       transition: {
         type: 'spring',

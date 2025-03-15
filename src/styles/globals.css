@@ -167,3 +167,7 @@
     @apply mx-auto w-full max-w-5xl;
   }
 }
+
+::selection {
+  @apply bg-primary text-primary-foreground;
+}
