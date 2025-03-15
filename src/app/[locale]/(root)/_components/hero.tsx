@@ -1,11 +1,12 @@
 import Image from 'next/image';
 
+import { SectionWrapper } from '@/components/section-items';
 import { SocialIcons } from '@/components/social-icons';
 import { ABOUT_ME } from '@/data/about';
 
 export function Hero() {
   return (
-    <section className='hero-glow py-12 md:py-16'>
+    <SectionWrapper className='hero-glow md:py-16' id='hero'>
       <div className='flex flex-col items-start gap-8 md:flex-row'>
         {/* Profile Image Section */}
         <div className='relative flex-shrink-0'>
@@ -39,6 +40,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }

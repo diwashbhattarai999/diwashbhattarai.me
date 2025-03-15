@@ -12,14 +12,24 @@ export const SectionTitle = ({
 }) => <h2 className={cn('text-3xl font-bold', className)}>{children}</h2>;
 
 interface ISectionProps {
-  title: string;
+  id: string;
+  title?: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-export const Section: React.FC<ISectionProps> = ({ title, children }) => {
+export const SectionWrapper: React.FC<ISectionProps> = ({
+  id,
+  title,
+  children,
+  className,
+}) => {
   return (
-    <section className='border-border/40 border-t py-12'>
-      <SectionTitle className='mb-8'>{title}</SectionTitle>
+    <section
+      className={cn('border-border/40 border-t px-4 py-12', className)}
+      id={id}
+    >
+      {title && <SectionTitle className='mb-8'>{title}</SectionTitle>}
       {children}
     </section>
   );
@@ -30,7 +40,7 @@ interface ISectionCardProps {
   subtitle: string;
   description: string;
   skills: string[];
-  projects?: string[]; // Added projects as an optional prop
+  projects?: string[];
   website?: string;
   Icon: LucideIcon;
 }
@@ -45,7 +55,7 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
   Icon,
 }) => {
   return (
-    <Card className='subtle-glow'>
+    <Card>
       <CardHeader className='flex flex-row items-start gap-4'>
         <div className='bg-primary/10 rounded-full p-3'>
           <Icon className='text-primary h-6 w-6' />
