@@ -1,10 +1,48 @@
+import GoodBuyImg from '@/assets/projects/good-buy.png';
+import GovCertifyImg from '@/assets/projects/gov-certify.png';
+import MetaLogicImg from '@/assets/projects/metalogic.png';
+import MovizImg from '@/assets/projects/moviez.png';
+import NextAuthV5Img from '@/assets/projects/next-auth-v5.png';
+import SmartYatraImg from '@/assets/projects/smart-yatra-light.png';
+
 export const PROJECTS = [
+  {
+    id: 'smart-yatra',
+    title: 'Smart Yatra',
+    description:
+      'A digital public transportation system utilizing QR codes for fare collection and route optimization in Kathmandu Valley.',
+    image: SmartYatraImg,
+    github: 'https://github.com/SmartYatra/smart-yatra-frontend',
+    demo: 'https://smart-yatra-frontend.vercel.app/',
+    tags: [
+      'Next.js',
+      'TypeScript',
+      'Tailwind CSS',
+      'Shadcn UI',
+      'Laravel',
+      'MySQL',
+      'OpenStreetMap',
+      'Leaflet',
+    ],
+    longDescription:
+      'Smart Yatra is a digital public transport management system that enhances commuting efficiency in Kathmandu Valley. It enables passengers to board and exit buses using QR codes, calculates fares based on travel distance, and optimizes routes using OpenStreetMap and OSRM API. The system features real-time data updates, automated fare processing, and a seamless experience for both passengers and bus operators.',
+    features: [
+      'QR code-based bus boarding and fare payment',
+      'Automated distance-based fare calculation using Haversine formula',
+      'Bus route mapping with OpenStreetMap and OSRM API',
+      'User authentication and profile management',
+      'Admin panel for route and fare management',
+      'Secure database management with Firebase and MySQL',
+      'Custom map integration with Leaflet.js',
+      'Mobile-friendly and responsive UI',
+    ],
+  },
   {
     id: 'good-buy',
     title: 'Good-Buy',
     description:
       'An e-commerce platform built with Next.js, TypeScript, Tailwind CSS, Prisma, and MongoDB, offering seamless integration with Khalti payment and cash on delivery options.',
-    image: '/placeholder.svg?height=200&width=400',
+    image: GoodBuyImg,
     github: 'https://github.com/diwashbhattarai999/GoodBuy',
     demo: 'https://good-buy.vercel.app/',
     tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'MongoDB'],
@@ -23,7 +61,7 @@ export const PROJECTS = [
     title: 'Gov Certify',
     description:
       'An online certificate registration platform developed for e-governance projects, streamlining the process of certificate issuance and registration for citizens.',
-    image: '/placeholder.svg?height=200&width=400',
+    image: GovCertifyImg,
     github: 'https://github.com/diwashbhattarai999/Gov-Certify',
     demo: 'https://gov-certify.vercel.app/',
     tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma', 'MongoDB'],
@@ -42,7 +80,7 @@ export const PROJECTS = [
     title: 'Next Auth v5',
     description:
       'A project showcasing the implementation of authentication and various key features using Next.js 14, NextAuth v5, Tailwind CSS, Shadcn UI, Prisma, and MongoDB.',
-    image: '/placeholder.svg?height=200&width=400',
+    image: NextAuthV5Img,
     github: 'https://github.com/diwashbhattarai999/Next-Auth-v5',
     demo: 'https://db-next-auth-v5.vercel.app/',
     tags: [
@@ -61,6 +99,24 @@ export const PROJECTS = [
       'Session management and security',
       'Integration with Prisma and MongoDB',
       'Responsive and accessible UI components',
+    ],
+  },
+  {
+    id: 'movix',
+    title: 'Movix',
+    description:
+      'A movie database application built with React, Redux, and the TMDB API that lets users explore movies and TV shows.',
+    image: MovizImg,
+    github: 'https://github.com/diwashbhattarai999/movix',
+    demo: 'https://db-movie-app.vercel.app/',
+    tags: ['React', 'Redux', 'TMDB API', 'SCSS'],
+    longDescription:
+      'Movix is a feature-rich movie database app where users can search, filter, and explore movies and TV shows. Built with React and Redux, it leverages the TMDB API to provide real-time data. The application features a clean design with smooth animations and is fully responsive.',
+    features: [
+      'Search and filter movies/TV shows',
+      'Detailed pages with movie information',
+      'Responsive design with smooth animations',
+      'Real-time data fetching from TMDB API',
     ],
   },
   {
@@ -83,21 +139,22 @@ export const PROJECTS = [
     ],
   },
   {
-    id: 'movix',
-    title: 'Movix',
+    id: 'metalogic',
+    title: 'MetaLogic',
     description:
-      'A movie database application built with React, Redux, and the TMDB API that lets users explore movies and TV shows.',
-    image: '/placeholder.svg?height=200&width=400',
-    github: 'https://github.com/diwashbhattarai999/movix',
-    demo: 'https://movix-diwash.vercel.app/',
-    tags: ['React', 'Redux', 'TMDB API', 'SCSS'],
+      'A single-page website designed for MetaLogic, showcasing the company’s services, projects, and contact information.',
+    image: MetaLogicImg,
+    github: 'https://github.com/diwashbhattarai999/MetaLogic',
+    demo: 'https://meta-logic.vercel.app/',
+    tags: ['React', 'TypeScript', 'Tailwind CSS'],
     longDescription:
-      'Movix is a feature-rich movie database app where users can search, filter, and explore movies and TV shows. Built with React and Redux, it leverages the TMDB API to provide real-time data. The application features a clean design with smooth animations and is fully responsive.',
+      'MetaLogic is a single-page website created for a fictional company to demonstrate its services and projects. The site features a clean and modern design with sections for company information, services, projects, and contact details. It is built using React, TypeScript, and Tailwind CSS for styling.',
     features: [
-      'Search and filter movies/TV shows',
-      'Detailed pages with movie information',
-      'Responsive design with smooth animations',
-      'Real-time data fetching from TMDB API',
+      'Responsive single-page design',
+      'Company information and services overview',
+      'Project showcase with image gallery',
+      'Contact form for inquiries',
+      'Modern UI with smooth animations',
     ],
   },
 ];
