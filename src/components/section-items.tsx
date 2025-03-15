@@ -7,9 +7,17 @@ export const SectionTitle = ({
   children,
   className,
 }: {
-  children: string;
+  children: React.ReactNode;
   className?: string;
-}) => <h2 className={cn('text-3xl font-bold', className)}>{children}</h2>;
+}) => (
+  <div className={cn('relative font-bold', className)}>
+    <h2 className='relative z-10 text-3xl'>{children}</h2>
+
+    <span className='text-muted/20 pointer-events-none absolute top-1/2 left-0 z-0 -translate-y-1/2 text-6xl md:text-[7rem]'>
+      {children}
+    </span>
+  </div>
+);
 
 interface ISectionProps {
   id: string;
@@ -32,6 +40,12 @@ export const SectionWrapper: React.FC<ISectionProps> = ({
       {title && <SectionTitle className='mb-8'>{title}</SectionTitle>}
       {children}
     </section>
+  );
+};
+
+export const SectionSeperator = ({ className }: { className?: string }) => {
+  return (
+    <div className={cn('border-input border-b border-dashed', className)} />
   );
 };
 
@@ -69,10 +83,10 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
         <p className='text-muted-foreground'>{description}</p>
 
         {/* Render skills */}
-        <div className='text-muted-foreground mt-4 text-sm'>
+        <div className='text-muted-foreground mt-4 flex flex-wrap gap-4 text-sm'>
           {skills.map((skill, index) => (
             <span
-              className='bg-muted mr-4 inline-block rounded-sm px-3 py-1'
+              className='bg-muted inline-block rounded-sm px-3 py-1'
               key={index}
             >
               {skill}

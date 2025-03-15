@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
 import { ArrowRight, ExternalLink, Github, LucideIcon } from 'lucide-react';
 
@@ -14,6 +13,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { PROJECTS } from '@/data/project';
+import { Link } from '@/i18n/routing';
 
 const ProjectTags = ({ tags }: { tags: string[] }) => {
   return (
@@ -50,15 +50,6 @@ const ExternalLinkLink = ({
   </a>
 );
 
-const ProjectLinks = ({ demo, github }: { github: string; demo: string }) => {
-  return (
-    <CardFooter className='flex justify-between'>
-      <ExternalLinkLink href={github} icon={Github} label='Code' />
-      <ExternalLinkLink href={demo} icon={ExternalLink} label='Demo' />
-    </CardFooter>
-  );
-};
-
 interface IProjectsProps {
   showViewAll?: boolean;
   limit?: number;
@@ -70,7 +61,7 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
   return (
     <SectionWrapper id='projects'>
       <div className='mb-8 flex items-center justify-between'>
-        <SectionTitle>Projects</SectionTitle>
+        <SectionTitle>{limit ? 'Projects' : 'All Projects'}</SectionTitle>
         {showViewAll && (
           <Button asChild variant='outline'>
             <Link href='/projects'>
@@ -107,7 +98,18 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
               <ProjectTags tags={project.tags} />
             </CardContent>
 
-            <ProjectLinks demo={project.demo} github={project.github} />
+            <CardFooter className='flex-1 items-end justify-between'>
+              <ExternalLinkLink
+                href={project.github}
+                icon={Github}
+                label='Code'
+              />
+              <ExternalLinkLink
+                href={project.demo}
+                icon={ExternalLink}
+                label='Demo'
+              />
+            </CardFooter>
           </Card>
         ))}
       </div>

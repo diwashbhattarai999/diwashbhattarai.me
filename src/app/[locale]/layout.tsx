@@ -6,8 +6,12 @@ import { getMessages } from 'next-intl/server';
 
 import { Toaster } from 'sonner';
 
+import { CustomCursor } from '@/components/custom-cursor';
+import { Footer } from '@/components/layouts/footer';
+import { Navbar } from '@/components/layouts/navbar';
 import { TanstackQueryProvider } from '@/components/providers/tanstack-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { SectionSeperator } from '@/components/section-items';
 import { siteConfig } from '@/configs';
 import { routing, TLocales } from '@/i18n/routing';
 
@@ -52,7 +56,34 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <TanstackQueryProvider>
-              {children}
+              <CustomCursor />
+
+              <main className='bg-background relative flex h-full min-h-screen flex-col'>
+                {/* Navbar */}
+                <div className='max-container h-full'>
+                  <div className='border-input mx-2 h-full border-x border-dashed'>
+                    <Navbar />
+                  </div>
+                </div>
+
+                <SectionSeperator />
+
+                {/* Main */}
+                <div className='max-container size-full flex-1'>
+                  <div className='border-input mx-2 border-x border-dashed'>
+                    {children}
+                  </div>
+                </div>
+
+                <SectionSeperator />
+
+                {/* Footer */}
+                <div className='max-container'>
+                  <div className='border-input mx-2 border-x border-dashed'>
+                    <Footer />
+                  </div>
+                </div>
+              </main>
               <Toaster richColors position='bottom-right' />
             </TanstackQueryProvider>
           </NextIntlClientProvider>

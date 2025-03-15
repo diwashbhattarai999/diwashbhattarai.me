@@ -6,7 +6,7 @@ import { ABOUT_ME } from '@/data/about';
 
 export function Hero() {
   return (
-    <SectionWrapper className='hero-glow md:py-16' id='hero'>
+    <SectionWrapper className='md:py-16' id='hero'>
       <div className='flex flex-col items-start gap-8 md:flex-row'>
         {/* Profile Image Section */}
         <div className='relative flex-shrink-0'>
@@ -21,7 +21,7 @@ export function Hero() {
         </div>
 
         {/* Text Section */}
-        <div>
+        <div className='relative'>
           <h1 className='mb-2 text-4xl font-bold'>{ABOUT_ME.name}</h1>
           <h2 className='text-primary mb-6 text-xl'>{ABOUT_ME.title}</h2>
 

@@ -4,9 +4,7 @@ import { SKILLS } from '@/data/skills';
 
 export function Skills() {
   return (
-    <SectionWrapper id='skills'>
-      <h2 className='mb-8 text-3xl font-bold'>Skills</h2>
-
+    <SectionWrapper id='skills' title='Skills'>
       <div className='grid gap-8 md:grid-cols-2'>
         {SKILLS.map((category, index) => (
           <Card key={index}>

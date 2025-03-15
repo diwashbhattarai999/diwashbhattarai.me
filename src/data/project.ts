@@ -3,6 +3,7 @@ import GovCertifyImg from '@/assets/projects/gov-certify.png';
 import MetaLogicImg from '@/assets/projects/metalogic.png';
 import MovizImg from '@/assets/projects/moviez.png';
 import NextAuthV5Img from '@/assets/projects/next-auth-v5.png';
+import NextStarterImg from '@/assets/projects/next-starter.png';
 import SmartYatraImg from '@/assets/projects/smart-yatra-light.png';
 
 export const PROJECTS = [
@@ -102,16 +103,16 @@ export const PROJECTS = [
     ],
   },
   {
-    id: 'movix',
-    title: 'Movix',
+    id: 'moviez',
+    title: 'Moviez',
     description:
       'A movie database application built with React, Redux, and the TMDB API that lets users explore movies and TV shows.',
     image: MovizImg,
-    github: 'https://github.com/diwashbhattarai999/movix',
+    github: 'https://github.com/diwashbhattarai999/moviez',
     demo: 'https://db-movie-app.vercel.app/',
-    tags: ['React', 'Redux', 'TMDB API', 'SCSS'],
+    tags: ['React', 'Redux', 'TMDB API', 'SCSS', 'Infinite-scroll'],
     longDescription:
-      'Movix is a feature-rich movie database app where users can search, filter, and explore movies and TV shows. Built with React and Redux, it leverages the TMDB API to provide real-time data. The application features a clean design with smooth animations and is fully responsive.',
+      'Moviez is a feature-rich movie database app where users can search, filter, and explore movies and TV shows. Built with React and Redux, it leverages the TMDB API to provide real-time data. The application features a clean design with smooth animations and is fully responsive.',
     features: [
       'Search and filter movies/TV shows',
       'Detailed pages with movie information',
@@ -124,9 +125,9 @@ export const PROJECTS = [
     title: 'Next.js Starter Template',
     description:
       'A highly optimized Next.js starter template with Tailwind CSS, TypeScript, ESLint, Prettier, and authentication setup.',
-    image: '/placeholder.svg?height=200&width=400',
-    github: 'https://github.com/diwashbhattarai999/Next.js-Starter-Template',
-    demo: 'https://nextjs-starter-template.vercel.app/',
+    image: NextStarterImg,
+    github: 'https://github.com/diwashbhattarai999/NextStarter',
+    demo: 'https://db-next-starter.vercel.app/',
     tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'ESLint', 'Prettier'],
     longDescription:
       'This Next.js starter template provides a ready-to-use boilerplate for modern web applications. It includes authentication, internationalization support, UI components, and best practices for performance and maintainability. Developers can use it as a foundation to quickly build and scale projects.',
@@ -146,7 +147,7 @@ export const PROJECTS = [
     image: MetaLogicImg,
     github: 'https://github.com/diwashbhattarai999/MetaLogic',
     demo: 'https://meta-logic.vercel.app/',
-    tags: ['React', 'TypeScript', 'Tailwind CSS'],
+    tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'GSAP'],
     longDescription:
       'MetaLogic is a single-page website created for a fictional company to demonstrate its services and projects. The site features a clean and modern design with sections for company information, services, projects, and contact details. It is built using React, TypeScript, and Tailwind CSS for styling.',
     features: [
