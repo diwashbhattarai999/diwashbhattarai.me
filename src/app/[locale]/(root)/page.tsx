@@ -1,3 +1,4 @@
+import { CustomCursor } from '@/components/custom-cursor';
 import { Footer } from '@/components/layouts/footer';
 import { Navbar } from '@/components/layouts/navbar';
 
@@ -11,6 +12,8 @@ import { Skills } from './_components/skills';
 const HomePage = () => {
   return (
     <main className='bg-background relative'>
+      <CustomCursor />
+
       <div className='flex min-h-screen flex-col'>
         <div className='max-container border-x'>
           <Navbar />

@@ -36,8 +36,8 @@ export const Navbar = () => {
         className={cn(
           'z-40 hidden items-center gap-6 px-6 py-3 md:flex',
           floating
-            ? 'bg-background/80 border-border/40 fixed top-4 left-1/2 -translate-x-1/2 rounded-full border shadow-lg backdrop-blur-md'
-            : 'bg-background border-border/40 w-full border-b shadow'
+            ? 'bg-background/50 border-border fixed top-4 left-1/2 -translate-x-1/2 rounded-full border shadow-lg backdrop-blur-md'
+            : 'bg-background border-border/40 w-full border-b'
         )}
       >
         <Logo />
