@@ -92,8 +92,11 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
                   {project.title}
                 </CardTitle>
               </Link>
-              <CardDescription>{project.description}</CardDescription>
+              <CardDescription className='line-clamp-3'>
+                {project.description}
+              </CardDescription>
             </CardHeader>
+
             <CardContent className='pb-2'>
               <ProjectTags tags={project.tags} />
             </CardContent>

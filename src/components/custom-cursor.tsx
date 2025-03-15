@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 export const CustomCursor = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -84,15 +84,15 @@ export const CustomCursor = () => {
     updateTrailPositions();
   }, [mousePosition]);
 
-  const variants = {
+  const variants: Variants = {
     default: {
       x: mousePosition.x - 16,
       y: mousePosition.y - 16,
       height: 32,
       width: 32,
-      backgroundColor: 'var(--primary/0.1)',
-      border: '1px solid var(--primary/0.3)',
-      mixBlendMode: 'normal' as const,
+      backgroundColor: 'color-mix(in oklab, var(--primary) 10%, transparent)',
+      border: '1px solid color-mix(in oklab, var(--primary) 30%, transparent)',
+      mixBlendMode: 'normal',
       transition: {
         type: 'spring',
         mass: 0.6,
@@ -101,11 +101,11 @@ export const CustomCursor = () => {
     hover: {
       x: mousePosition.x - 24,
       y: mousePosition.y - 24,
-      height: 50,
-      width: 50,
-      backgroundColor: 'var(--primary/0.2)',
-      border: '1px solid var(--primary/0.5)',
-      mixBlendMode: 'multiply' as const,
+      height: 60,
+      width: 60,
+      backgroundColor: 'color-mix(in oklab, var(--primary) 80%, transparent)',
+      border: '1px solid color-mix(in oklab, var(--primary) 50%, transparent)',
+      mixBlendMode: 'multiply',
       transition: {
         type: 'spring',
         mass: 0.6,
@@ -116,8 +116,8 @@ export const CustomCursor = () => {
       y: mousePosition.y - 16,
       height: 32,
       width: 32,
-      backgroundColor: 'var(--primary/0.3)',
-      border: '1px solid var(--primary/0.6)',
+      backgroundColor: 'color-mix(in oklab, var(--primary) 30%, transparent)',
+      border: '1px solid color-mix(in oklab, var(--primary) 60%, transparent)',
       transition: {
         type: 'spring',
         mass: 0.6,
@@ -128,7 +128,7 @@ export const CustomCursor = () => {
   return (
     <motion.div
       animate={cursorVariant}
-      className='pointer-events-none fixed top-0 left-0 z-50 hidden rounded-full backdrop-blur-sm md:block'
+      className='pointer-events-none fixed top-0 left-0 z-50 hidden rounded-full md:block'
       variants={variants}
     />
   );
