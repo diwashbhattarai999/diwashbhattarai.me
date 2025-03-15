@@ -1,4 +1,5 @@
 import { LetsConnectButton } from '@/components/lets-connect-btn';
+import { SectionWrapper } from '@/components/section-items';
 import {
   Card,
   CardContent,
@@ -9,10 +10,8 @@ import {
 
 export function Contact() {
   return (
-    <section className='border-border/40 border-t py-12' id='contact'>
-      <h2 className='mb-8 text-3xl font-bold'>Contact</h2>
-
-      <Card className='subtle-glow'>
+    <SectionWrapper id='contact' title='Contact'>
+      <Card>
         <CardHeader>
           <CardTitle>Book a Call</CardTitle>
           <CardDescription>
@@ -27,6 +26,6 @@ export function Contact() {
           />
         </CardContent>
       </Card>
-    </section>
+    </SectionWrapper>
   );
 }

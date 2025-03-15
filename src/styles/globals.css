@@ -164,28 +164,6 @@
   }
 
   .max-container {
-    @apply mx-auto w-full max-w-5xl px-4;
-  }
-}
-
-@layer components {
-  .subtle-glow {
-    position: relative;
-  }
-
-  .subtle-glow::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: var(--radius);
-    background: linear-gradient(
-      to right,
-      hsl(var(--primary) / 0.2),
-      hsl(var(--primary) / 0.1),
-      hsl(var(--primary) / 0.2)
-    );
-    opacity: 0.5;
-    filter: blur(4px);
-    z-index: -10;
+    @apply mx-auto w-full max-w-5xl;
   }
 }

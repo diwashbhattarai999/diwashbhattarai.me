@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { ArrowRight, ExternalLink, Github, LucideIcon } from 'lucide-react';
 
-import { SectionTitle } from '@/components/section-items';
+import { SectionTitle, SectionWrapper } from '@/components/section-items';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -68,7 +68,7 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
   const displayedProjects = limit ? PROJECTS.slice(0, limit) : PROJECTS;
 
   return (
-    <section className='border-border/40 border-t py-12' id='projects'>
+    <SectionWrapper id='projects'>
       <div className='mb-8 flex items-center justify-between'>
         <SectionTitle>Projects</SectionTitle>
         {showViewAll && (
@@ -83,7 +83,7 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
 
       <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
         {displayedProjects.map(project => (
-          <Card className='subtle-glow overflow-hidden' key={project.id}>
+          <Card className='overflow-hidden' key={project.id}>
             <Link
               className='relative block h-48 w-full overflow-hidden'
               href={`/projects/${project.id}`}
@@ -111,6 +111,6 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
           </Card>
         ))}
       </div>
-    </section>
+    </SectionWrapper>
   );
 };

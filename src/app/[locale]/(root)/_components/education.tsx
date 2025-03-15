@@ -1,11 +1,11 @@
 import { GraduationCap } from 'lucide-react';
 
-import { Section, SectionCard } from '@/components/section-items';
+import { SectionCard, SectionWrapper } from '@/components/section-items';
 import { EDUCATION_DETAILS } from '@/data/education';
 
 export const Education = () => {
   return (
-    <Section title='Education'>
+    <SectionWrapper id='education' title='Education'>
       <div className='grid gap-8'>
         {EDUCATION_DETAILS.map((edu, index) => (
           <SectionCard
@@ -18,6 +18,6 @@ export const Education = () => {
           />
         ))}
       </div>
-    </Section>
+    </SectionWrapper>
   );
 };

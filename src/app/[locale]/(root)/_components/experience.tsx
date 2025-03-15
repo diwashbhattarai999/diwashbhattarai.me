@@ -1,12 +1,12 @@
 import { Briefcase } from 'lucide-react';
 
-import { Section, SectionCard } from '@/components/section-items';
+import { SectionCard, SectionWrapper } from '@/components/section-items';
 import { EXPERIENCE_DETAILS } from '@/data/experience';
 
 export const Experience = () => {
   return (
-    <Section title='Experience'>
-      <div className='space-y-8'>
+    <SectionWrapper id='experience' title='Experience'>
+      <div className='grid gap-8'>
         {EXPERIENCE_DETAILS.map((exp, index) => (
           <SectionCard
             Icon={Briefcase}
@@ -20,6 +20,6 @@ export const Experience = () => {
           />
         ))}
       </div>
-    </Section>
+    </SectionWrapper>
   );
 };
