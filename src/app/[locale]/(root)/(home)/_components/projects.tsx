@@ -74,7 +74,9 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
 
       <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
         {displayedProjects.map(project => (
-          <Card className='overflow-hidden pt-0' key={project.id}>
+          <Card className='relative overflow-hidden pt-0' key={project.id}>
+            <div className='line-glow top-auto bottom-5 translate-0' />
+            <div className='line-glow top-auto right-0 bottom-5 left-auto translate-0' />
             <Link
               className='relative block h-48 w-full overflow-hidden'
               href={`/projects/${project.id}`}

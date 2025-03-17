@@ -7,7 +7,9 @@ export function Skills() {
     <SectionWrapper id='skills' title='Skills'>
       <div className='grid gap-8 md:grid-cols-2'>
         {SKILLS.map((category, index) => (
-          <Card key={index}>
+          <Card className='relative' key={index}>
+            <div className='line-glow' />
+            <div className='line-glow right-0 left-auto' />
             <CardHeader className='flex flex-row items-center gap-4 pb-2'>
               <div className='text-primary'>
                 <category.icon className='size-6' />

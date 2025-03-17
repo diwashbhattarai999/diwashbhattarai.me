@@ -4,6 +4,8 @@ import MetaLogicImg from '@/assets/projects/metalogic.png';
 import MovizImg from '@/assets/projects/moviez.png';
 import NextAuthV5Img from '@/assets/projects/next-auth-v5.png';
 import NextStarterImg from '@/assets/projects/next-starter.png';
+import Portfoliov1Img from '@/assets/projects/portfolio-v1.png';
+import Portfoliov2Img from '@/assets/projects/portfolio-v2.png';
 import SmartYatraImg from '@/assets/projects/smart-yatra-light.png';
 
 export const PROJECTS = [
@@ -156,6 +158,52 @@ export const PROJECTS = [
       'Project showcase with image gallery',
       'Contact form for inquiries',
       'Modern UI with smooth animations',
+    ],
+  },
+  {
+    id: 'portfolio-v2',
+    title: 'Portfolio v2',
+    description:
+      'The second version of my personal portfolio website built with Next.js, TypeScript, Tailwind CSS, and Framer Motion.',
+    image: Portfoliov2Img,
+    github: 'https://github.com/diwashbhattarai999/www-v2',
+    demo: 'https://diwashb-v2.vercel.app/',
+    tags: [
+      'Next.js',
+      'TypeScript',
+      'Tailwind CSS',
+      'Framer-motion',
+      'Prisma',
+      'MongoDB',
+    ],
+    longDescription:
+      'Portfolio v2 is the second version of my personal portfolio website, showcasing my projects, skills, and contact information. The site is built with Next.js, TypeScript, and Tailwind CSS, featuring a clean and interactive design. It includes sections for project details, skills, and a contact form.',
+    features: [
+      'Project showcase with detailed information',
+      'Skills section with proficiency levels',
+      'Contact form for inquiries',
+      'Interactive animations with Framer Motion',
+      'Responsive design for various devices',
+      'Admin panel for managing contents',
+    ],
+  },
+  {
+    id: 'porfolio-v1',
+    title: 'Portfolio v1',
+    description:
+      'The first version of my personal portfolio website built with React, TypeScript, and Tailwind CSS.',
+    image: Portfoliov1Img,
+    github: 'https://github.com/diwashbhattarai999/www-v1',
+    demo: 'https://diwashb-v1.vercel.app/',
+    tags: ['React', 'Javascript', 'CSS', 'Framer-motion'],
+    longDescription:
+      'Portfolio v1 is the initial version of my personal portfolio website, showcasing my projects, skills, and contact information. The site is built with React, JavaScript, and CSS, featuring a clean and interactive design. It includes sections for project details, skills, and a contact form.',
+    features: [
+      'Project showcase with detailed information',
+      'Skills section with proficiency levels',
+      'Contact form for inquiries',
+      'Interactive animations with Framer Motion',
+      'Responsive design for various devices',
     ],
   },
 ];

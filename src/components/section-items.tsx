@@ -69,7 +69,9 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
   Icon,
 }) => {
   return (
-    <Card>
+    <Card className='relative'>
+      <div className='line-glow' />
+      <div className='line-glow right-0 left-auto' />
       <CardHeader className='flex flex-row items-start gap-4'>
         <div className='bg-primary/10 rounded-full p-3'>
           <Icon className='text-primary h-6 w-6' />
