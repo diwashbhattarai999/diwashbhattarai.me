@@ -2,7 +2,11 @@ import Image from 'next/image';
 
 import { ArrowRight, ExternalLink, Github, LucideIcon } from 'lucide-react';
 
-import { SectionTitle, SectionWrapper } from '@/components/section-items';
+import {
+  SectionSubTitle,
+  SectionTitle,
+  SectionWrapper,
+} from '@/components/section-items';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -60,16 +64,22 @@ export const Projects = ({ showViewAll = false, limit }: IProjectsProps) => {
 
   return (
     <SectionWrapper id='projects'>
-      <div className='mb-8 flex items-center justify-between'>
-        <SectionTitle>{limit ? 'Projects' : 'All Projects'}</SectionTitle>
-        {showViewAll && (
-          <Button asChild variant='outline'>
-            <Link href='/projects'>
-              View All
-              <ArrowRight className='ml-2 h-4 w-4' />
-            </Link>
-          </Button>
-        )}
+      <div className='mb-8'>
+        <div className='flex items-center justify-between'>
+          <SectionTitle>{limit ? 'Projects' : 'All Projects'}</SectionTitle>
+          {showViewAll && (
+            <Button asChild variant='outline'>
+              <Link href='/projects'>
+                View All
+                <ArrowRight className='ml-2 h-4 w-4' />
+              </Link>
+            </Button>
+          )}
+        </div>
+
+        <SectionSubTitle>
+          {!limit && 'Here are some of the projects I have worked on.'}
+        </SectionSubTitle>
       </div>
 
       <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>

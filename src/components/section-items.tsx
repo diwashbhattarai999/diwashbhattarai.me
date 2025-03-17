@@ -19,6 +19,14 @@ export const SectionTitle = ({
   </div>
 );
 
+export const SectionSubTitle = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => <h3 className={cn('text-primary', className)}>{children}</h3>;
+
 interface ISectionProps {
   id: string;
   title?: string;

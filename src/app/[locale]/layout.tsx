@@ -6,7 +6,6 @@ import { getMessages } from 'next-intl/server';
 
 import { Toaster } from 'sonner';
 
-import { CustomCursor } from '@/components/custom-cursor';
 import { Footer } from '@/components/layouts/footer';
 import { Navbar } from '@/components/layouts/navbar';
 import { TanstackQueryProvider } from '@/components/providers/tanstack-provider';
@@ -56,9 +55,10 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <TanstackQueryProvider>
-              <CustomCursor />
+              {/* <PageLoader /> */}
 
-              <main className='bg-background relative flex h-full min-h-screen flex-col'>
+              <main className='bg-background relative flex h-full min-h-screen flex-col overflow-hidden'>
+                {/* <CustomCursor /> */}
                 {/* Navbar */}
                 <div className='max-container h-full'>
                   <div className='border-input mx-2 h-full border-x border-dashed'>

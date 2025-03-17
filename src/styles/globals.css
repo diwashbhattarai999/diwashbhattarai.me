@@ -160,7 +160,8 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground duration-500 ease-in-out;
+    transition-property: opacity, transform, filter, background;
   }
 
   .max-container {
@@ -168,12 +169,22 @@
   }
 }
 
-::selection {
-  @apply bg-primary text-primary-foreground;
-}
-
 @layer components {
   .line-glow {
     @apply via-primary/20 absolute top-1/2 left-0 h-1/2 w-px -translate-y-1/2 bg-gradient-to-b from-transparent to-transparent;
   }
+
+  .page-transition {
+    @apply -translate-y-40 transform bg-black opacity-0 blur-md;
+  }
+}
+
+/* Selection */
+::selection {
+  @apply bg-primary text-primary-foreground;
+}
+
+/* Hide Scrollbar */
+::-webkit-scrollbar {
+  display: none;
 }
