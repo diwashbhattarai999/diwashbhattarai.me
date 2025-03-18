@@ -14,14 +14,9 @@ export const SectionTitle = ({
   className?: string;
 }) => (
   <div className={cn('relative font-bold', className)}>
-    {/* <h2 className='relative z-10 text-3xl'>{children}</h2> */}
-    <BlurFadeText
-      className='relative z-10 text-3xl'
-      delay={0.08}
-      text={children}
-    />
+    <BlurFadeText className='text-3xl' delay={0.08} text={children} />
 
-    <span className='text-muted/20 pointer-events-none absolute top-1/2 left-0 z-0 -translate-y-1/2 text-6xl text-nowrap select-none md:text-[7rem]'>
+    <span className='text-muted/20 pointer-events-none absolute top-1/2 left-0 z-[-1] -translate-y-1/2 text-6xl text-nowrap select-none md:text-[7rem]'>
       {children}
     </span>
   </div>

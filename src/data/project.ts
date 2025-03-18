@@ -10,7 +10,7 @@ import Portfoliov1Img from '@/assets/projects/portfolio-v1.png';
 import Portfoliov2Img from '@/assets/projects/portfolio-v2.png';
 import SmartYatraImg from '@/assets/projects/smart-yatra-light.png';
 
-interface IProject {
+export interface IProject {
   id: string;
   title: string;
   description: string;

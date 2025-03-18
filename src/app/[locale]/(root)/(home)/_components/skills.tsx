@@ -20,7 +20,7 @@ export function Skills() {
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
             <div className='flex items-center gap-3'>
-              <div className='text-teal-400'>
+              <div className='text-primary'>
                 <category.icon className='size-5' />
               </div>
               <h3 className='text-xl font-medium tracking-tight'>
@@ -32,7 +32,7 @@ export function Skills() {
               {category.skills.map((skill, skillIndex) => (
                 <motion.div
                   animate={{ opacity: 1, y: 0 }}
-                  className='border-input bg-muted/50 flex flex-col items-center justify-center rounded-lg border p-4 backdrop-blur-md transition-colors hover:border-teal-500/20 hover:bg-teal-500/5'
+                  className='border-input bg-muted/50 hover:border-primary/20 hover:bg-primary/5 flex flex-col items-center justify-center rounded-lg border p-4 transition-colors'
                   initial={{ opacity: 0, y: 10 }}
                   key={skillIndex}
                   whileHover={{ y: -5 }}
@@ -41,11 +41,10 @@ export function Skills() {
                     delay: 0.05,
                   }}
                 >
-                  <div className='relative mb-2 size-10'>
+                  <div className='mb-2 size-10'>
                     <Image
-                      fill
                       alt={skill.name}
-                      className='object-contain'
+                      className='size-full object-contain'
                       src={skill.icon || '/placeholder.svg'}
                     />
                   </div>
