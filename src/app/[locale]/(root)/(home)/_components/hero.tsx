@@ -1,8 +1,11 @@
-import Image from 'next/image';
-
+import BlurFade from '@/components/animations/blur-fade';
+import BlurFadeText from '@/components/animations/blur-fade-text';
 import { SectionWrapper } from '@/components/section-items';
 import { SocialIcons } from '@/components/social-icons';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ABOUT_ME } from '@/data/about';
+
+const BLUR_FADE_DELAY = 0.04;
 
 export function Hero() {
   return (
@@ -10,29 +13,41 @@ export function Hero() {
       <div className='flex flex-col items-start gap-8 md:flex-row'>
         {/* Profile Image Section */}
         <div className='relative flex-shrink-0'>
-          <div className='from-primary/30 via-primary/20 to-primary/30 absolute -inset-1 rounded-full bg-gradient-to-r blur-sm'></div>
-          <Image
-            alt={ABOUT_ME.name}
-            className='border-border relative rounded-full border'
-            height={150}
-            src={ABOUT_ME.profileImage}
-            width={150}
-          />
+          <div className='from-primary/30 via-primary/20 to-primary/30 absolute -inset-1 rounded-full bg-gradient-to-r blur-sm' />
+
+          <BlurFade>
+            <Avatar className='size-36 border'>
+              <AvatarImage
+                alt={ABOUT_ME.name}
+                src={ABOUT_ME.profileImage.src}
+              />
+              <AvatarFallback>{ABOUT_ME.initials}</AvatarFallback>
+            </Avatar>
+          </BlurFade>
         </div>
 
         {/* Text Section */}
         <div className='relative'>
-          <h1 className='mb-2 text-4xl font-bold'>{ABOUT_ME.name}</h1>
-          <h2 className='text-primary mb-6 text-xl'>{ABOUT_ME.title}</h2>
+          <BlurFadeText
+            className='mb-2 text-4xl font-bold'
+            delay={BLUR_FADE_DELAY}
+            text={ABOUT_ME.name}
+            yOffset={8}
+          />
+          <BlurFadeText
+            className='text-primary mb-6 text-xl'
+            delay={BLUR_FADE_DELAY}
+            text={ABOUT_ME.title}
+          />
 
           <div className='max-w-2xl'>
             {ABOUT_ME.description.map((text, index) => (
-              <p
+              <BlurFadeText
                 className='text-muted-foreground mb-6 leading-relaxed'
+                delay={BLUR_FADE_DELAY * (index + 1)}
                 key={index}
-              >
-                {text}
-              </p>
+                text={text}
+              />
             ))}
 
             {/* Social Icons */}

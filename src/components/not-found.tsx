@@ -1,15 +1,17 @@
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
-import { Search } from 'lucide-react';
+import NotFoundImg from '@/assets/not-found.svg';
 
 import { buttonVariants } from './ui/button';
 
 export const NotFoundComponent = () => {
   return (
-    <div className='bg-background flex h-screen w-full flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8'>
-      <div className='mx-auto max-w-xl text-center'>
-        <Search className='text-accent-foreground mx-auto h-12 w-12' />
+    <div className='flex h-screen w-full flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8'>
+      <div className='mx-auto flex max-w-xl flex-col items-center justify-center text-center'>
+        {/* <Search className='text-accent-foreground mx-auto h-12 w-12' /> */}
+        <Image alt='404 Not Found' height={400} src={NotFoundImg} width={400} />
         <h1 className='text-foreground mt-4 text-3xl font-bold tracking-tight sm:text-4xl'>
           404 Not Found
         </h1>

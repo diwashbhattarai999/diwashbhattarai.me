@@ -1,6 +1,6 @@
 export const EXPERIENCE_DETAILS = [
   {
-    title: 'Junior Software Engineer',
+    title: 'Junior Full Stack Developer',
     company: 'Upachaar Nepal',
     duration: 'Jun 2024 - Present',
     description:
