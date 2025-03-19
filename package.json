@@ -1,5 +1,5 @@
 {
-  "name": "www-v3",
+  "name": "diwashbhattarai.me",
   "version": "1.0.0",
   "private": true,
   "author": {
@@ -19,7 +19,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/diwashbhattarai999/www-v3"
+    "url": "https://github.com/diwashbhattarai999/diwashbhattarai.me"
   },
   "license": "MIT",
   "type": "module",
