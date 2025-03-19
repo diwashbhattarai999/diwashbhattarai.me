@@ -1,4 +1,4 @@
-import { SocialIcons } from '../social-icons';
+import { SOCIALS_LINKS } from '@/data/social-links';
 
 export const Footer = () => {
   return (
@@ -8,7 +8,20 @@ export const Footer = () => {
           © {new Date().getFullYear()} Diwash Bhattarai. All rights reserved.
         </p>
 
-        <SocialIcons iconClassName='size-4' />
+        <div className='flex gap-2'>
+          {SOCIALS_LINKS.map(({ Icon, link, title }, index) => (
+            <a
+              className='text-foreground/60 hover:text-primary hover:bg-muted rounded-full p-2 transition-colors'
+              href={link}
+              key={index}
+              rel='noopener noreferrer'
+              target={link.startsWith('mailto') ? '_self' : '_blank'}
+            >
+              <Icon className='size-4' />
+              <span className='sr-only'>{title}</span>
+            </a>
+          ))}
+        </div>
       </div>
     </footer>
   );
