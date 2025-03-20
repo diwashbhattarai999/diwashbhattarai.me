@@ -7,6 +7,9 @@ this portfolio is designed to be fast, responsive, and visually appealing.
 👉 **Live Demo:**
 [https://diwashbhattarai.vercel.app](https://diwashbhattarai.vercel.app)
 
+![image](https://github.com/user-attachments/assets/16456664-79df-4bd3-919e-8c41172cf3c4)
+
+
 ---
 
 ## 🚀 Features
