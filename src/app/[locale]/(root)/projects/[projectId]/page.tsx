@@ -109,8 +109,8 @@ export default async function ProjectPage({
       <BlurFade delay={0.12}>
         <section className='mb-12'>
           <h2 className='mb-4 text-2xl font-bold'>Overview</h2>
-          <p className='mb-4 text-zinc-300'>{project.overview}</p>
-          <p className='text-zinc-300'>{project.poweredBy}</p>
+          <p className='text-muted-foreground mb-4'>{project.overview}</p>
+          <p className='text-muted-foreground'>{project.poweredBy}</p>
         </section>
       </BlurFade>
 
@@ -135,7 +135,7 @@ export default async function ProjectPage({
           <h2 className='mb-4 text-2xl font-bold'>Features</h2>
           <ul className='space-y-4'>
             {project.features.map((feature, index) => (
-              <li className='text-zinc-300' key={index}>
+              <li className='text-muted-foreground' key={index}>
                 {feature}
               </li>
             ))}
@@ -146,7 +146,9 @@ export default async function ProjectPage({
       {/* Development and Challenges Section */}
       <section className='mb-12'>
         <h2 className='mb-4 text-2xl font-bold'>Development and Challenges</h2>
-        <p className='mb-8 text-zinc-300'>{project.developmentChallenges}</p>
+        <p className='text-muted-foreground mb-8'>
+          {project.developmentChallenges}
+        </p>
 
         {/* Project Screenshots */}
         <div className='space-y-8'>
@@ -171,7 +173,7 @@ export default async function ProjectPage({
       {/* Conclusion */}
       <section className='mb-12'>
         <h2 className='mb-4 text-2xl font-bold'>Conclusion</h2>
-        <p className='text-zinc-300'>{project.conclusion}</p>
+        <p className='text-muted-foreground'>{project.conclusion}</p>
       </section>
     </div>
   );

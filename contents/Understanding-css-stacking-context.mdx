@@ -1,0 +1,254 @@
+---
+title: 'Demystifying CSS Stacking Context: A Visual Guide'
+date: '2025-03-20'
+author: 'Diwash Bhattarai'
+profile: '/profile.png'
+tags: ['CSS', 'Web Development', 'Frontend', 'Styling']
+description:
+  'Learn how CSS stacking contexts work, how to manage z-index effectively, and
+  avoid common pitfalls in your web projects.'
+coverImage: '/contents/css-stacking-cover.jpg'
+readTime: '5 min read'
+category: 'CSS'
+---
+
+Have you ever struggled with CSS `z-index` not working as expected? The secret
+lies in understanding **stacking contexts** - a fundamental CSS concept that
+determines how elements overlap. Let's break it down!
+
+## What is a Stacking Context?
+
+A stacking context is a conceptual layer system that determines the vertical
+order of elements. Think of it like a stack of transparent sheets:
+
+<CodeBlock 
+  language="typescript"
+  filename='demo.tsx'
+  code={`<div style={{ position: 'relative' }}>
+  {/* Sheet 1 (background) */}
+  <div
+    style={{
+      position: 'absolute',
+      backgroundColor: 'red',
+      width: '200px',
+      height: '200px',
+    }}
+  />
+
+{/* Sheet 2 (middle) */}
+
+<div
+  style={{
+    position: 'absolute',
+    backgroundColor: 'blue',
+    width: '150px',
+    height: '150px',
+    top: '50px',
+    left: '50px',
+  }}
+/>
+
+{/* Sheet 3 (foreground) */}
+
+  <div
+    style={{
+      position: 'absolute',
+      backgroundColor: 'green',
+      width: '100px',
+      height: '100px',
+      top: '100px',
+      left: '100px',
+    }}
+  />
+</div>`}
+
+/>
+
+**Default behavior:** Elements stack in this order (from bottom to top):
+
+1. Root element (html)
+2. Non-positioned elements in DOM order
+3. Positioned elements in DOM order
+4. Elements with `z-index`
+
+---
+
+## Visualizing Stacking Contexts
+
+To better understand stacking contexts, here's a visual representation:
+
+![CSS Stacking Context](/contents/css-stacking.png)
+
+This image illustrates how elements are layered based on their stacking context
+and `z-index` values.
+
+---
+
+## Creating Stacking Contexts
+
+Certain CSS properties create new stacking contexts. Here are common triggers:
+
+<CodeBlock 
+  language="typescript"
+  filename='demo.tsx'
+  code={`<div>
+  {/* This creates a stacking context */}
+  <div
+    style={{
+      position: 'relative',
+      zIndex: 0,
+      padding: '20px',
+      backgroundColor: '#eee',
+    }}
+  >
+    <div
+      style={{
+        position: 'absolute',
+        zIndex: 100,
+        backgroundColor: 'yellow',
+        width: '50px',
+        height: '50px',
+      }}
+    />
+  </div>
+
+{/* This element will overlap because of root context */}
+
+  <div
+    style={{
+      position: 'relative',
+      zIndex: 1,
+      backgroundColor: 'pink',
+      marginTop: '-30px',
+    }}
+  >
+    I'm on top!
+  </div>
+</div>`}
+/>
+
+Key properties that create stacking contexts:
+
+- `position: absolute/fixed` **with** `z-index`
+- `opacity < 1`
+- `transform` (any value except none)
+- `filter` (non-none values)
+- `will-change` (certain values)
+
+---
+
+## The Hierarchy Hierarchy
+
+Stacking contexts form a parent-child relationship. Children **cannot** escape
+their parent's context:
+
+<CodeBlock 
+  language='typescript'
+  filename='demo.tsx'
+  code={`<div style={{ position: 'relative', zIndex: 1 }}>
+  {/* Parent context (z-index: 1) */}
+  <div style={{
+    position: 'absolute',
+    zIndex: 100,
+    backgroundColor: 'rgba(255,0,0,0.5)',
+    width: '200px',
+    height: '200px'
+  }}>
+    Parent Context
+
+    {/* Child context */}
+    <div style={{
+      position: 'absolute',
+      zIndex: 9999,
+      backgroundColor: 'blue',
+      width: '100px',
+      height: '100px',
+      top: '50px'
+    }}>
+      Child Context
+    </div>
+
+  </div>
+</div>
+
+<div
+  style={{
+    position: 'relative',
+    zIndex: 2,
+    backgroundColor: 'lime',
+    width: '150px',
+    height: '150px',
+    marginTop: '-200px',
+  }}
+>
+  Sibling Context
+</div>
+`} />
+
+In this example:
+
+1. The lime box (z-index: 2) appears on top
+2. Red parent (z-index: 1) is below
+3. Blue child (z-index: 9999) is still under lime box
+
+**Why?** The child's high z-index only matters within its parent's context
+(z-index: 1).
+
+---
+
+## Common Pitfalls & Solutions
+
+**Problem:** "My z-index: 9999 isn't working!" **Solution:** Check if parent
+elements create a stacking context with lower z-index.
+
+**Problem:** Unexpected overlap after adding opacity **Solution:** Remember
+`opacity < 1` creates new context!
+
+<CodeBlock
+  language='typescript'
+  filename='demo.tsx'
+  code={`<div style={{ opacity: 0.99 }}>
+  {/* New stacking context created */}
+  <div
+    style={{
+      position: 'relative',
+      zIndex: 1,
+      backgroundColor: 'orange',
+    }}
+  >
+    This z-index is now relative to the opacity container
+  </div>
+</div>`}
+/>
+
+---
+
+## Best Practices
+
+1. **Minimize z-index usage** - Use natural DOM order when possible
+2. **Create clear layers** - Use base z-index values (100, 200, etc.)
+3. **Isolate components** - Use `position: relative` at component root
+4. **Use CSS custom properties** for consistent z-index management
+
+<CodeBlock
+  language='css'
+  filename='demo.css'
+  code={`:root {
+  --z-modal: 1000;
+  --z-tooltip: 500;
+  --z-navbar: 100;
+}`}
+/>
+
+---
+
+## Debugging Tips
+
+1. Chrome DevTools → Elements panel → Check "Stacking Contexts" overlay
+2. Temporarily add `outline: 1px solid #f00;` to visualize boundaries
+3. Use 3D view in browser dev tools to see layers
+
+Understanding stacking contexts will save you hours of layout frustration.
+Remember: it's not just about z-index, but about the entire layer hierarchy!
+
+Happy coding!

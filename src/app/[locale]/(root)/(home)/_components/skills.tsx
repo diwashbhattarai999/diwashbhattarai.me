@@ -45,7 +45,9 @@ export function Skills() {
                     <Image
                       alt={skill.name}
                       className='size-full object-contain'
+                      height={40}
                       src={skill.icon || '/placeholder.svg'}
+                      width={40}
                     />
                   </div>
                   <span className='text-secondary-foreground text-center text-sm'>

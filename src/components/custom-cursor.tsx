@@ -142,6 +142,8 @@
 
 import React, { useEffect, useState } from 'react';
 
+import useIsMounted from '@/hooks/use-is-mounted';
+
 interface CustomCursorProps {
   gradientColorStart?: string;
   gradientColorEnd?: string;
@@ -209,6 +211,9 @@ export function CustomCursor({
       cancelAnimationFrame(animationFrameId);
     };
   }, [cursorPosition]);
+
+  const { isMounted } = useIsMounted();
+  if (!isMounted) return null;
 
   return (
     <div

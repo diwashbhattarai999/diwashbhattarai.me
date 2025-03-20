@@ -27,8 +27,8 @@ export default function RootLayout({
         <SectionSeperator />
 
         {/* Main */}
-        <div className='max-container size-full flex-1'>
-          <div className='border-input mx-2 border-x border-dashed'>
+        <div className='max-container flex size-full flex-1'>
+          <div className='border-input mx-2 flex-1 border-x border-dashed'>
             {children}
           </div>
         </div>

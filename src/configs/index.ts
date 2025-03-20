@@ -5,10 +5,7 @@ import { getBaseUrl } from '@/utils/helpers';
 export const siteConfig: Metadata = {
   title: 'Diwash Bhattarai | Portfolio',
   metadataBase: new URL(getBaseUrl()),
-  icons: [
-    { rel: 'icon', url: '/favicon.png' },
-    { rel: 'apple-touch-icon', url: '/apple-touch-icon.png' },
-  ],
+  icons: [{ rel: 'icon', url: '/favicon.png' }],
   alternates: {
     canonical: '/',
   },

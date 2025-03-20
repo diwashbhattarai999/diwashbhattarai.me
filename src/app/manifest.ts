@@ -12,27 +12,17 @@ export default function manifest(): MetadataRoute.Manifest {
       'The personal portfolio of Diwash Bhattarai, showcasing projects, skills, and experience.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#fff',
-    theme_color: '#fff',
+    background_color: '#25252e',
+    theme_color: '#5e608f',
     icons: [
-      {
-        src: '/android-chrome-96x96.png',
-        sizes: '96x96',
-        type: 'image/png',
-      },
-      {
-        src: '/android-chrome-144x144.png',
-        sizes: '144x144',
-        type: 'image/png',
-      },
       {
         src: '/android-chrome-192x192.png',
         sizes: '192x192',
         type: 'image/png',
       },
       {
-        src: '/apple-touch-icon.png',
-        sizes: '120x120',
+        src: '/android-chrome-512x512.png',
+        sizes: '512x512',
         type: 'image/png',
       },
     ],
