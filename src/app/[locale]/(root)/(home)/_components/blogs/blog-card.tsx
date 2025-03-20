@@ -34,7 +34,7 @@ interface IBlogCardProps {
 
 export const BlogCard = ({ post }: IBlogCardProps) => {
   return (
-    <Card className='group bg-card/20 relative overflow-hidden rounded-xl border p-0 backdrop-blur-2xl'>
+    <Card className='group bg-card/20 relative overflow-hidden rounded-xl border p-0 backdrop-blur-md'>
       <div className='grid grid-cols-1 md:grid-cols-[1fr_1.5fr] lg:grid-cols-[1fr_2fr]'>
         {/* Image Section */}
         <div className='relative rounded-md md:h-72'>

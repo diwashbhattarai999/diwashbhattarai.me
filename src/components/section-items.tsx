@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 
 import BlurFade from './animations/blur-fade';
 import BlurFadeText from './animations/blur-fade-text';
+import { BlinkingCircle } from './blinking-circle';
 
 export const SectionTitle = ({
   children,
@@ -68,12 +69,13 @@ export const SectionSeperator = ({ className }: { className?: string }) => {
 
 interface ISectionCardProps {
   title: string;
-  subtitle: string;
+  subtitle: React.ReactNode;
   description: string;
   skills: string[];
+  Icon: LucideIcon;
   projects?: string[];
   website?: string;
-  Icon: LucideIcon;
+  current?: boolean;
 }
 
 export const SectionCard: React.FC<ISectionCardProps> = ({
@@ -81,9 +83,10 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
   subtitle,
   description,
   skills,
+  Icon,
   projects,
   website,
-  Icon,
+  current,
 }) => {
   return (
     <BlurFade delay={0.1}>
@@ -91,9 +94,15 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
         <div className='line-glow' />
         <div className='line-glow right-0 left-auto' />
         <CardHeader className='flex flex-row items-start gap-4'>
-          <div className='bg-primary/10 rounded-full p-3'>
-            <Icon className='text-primary h-6 w-6' />
+          <div className='bg-primary/10 relative rounded-full p-2'>
+            <Icon className='text-primary size-6' />
+            {current && (
+              <div className='absolute right-0.5 bottom-0.5'>
+                <BlinkingCircle />
+              </div>
+            )}
           </div>
+
           <div>
             <CardTitle className='text-lg'>{title}</CardTitle>
             <p className='text-primary'>{subtitle}</p>

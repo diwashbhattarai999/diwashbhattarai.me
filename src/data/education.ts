@@ -4,6 +4,7 @@ export const EDUCATION_DETAILS = [
     degree:
       'Bachelor of Science in Computer Science and Information Technology (BSc.CSIT)',
     duration: 'Apr 2021 - Current',
+    current: true,
     description: `Pursuing Bachelor's degree with a focus on programming, data structures, algorithms, web development, and software engineering. Actively participating in coding competitions and hackathons. Engaged in hands-on projects and real-world applications in web development and system design.`,
     skills: [
       'C',

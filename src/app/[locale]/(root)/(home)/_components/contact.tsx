@@ -11,7 +11,7 @@ import {
 export function Contact() {
   return (
     <SectionWrapper id='contact' title='Contact'>
-      <Card>
+      <Card className='bg-card/50 backdrop-blur-md'>
         <CardHeader>
           <CardTitle>Book a Call</CardTitle>
           <CardDescription>

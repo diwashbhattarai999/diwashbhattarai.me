@@ -10,6 +10,7 @@ export const Experience = () => {
         {EXPERIENCE_DETAILS.map((exp, index) => (
           <SectionCard
             Icon={Briefcase}
+            current={exp.current}
             description={exp.description}
             key={index}
             projects={exp.projects}

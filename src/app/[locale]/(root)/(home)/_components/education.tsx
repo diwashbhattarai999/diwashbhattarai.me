@@ -10,6 +10,7 @@ export const Education = () => {
         {EDUCATION_DETAILS.map((edu, index) => (
           <SectionCard
             Icon={GraduationCap}
+            current={edu.current}
             description={edu.description}
             key={index}
             skills={edu.skills}

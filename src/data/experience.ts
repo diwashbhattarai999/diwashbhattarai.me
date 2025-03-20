@@ -16,6 +16,8 @@ export const EXPERIENCE_DETAILS = [
     ],
     projects: ['Patient Management', 'Doctor Management'],
     website: 'https://patient.upchaarnepal.com',
+    current: true,
+    logo: '/company/upchaar-nepal.png',
   },
   {
     title: 'Junior Frontend Developer',
@@ -30,6 +32,8 @@ export const EXPERIENCE_DETAILS = [
       'Korean Color Analysis',
     ],
     website: 'https://factdigi.com',
+    current: true,
+    logo: '/company/fact-digi.png',
   },
   {
     title: 'Frontend Developer Intern',
@@ -44,5 +48,7 @@ export const EXPERIENCE_DETAILS = [
       'Portfolio Website',
     ],
     website: 'https://kswtechzone.com.np/',
+    current: false,
+    logo: '/company/ksw.png',
   },
 ];
