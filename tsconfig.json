@@ -28,6 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "eslint.config.mjs"
-  ],
+, "src/app/contents/blog-1.mdx"  ],
   "exclude": ["node_modules"]
 }

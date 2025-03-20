@@ -1,12 +1,13 @@
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 
-import { ArrowRight, Calendar, Clock, MessageSquare } from 'lucide-react';
+import { ArrowRight, Calendar, Clock } from 'lucide-react';
 
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -17,39 +18,39 @@ import { AvatarFallback } from '@radix-ui/react-avatar';
 
 interface IBlogCardProps {
   post: {
-    id: string;
+    slug: string;
     title: string;
-    excerpt: string;
-    coverImage: string;
     date: string;
     author: string;
-    authorProfile: StaticImageData;
-    category: string;
+    profile: string;
+    tags: string[];
+    description: string;
+    coverImage: string;
+    excerpt: string;
     readTime: string;
-    commentCount: number;
+    category: string;
   };
 }
 
 export const BlogCard = ({ post }: IBlogCardProps) => {
   return (
-    <Card className='group bg-card/30 hover:border-primary/20 hover:shadow-primary/5 relative overflow-hidden rounded-xl border p-0 transition-all duration-300 hover:shadow-lg'>
+    <Card className='group bg-card/20 relative overflow-hidden rounded-xl border p-0 backdrop-blur-2xl'>
       <div className='grid grid-cols-1 md:grid-cols-[1fr_1.5fr] lg:grid-cols-[1fr_2fr]'>
         {/* Image Section */}
-        <div className='relative h-64 overflow-hidden md:h-full'>
+        <div className='relative rounded-md md:h-72'>
           <Image
-            fill
             alt={post.title}
-            className='object-cover transition-transform duration-500 group-hover:scale-105'
+            className='size-full object-cover object-top'
+            height={500}
             src={post.coverImage || '/placeholder.svg'}
+            width={500}
           />
-          <div className='absolute inset-0 bg-gradient-to-r from-black/60 to-transparent md:bg-gradient-to-t md:from-black/60 md:to-transparent' />
-          <Badge className='bg-primary/90 hover:bg-primary absolute top-4 left-4'>
-            {post.category}
-          </Badge>
+
+          <div className='to-card/80 absolute inset-0 size-full bg-gradient-to-b from-transparent'></div>
         </div>
 
         {/* Content Section */}
-        <div className='flex flex-col justify-between p-6 md:p-8'>
+        <div className='flex flex-col justify-between gap-5 px-6 py-4'>
           <CardHeader className='gap-4 p-0'>
             <div className='text-muted-foreground flex items-center gap-4 text-sm'>
               <div className='flex items-center gap-1'>
@@ -60,27 +61,42 @@ export const BlogCard = ({ post }: IBlogCardProps) => {
                 <Clock className='h-4 w-4' />
                 <span>{post.readTime}</span>
               </div>
-              <div className='flex items-center gap-1'>
-                <MessageSquare className='h-4 w-4' />
-                <span>{post.commentCount} comments</span>
-              </div>
             </div>
 
-            <Link href={`/blogs/${post.id}`}>
-              <CardTitle className='group-hover:text-primary text-2xl leading-tight font-bold tracking-tight transition-colors md:text-3xl'>
+            <Link href={`/blogs/${post.slug}`}>
+              <CardTitle className='hover:text-primary text-2xl leading-tight font-bold tracking-tight transition-colors'>
                 {post.title}
               </CardTitle>
             </Link>
 
-            <CardDescription className='line-clamp-3 text-base md:line-clamp-4'>
-              {post.excerpt}
-            </CardDescription>
+            <div className='flex flex-wrap gap-2'>
+              {post.tags.slice(0, 3).map(tag => (
+                <Badge className='text-xs font-medium' key={tag}>
+                  {tag}
+                </Badge>
+              ))}
+              {post.tags.length > 3 && (
+                <Badge className='text-xs font-medium'>
+                  +{post.tags.length - 3}
+                </Badge>
+              )}
+            </div>
           </CardHeader>
+
+          <CardContent className='p-0'>
+            <CardDescription className='line-clamp-3 text-base md:line-clamp-4'>
+              {post.description}
+            </CardDescription>
+          </CardContent>
 
           <CardFooter className='mt-6 flex items-center justify-between px-0'>
             <div className='flex items-center gap-2'>
               <Avatar>
-                <AvatarImage alt={post.author} src={post.authorProfile.src} />
+                <AvatarImage
+                  alt={post.author}
+                  className='object-cover'
+                  src={post.profile}
+                />
                 <AvatarFallback>
                   {post.author.charAt(0).toUpperCase() +
                     post.author.charAt(1).toUpperCase()}
@@ -96,7 +112,7 @@ export const BlogCard = ({ post }: IBlogCardProps) => {
             >
               <Link
                 className='flex items-center gap-1'
-                href={`/blogs/${post.id}`}
+                href={`/blogs/${post.slug}`}
               >
                 Read More
                 <ArrowRight className='h-4 w-4 transition-transform duration-300 group-hover/button:translate-x-1' />

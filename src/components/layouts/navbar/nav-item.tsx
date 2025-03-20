@@ -23,6 +23,7 @@ export const NavItem = ({
   className,
 }: NavItemProps) => {
   const pathname = usePathname();
+  const isActive = path === '/' ? pathname === path : pathname.startsWith(path);
 
   return (
     <>
@@ -31,7 +32,7 @@ export const NavItem = ({
         key={path}
         className={cn(
           'hover:text-primary hover:bg-muted hidden rounded-md px-4 py-1 transition-colors md:inline',
-          pathname === path ? 'text-primary bg-muted' : 'text-foreground/60',
+          isActive ? 'text-primary bg-muted' : 'text-foreground/60',
           className
         )}
       >

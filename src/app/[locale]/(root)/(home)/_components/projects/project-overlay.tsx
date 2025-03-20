@@ -55,10 +55,11 @@ export const ProjectOverlay = ({
         </div>
         <div className='relative h-[300px] overflow-hidden rounded-xl'>
           <Image
-            fill
             alt={project.title}
-            className='object-cover object-top transition-all duration-700'
+            className='size-full object-cover object-top transition-all duration-700'
+            height={500}
             src={project.image || '/placeholder.svg'}
+            width={500}
           />
           <div className='absolute inset-0 bg-gradient-to-t from-black/40 to-transparent' />
         </div>
