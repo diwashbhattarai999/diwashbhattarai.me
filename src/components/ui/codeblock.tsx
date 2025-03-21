@@ -4,7 +4,7 @@ import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
-import { IconCheck, IconCopy } from '@tabler/icons-react';
+import { Check, Copy } from 'lucide-react';
 
 type CodeBlockProps = {
   language: string;
@@ -55,11 +55,35 @@ export const CodeBlock = ({
     ? tabs[activeTab].highlightLines || []
     : highlightLines;
 
+  // Add custom CSS to ensure the code block is responsive
+  React.useEffect(() => {
+    // Add a style tag to handle the SyntaxHighlighter's generated elements
+    const styleTag = document.createElement('style');
+    styleTag.innerHTML = `
+      .syntax-highlighter-container pre {
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+      }
+      
+      @media (max-width: 640px) {
+        .syntax-highlighter-container code {
+          font-size: 0.75rem !important;
+        }
+      }
+    `;
+    document.head.appendChild(styleTag);
+
+    return () => {
+      document.head.removeChild(styleTag);
+    };
+  }, []);
+
   return (
     <div className='relative w-full rounded-lg bg-neutral-900/90 p-4 font-mono text-sm backdrop-blur-md dark:bg-neutral-900/50'>
       <div className='flex flex-col gap-2'>
         {tabsExist && (
-          <div className='flex  overflow-x-auto'>
+          <div className='flex flex-wrap overflow-x-auto'>
             {tabs.map((tab, index) => (
               <button
                 key={index}
@@ -77,14 +101,16 @@ export const CodeBlock = ({
         )}
         {!tabsExist && filename && (
           <div className='flex items-center justify-between py-2'>
-            <div className='text-muted-foreground text-xs'>{filename}</div>
+            <div className='text-muted-foreground max-w-[80%] truncate text-xs'>
+              {filename}
+            </div>
             <button
               className='text-muted-foreground hover:text-secondary-foreground flex items-center gap-1 font-sans text-xs transition-colors'
               onClick={() => {
                 void copyToClipboard();
               }}
             >
-              {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+              {copied ? <Check size={14} /> : <Copy size={14} />}
             </button>
           </div>
         )}
@@ -92,22 +118,36 @@ export const CodeBlock = ({
       <SyntaxHighlighter
         showLineNumbers
         wrapLines
+        wrapLongLines
         PreTag='div'
         language={activeLanguage}
         style={atomDark}
+        codeTagProps={{
+          style: {
+            display: 'block',
+            width: '100%',
+            maxWidth: '100%',
+            overflowX: 'auto',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+          },
+        }}
         customStyle={{
           margin: 0,
           padding: 0,
           background: 'transparent',
-          fontSize: '0.875rem', // text-sm equivalent
+          fontSize: '0.875rem',
+          maxWidth: '100%',
+          overflowX: 'auto',
         }}
         lineProps={lineNumber => ({
           style: {
             backgroundColor: activeHighlightLines.includes(lineNumber)
-              ? 'rgba(255,255,255)'
+              ? 'rgba(255,255,255,0.1)'
               : 'transparent',
             display: 'block',
             width: '100%',
+            maxWidth: '100%',
           },
         })}
       >

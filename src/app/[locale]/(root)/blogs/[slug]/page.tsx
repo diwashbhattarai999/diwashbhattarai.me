@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import BlurFade from '@/components/animations/blur-fade';
 import BlurFadeText from '@/components/animations/blur-fade-text';
 import { Badge } from '@/components/ui/badge';
-import { CodeBlock } from '@/components/ui/codeblocks';
+import { CodeBlock } from '@/components/ui/codeblock';
 import { Link } from '@/i18n/routing';
 import { getPostBySlug } from '@/lib/mdx';
 
@@ -23,7 +23,7 @@ export default async function BlogPost({
       {/* Back to blogs link */}
       <BlurFade>
         <Link
-          className='text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 transition-colors'
+          className='text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-2 transition-colors md:mb-8'
           href='/blogs'
         >
           <ArrowLeft className='h-4 w-4' />
@@ -34,7 +34,7 @@ export default async function BlogPost({
       {/* Title */}
       {/* <h1 className='text-4xl leading-tight font-bold'>{frontMatter.title}</h1> */}
       <BlurFadeText
-        className='text-4xl leading-tight font-bold'
+        className='text-3xl leading-tight font-bold sm:text-4xl'
         delay={0.04}
         text={frontMatter.title}
         yOffset={8}
@@ -94,7 +94,7 @@ export default async function BlogPost({
       </div>
 
       <BlurFade delay={0.2}>
-        <article className='prose xl:prose-lg dark:prose-invert prose-hr:border-input mt-8 max-w-none'>
+        <article className='prose xl:prose-lg dark:prose-invert prose-hr:border-input mt-8 w-full md:max-w-none'>
           <MDXRemote components={{ CodeBlock }} source={content} />
         </article>
       </BlurFade>

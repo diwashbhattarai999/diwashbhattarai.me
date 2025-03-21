@@ -11,8 +11,8 @@ const HomePage = () => {
   return (
     <>
       {/* Background circles */}
-      {/* <div className='bg-primary fixed -top-10 -left-10 z-0 size-48 rounded-full blur-[20rem]' />
-      <div className='bg-primary fixed -right-10 -bottom-10 z-0 size-48 rounded-full blur-[20rem]' /> */}
+      <div className='bg-primary/20 fixed -top-10 -left-10 z-0 size-72 rounded-full blur-[20rem]' />
+      <div className='bg-primary/20 fixed -right-10 -bottom-10 z-0 size-72 rounded-full blur-[20rem]' />
 
       <Hero />
       <SectionSeperator />
