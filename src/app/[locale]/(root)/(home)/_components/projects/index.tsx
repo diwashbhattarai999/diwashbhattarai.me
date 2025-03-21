@@ -51,9 +51,10 @@ export const Projects = ({
       </div>
       <BlurFade delay={0.1}>
         <div className='space-y-0'>
-          {displayedProjects.map(project => (
+          {displayedProjects.map((project, index) => (
             <React.Fragment key={project.id}>
               <ProjectCard
+                index={index}
                 isHovered={hoveredId === project.id}
                 key={project.id}
                 project={project}

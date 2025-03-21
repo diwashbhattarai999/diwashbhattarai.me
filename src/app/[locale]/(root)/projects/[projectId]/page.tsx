@@ -100,6 +100,7 @@ export default async function ProjectPage({
             fill
             alt={project.title}
             className='object-cover object-top'
+            sizes='(min-width: 1024px) 1024px, 100vw'
             src={project.image || '/placeholder.svg'}
           />
         </div>
@@ -159,6 +160,7 @@ export default async function ProjectPage({
                   fill
                   alt={screenshot.alt}
                   className='object-cover'
+                  sizes='(min-width: 1024px) 1024px, 100vw'
                   src={screenshot.src || '/placeholder.svg'}
                 />
               </div>

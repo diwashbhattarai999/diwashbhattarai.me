@@ -16,10 +16,12 @@ export const ProjectCard = ({
   project,
   onHover,
   isHovered,
+  index,
 }: {
   project: IProject;
   onHover: (id: string | null) => void;
   isHovered: boolean;
+  index: number;
 }) => {
   const isMobile = useIsMobile();
   const cardRef = React.useRef<HTMLDivElement>(null);
@@ -50,7 +52,7 @@ export const ProjectCard = ({
       onMouseEnter={() => onHover(project.id)}
       onMouseLeave={() => onHover(null)}
     >
-      <div className='flex w-full flex-col gap-4 md:flex-row md:items-center md:gap-6'>
+      <div className='relative flex w-full flex-col gap-4 md:flex-row md:items-center md:gap-6'>
         <Link href={`/projects/${project.id}`}>
           <div className='mb-4 h-64 w-full overflow-hidden rounded-xl md:hidden'>
             <Image
@@ -82,6 +84,11 @@ export const ProjectCard = ({
             label='Live Demo'
           />
         </div>
+
+        <span className='text-muted-foreground/5 absolute top-1/2 right-0 -z-10 hidden -translate-y-1/2 text-7xl md:inline'>
+          {index < 9 ? '0' : ''}
+          {index + 1}
+        </span>
       </div>
 
       {/* Overlay should be inside the hovered ProjectCard */}
