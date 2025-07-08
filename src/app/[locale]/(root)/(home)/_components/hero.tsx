@@ -19,6 +19,7 @@ export function Hero() {
             <Avatar className='size-36 border'>
               <AvatarImage
                 alt={ABOUT_ME.name}
+                className='object-cover'
                 src={ABOUT_ME.profileImage.src}
               />
               <AvatarFallback>{ABOUT_ME.initials}</AvatarFallback>
