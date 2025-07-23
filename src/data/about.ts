@@ -5,8 +5,8 @@ export const ABOUT_ME = {
   initials: 'DB',
   title: 'Full Stack Developer',
   description: [
-    'A passionate full-stack developer with expertise in React, Node.js, and modern web technologies. I specialize in building responsive, user-friendly web applications with clean code and optimal performance. With a strong foundation in both frontend and backend development, I create seamless digital experiences that solve real-world problems.',
-    'Currently, I am working as a Junior Software Engineer at Upachaar Nepal, where I am involved in developing a patient management system and working on scalable RESTful APIs with technologies like React, Tailwind CSS, Typescript, Express.js, and Firebase.',
+    'A dedicated full-stack developer with nearly 2 years of experience in building scalable, production-ready web applications. I specialize in React, Next.js, Node.js, and modern web technologies, with a strong focus on clean architecture, performance, and developer experience. Passionate about open-source contributions and developer tooling.',
+    'Currently working as a Full Stack Developer at Upachaar Nepal, where I build and maintain robust portals for patients, doctors, clinics, and admins. I develop RESTful APIs and microservices using Node.js, Express, MongoDB, and Firebase, while also publishing reusable components to internal registries and mentoring interns on best practices.',
   ],
   profileImage: ProfileImg,
 };

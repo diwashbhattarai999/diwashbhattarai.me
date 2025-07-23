@@ -23,7 +23,7 @@ export const SOCIALS_LINKS = [
   },
   {
     Icon: FileText,
-    link: 'https://drive.google.com/file/d/18-BRysi8R89r9jLVONKHL_k4m7KwAk8f/view?usp=drive_link',
+    link: 'https://drive.google.com/file/d/1dlgquCAYdXZ14LpVLHtSKFDKoqlQE1WJ/view?usp=sharing',
     title: 'Resume',
   },
 ];
