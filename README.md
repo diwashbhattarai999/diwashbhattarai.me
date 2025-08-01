@@ -5,9 +5,9 @@ projects, and experiences as a web developer. Built with modern technologies,
 this portfolio is designed to be fast, responsive, and visually appealing.
 
 👉 **Live Demo:**
-[https://diwashbhattarai.vercel.app](https://diwashbhattarai.vercel.app)
+[https://diwashb.com.np](https://diwashb.com.np)
 
-![image](https://github.com/user-attachments/assets/16456664-79df-4bd3-919e-8c41172cf3c4)
+![image](https://github.com/user-attachments/assets/2c866d5d-5a57-447c-a373-f027f54d3182)
 
 
 ---
