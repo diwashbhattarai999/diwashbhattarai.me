@@ -1,129 +1,105 @@
-import eslintConfigPrettier from 'eslint-config-prettier';
+// eslint.config.mjs
+import nextPlugin from '@next/eslint-plugin-next';
+
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
-import eslintPluginReact from 'eslint-plugin-react';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
-import { dirname } from 'path';
-import typescriptEslint from 'typescript-eslint';
-import { fileURLToPath } from 'url';
 
-import { FlatCompat } from '@eslint/eslintrc';
 import eslintJS from '@eslint/js';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 
-// Get current directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+export default [
+  // Base JS config
+  { ...eslintJS.configs.recommended },
 
-// Initialize compatibility
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-/** Base Configuration */
-const baseConfig = {
-  extends: [eslintJS.configs.recommended],
-  rules: {
-    'no-unused-vars': 'error',
-    'no-await-in-loop': 'error',
-    'no-duplicate-imports': 'error',
-    'no-use-before-define': 'error',
-    'require-atomic-updates': 'error',
-  },
-};
-
-/** TypeScript Configuration */
-const typescriptConfig = {
-  extends: [...typescriptEslint.configs.recommendedTypeChecked],
-  languageOptions: {
-    parser: tsParser,
-    parserOptions: {
-      ecmaVersion: 'latest',
-      project: './tsconfig.json',
-    },
-    globals: {
-      ...globals.browser,
-      ...globals.es2025,
-    },
-  },
-  rules: {
-    '@typescript-eslint/no-unused-vars': 'error',
-    '@typescript-eslint/consistent-type-exports': 'error',
-    '@typescript-eslint/explicit-member-accessibility': 'error',
-    '@typescript-eslint/no-floating-promises': ['error'],
-    '@typescript-eslint/return-await': 'error',
-    '@typescript-eslint/no-unsafe-assignment': 'off',
-    '@typescript-eslint/no-unsafe-call': 'off',
-    '@typescript-eslint/no-unsafe-argument': 'off',
-    '@typescript-eslint/no-unsafe-member-access': 'off',
-    '@typescript-eslint/no-unsafe-return': 'off',
-    'no-use-before-define': 'off',
-    'no-await-in-loop': 'off',
-  },
-};
-
-/** React Configuration */
-const reactConfig = {
-  extends: [eslintPluginReact.configs.flat['jsx-runtime']],
-  rules: {
-    'react/jsx-boolean-value': 'error',
-    'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
-    'react/jsx-sort-props': [
-      'error',
-      { callbacksLast: true, shorthandFirst: true, multiline: 'last' },
-    ],
-    'react-hooks/exhaustive-deps': 'warn',
-  },
-};
-
-/** JSX A11y Configuration */
-const jsxA11yConfig = {
-  ...jsxA11yPlugin.flatConfigs.recommended,
-  plugins: { 'jsx-a11y': jsxA11yPlugin },
-  rules: {
-    'jsx-a11y/alt-text': ['error', { img: ['Image'] }],
-    'jsx-a11y/role-has-required-aria-props': 'error',
-  },
-};
-
-/** Import Sort Configuration */
-const importSortConfig = {
-  plugins: { 'simple-import-sort': simpleImportSort },
-  rules: {
-    'simple-import-sort/imports': [
-      'error',
-      {
-        groups: [
-          ['^react', '^@react', '^next', '^@next'], // React & Nextjs imports
-          ['^\\w'], // Third-party libraries
-          ['^@'], // Imports starting with @
-          ['^\\./'], // Relative imports
-          ['^.+\\.(css|scss)$'], // Style imports
-        ],
+  // TypeScript config
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: './tsconfig.json',
+        ecmaVersion: 'latest',
+        sourceType: 'module',
       },
-    ],
-    'simple-import-sort/exports': 'error',
-    'import/order': 'off', // Avoid conflicts with `simple-import-sort` plugin
-    'sort-imports': 'off', // Avoid conflicts with `simple-import-sort` plugin
+      globals: {
+        ...globals.browser,
+        ...globals.es2025,
+        process: 'readonly',
+        React: 'readonly',
+      },
+    },
+    plugins: { '@typescript-eslint': tsPlugin },
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/consistent-type-exports': 'error',
+      '@typescript-eslint/explicit-member-accessibility': 'error',
+      '@typescript-eslint/return-await': 'error',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      'no-use-before-define': 'off',
+      'no-await-in-loop': 'off',
+    },
   },
-};
 
-/** Next.js Configuration */
-const nextConfig = compat.extends('next/core-web-vitals', 'next/typescript');
+  // React + Hooks config
+  {
+    files: ['**/*.jsx', '**/*.tsx'],
+    plugins: { react: reactPlugin, 'react-hooks': reactHooksPlugin },
+    rules: {
+      'react/jsx-boolean-value': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'react/jsx-filename-extension': [
+        'error',
+        { extensions: ['.jsx', '.tsx'] },
+      ],
+    },
+  },
 
-const eslintConfig = typescriptEslint.config(
-  baseConfig,
-  typescriptConfig,
-  reactConfig,
-  jsxA11yConfig,
-  importSortConfig,
-  eslintConfigPrettier,
-  nextConfig
-);
+  // JSX a11y
+  {
+    files: ['**/*.jsx', '**/*.tsx'],
+    plugins: { 'jsx-a11y': jsxA11yPlugin },
+    rules: {
+      'jsx-a11y/alt-text': 'error',
+      'jsx-a11y/role-has-required-aria-props': 'error',
+    },
+  },
 
-// Uncomment to modify the config files
-// eslintConfig.map((config) => {
-//   config.files = ["src/**/*.ts", "src/**/*.tsx"];
-// });
+  // Next.js plugin
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: { '@next/next': nextPlugin },
+    rules: {
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs['core-web-vitals'].rules,
+    },
+  },
 
-export default eslintConfig;
+  // Import sorting
+  {
+    plugins: { 'simple-import-sort': simpleImportSort },
+    rules: {
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [
+            ['^react', '^@react', '^next', '^@next'], // React & Nextjs imports
+            ['^\\w'], // Third-party libraries
+            ['^@'], // Imports starting with @
+            ['^\\./'], // Relative imports
+            ['^.+\\.(css|scss)$'], // Style imports
+          ],
+        },
+      ],
+      'simple-import-sort/exports': 'error',
+    },
+  },
+];

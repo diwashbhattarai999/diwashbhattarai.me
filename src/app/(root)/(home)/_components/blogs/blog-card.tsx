@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
 
@@ -13,7 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Link } from '@/i18n/routing';
 import { AvatarFallback } from '@radix-ui/react-avatar';
 
 interface IBlogCardProps {

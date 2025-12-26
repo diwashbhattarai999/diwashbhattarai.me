@@ -1,4 +1,3 @@
-/* eslint-disable no-duplicate-imports */
 import type { ReactElement } from 'react';
 
 import type { RenderOptions } from '@testing-library/react';

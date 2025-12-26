@@ -1,12 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
 
 import { IProject } from '@/data/project';
 import { useIsMobile } from '@/hooks/use-is-mobile';
-import { Link } from '@/i18n/routing';
 
 import { ExternalLinkButton } from './external-link-button';
 import { ProjectOverlay } from './project-overlay';
@@ -19,6 +19,7 @@ export const ProjectCard = ({
   index,
 }: {
   project: IProject;
+  // eslint-disable-next-line no-unused-vars
   onHover: (id: string | null) => void;
   isHovered: boolean;
   index: number;

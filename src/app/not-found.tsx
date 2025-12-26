@@ -1,15 +1,7 @@
-'use client';
-
 import { NotFoundComponent } from '@/components/not-found';
 
-import '@/styles/globals.css';
+const NotFound = () => {
+  return <NotFoundComponent />;
+};
 
-export default function NotFound() {
-  return (
-    <html lang='en'>
-      <body>
-        <NotFoundComponent />
-      </body>
-    </html>
-  );
-}
+export default NotFound;

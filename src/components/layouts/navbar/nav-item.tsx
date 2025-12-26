@@ -1,3 +1,6 @@
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
 import { LucideIcon } from 'lucide-react';
 
 import {
@@ -6,7 +9,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Link, usePathname } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 
 interface NavItemProps {

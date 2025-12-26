@@ -1,4 +1,4 @@
-import { Code, Database, Layout, LucideIcon, Server, ServerCog } from 'lucide-react';
+import { Code, Database, Layout, LucideIcon, Server } from 'lucide-react';
 
 import CSS from '@/assets/skills/css.svg';
 import Docker from '@/assets/skills/docker.svg';
@@ -10,14 +10,19 @@ import GitHub from '@/assets/skills/github.svg';
 import GithubActions from '@/assets/skills/github-actions.svg';
 import HTML from '@/assets/skills/html.svg';
 import JS from '@/assets/skills/js.svg';
+import Kafka from '@/assets/skills/kafka.svg';
 import Linux from '@/assets/skills/linux.svg';
+import Microservices from '@/assets/skills/microservices.svg';
 import MongoDB from '@/assets/skills/mongodb.svg';
+import Nest from '@/assets/skills/nestjs.svg';
 import Next from '@/assets/skills/next.svg';
 import Node from '@/assets/skills/node.svg';
 import NPM from '@/assets/skills/npm.svg';
+import Postgres from '@/assets/skills/postgresql.svg';
 import Postman from '@/assets/skills/postman.svg';
 import PWA from '@/assets/skills/pwa.svg';
 import React from '@/assets/skills/react.svg';
+import Redis from '@/assets/skills/redis.svg';
 import Redux from '@/assets/skills/redux.svg';
 import Responsive from '@/assets/skills/responsive.svg';
 import Rest from '@/assets/skills/rest.svg';
@@ -27,14 +32,8 @@ import Tailwind from '@/assets/skills/tailwind.svg';
 import TanstackQuery from '@/assets/skills/tanstack-query.svg';
 import TS from '@/assets/skills/ts.svg';
 import VSCode from '@/assets/skills/vscode.svg';
-import Zod from '@/assets/skills/zod.svg';
-
-import Nest from '@/assets/skills/nestjs.svg';
-import Kafka from '@/assets/skills/kafka.svg';
-import Redis from '@/assets/skills/redis.svg';
-import Postgres from '@/assets/skills/postgresql.svg';
 import WebRTC from '@/assets/skills/webrtc.svg';
-import Microservices from '@/assets/skills/microservices.svg';
+import Zod from '@/assets/skills/zod.svg';
 
 interface Skill {
   name: string;

@@ -53,9 +53,8 @@ export function Hero() {
                 'mentoring interns',
               ];
 
-
               let highlightedText = text;
-              highlights.forEach((phrase) => {
+              highlights.forEach(phrase => {
                 highlightedText = highlightedText.replace(
                   phrase,
                   `<span class="font-semibold text-primary">${phrase}</span>`

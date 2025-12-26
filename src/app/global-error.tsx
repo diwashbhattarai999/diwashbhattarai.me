@@ -2,8 +2,6 @@
 
 import NextError from 'next/error';
 
-import { routing } from '@/i18n/routing';
-
 // interface IGlobalErrorProps {
 //   error: Error & { digest?: string };
 //   reset: () => void;
@@ -11,7 +9,7 @@ import { routing } from '@/i18n/routing';
 
 export default function GlobalError() {
   return (
-    <html lang={routing.defaultLocale}>
+    <html>
       <body>
         {/* `NextError` is the default Next.js error page component. Its type
         definition requires a `statusCode` prop. However, since the App Router

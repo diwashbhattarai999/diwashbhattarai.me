@@ -46,8 +46,11 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
       { name: 'Doctor Portal', link: 'https://doctor.upchaarnepal.com' },
       { name: 'Clinic Portal', link: 'https://clinic.upchaarnepal.com' },
       { name: 'Pharmacy Portal', link: 'https://pharmacy.upchaarnepal.com' },
-      { name: 'Diagnostic Portal', link: 'https://diagnostic.upchaarnepal.com' },
-      { name: 'Admin Panel', },
+      {
+        name: 'Diagnostic Portal',
+        link: 'https://diagnostic.upchaarnepal.com',
+      },
+      { name: 'Admin Panel' },
       { name: 'Logger System' },
     ],
     website: 'https://upchaarnepal.com',
@@ -74,7 +77,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
     projects: [
       { name: 'Service Provider Application' },
       { name: 'Company Website', link: 'https://factdigi.com' },
-      { name: 'Themjon Traders', link: "http://13.233.7.146"},
+      { name: 'Themjon Traders', link: 'http://13.233.7.146' },
       { name: 'Korean Color Analysis' },
     ],
     website: 'https://factdigi.com',

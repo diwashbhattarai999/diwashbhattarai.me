@@ -144,15 +144,19 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
                         {project}
                       </li>
                     );
-                  } else if (project && typeof project === 'object' && 'name' in project) {
+                  } else if (
+                    project &&
+                    typeof project === 'object' &&
+                    'name' in project
+                  ) {
                     return (
                       <li className='text-muted-foreground' key={index}>
                         {project.link ? (
                           <a
                             href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary hover:underline"
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='text-primary hover:underline'
                           >
                             {project.name}
                           </a>

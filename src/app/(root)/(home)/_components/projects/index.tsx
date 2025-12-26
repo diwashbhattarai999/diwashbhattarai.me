@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 import { ArrowRight } from 'lucide-react';
 
@@ -13,7 +14,6 @@ import {
 } from '@/components/section-items';
 import { Button } from '@/components/ui/button';
 import { PROJECTS } from '@/data/project';
-import { Link } from '@/i18n/routing';
 
 import { ProjectCard } from './project-card';
 

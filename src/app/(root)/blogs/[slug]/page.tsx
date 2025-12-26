@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 
 import { ArrowLeft } from 'lucide-react';
@@ -7,7 +8,6 @@ import BlurFade from '@/components/animations/blur-fade';
 import BlurFadeText from '@/components/animations/blur-fade-text';
 import { Badge } from '@/components/ui/badge';
 import { CodeBlock } from '@/components/ui/codeblock';
-import { Link } from '@/i18n/routing';
 import { getPostBySlug } from '@/lib/mdx';
 
 export default async function BlogPost({
