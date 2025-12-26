@@ -7,7 +7,8 @@ import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface BlurFadeTextProps {
-  text: string;
+  text?: string;
+  dangerouslySetInnerHTML?: { __html: string };
   className?: string;
   variant?: {
     hidden: { y: number };
@@ -21,6 +22,7 @@ interface BlurFadeTextProps {
 }
 const BlurFadeText = ({
   text,
+  dangerouslySetInnerHTML,
   className,
   variant,
   characterDelay = 0.03,
@@ -33,9 +35,9 @@ const BlurFadeText = ({
     visible: { y: -yOffset, opacity: 1, filter: 'blur(0px)' },
   };
   const combinedVariants = variant || defaultVariants;
-  const characters = useMemo(() => Array.from(text), [text]);
+  const characters = useMemo(() => Array.from(text ?? ''), [text]);
 
-  if (animateByCharacter) {
+  if (animateByCharacter && text) {
     return (
       <div className='z-0'>
         <AnimatePresence>
@@ -76,9 +78,10 @@ const BlurFadeText = ({
             delay,
             ease: 'easeOut',
           }}
-        >
-          {text}
-        </motion.span>
+          {...(dangerouslySetInnerHTML
+            ? { dangerouslySetInnerHTML }
+            : { children: text })}
+        />
       </AnimatePresence>
     </div>
   );

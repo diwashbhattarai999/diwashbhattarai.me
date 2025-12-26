@@ -42,14 +42,35 @@ export function Hero() {
           />
 
           <div className='max-w-2xl'>
-            {ABOUT_ME.description.map((text, index) => (
-              <BlurFadeText
-                className='text-muted-foreground mb-6 leading-relaxed'
-                delay={BLUR_FADE_DELAY * (index + 1)}
-                key={index}
-                text={text}
-              />
-            ))}
+            {ABOUT_ME.description.map((text, index) => {
+              // Highlight important phrases
+              const highlights = [
+                'full-stack developer',
+                '2 years of experience',
+                'React, Next.js, Node.js',
+                'Upachaar Nepal',
+                'RESTful APIs and microservices',
+                'mentoring interns',
+              ];
+
+
+              let highlightedText = text;
+              highlights.forEach((phrase) => {
+                highlightedText = highlightedText.replace(
+                  phrase,
+                  `<span class="font-semibold text-primary">${phrase}</span>`
+                );
+              });
+
+              return (
+                <BlurFadeText
+                  className='text-muted-foreground mb-6 leading-relaxed'
+                  delay={BLUR_FADE_DELAY * (index + 1)}
+                  key={index}
+                  dangerouslySetInnerHTML={{ __html: highlightedText }}
+                />
+              );
+            })}
 
             {/* Social Icons */}
             <SocialIcons />

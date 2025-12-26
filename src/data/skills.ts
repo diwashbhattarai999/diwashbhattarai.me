@@ -1,4 +1,4 @@
-import { Code, Database, Layout, LucideIcon, Server } from 'lucide-react';
+import { Code, Database, Layout, LucideIcon, Server, ServerCog } from 'lucide-react';
 
 import CSS from '@/assets/skills/css.svg';
 import Docker from '@/assets/skills/docker.svg';
@@ -29,6 +29,13 @@ import TS from '@/assets/skills/ts.svg';
 import VSCode from '@/assets/skills/vscode.svg';
 import Zod from '@/assets/skills/zod.svg';
 
+import Nest from '@/assets/skills/nestjs.svg';
+import Kafka from '@/assets/skills/kafka.svg';
+import Redis from '@/assets/skills/redis.svg';
+import Postgres from '@/assets/skills/postgresql.svg';
+import WebRTC from '@/assets/skills/webrtc.svg';
+import Microservices from '@/assets/skills/microservices.svg';
+
 interface Skill {
   name: string;
   icon: string;
@@ -52,12 +59,14 @@ export const SKILLS: SkillCategory[] = [
       { name: 'React', icon: React },
       { name: 'Next.js', icon: Next },
       { name: 'Redux Toolkit', icon: Redux },
-      { name: 'Shadcn UI', icon: Shadcn },
       { name: 'TanStack Query', icon: TanstackQuery },
+      { name: 'React Hook Form', icon: React },
       { name: 'Zod', icon: Zod },
+      { name: 'Shadcn UI', icon: Shadcn },
       { name: 'Tailwind CSS', icon: Tailwind },
       { name: 'SASS', icon: SASS },
       { name: 'Responsive Design', icon: Responsive },
+      { name: 'PWA', icon: PWA },
     ],
   },
   {
@@ -65,8 +74,12 @@ export const SKILLS: SkillCategory[] = [
     icon: Server,
     skills: [
       { name: 'Node.js', icon: Node },
-      { name: 'Express', icon: Express },
-      { name: 'REST API', icon: Rest },
+      { name: 'Express.js', icon: Express },
+      { name: 'NestJS', icon: Nest },
+      { name: 'Apache Kafka', icon: Kafka },
+      { name: 'WebRTC', icon: WebRTC },
+      { name: 'REST APIs', icon: Rest },
+      { name: 'Microservices Architecture', icon: Microservices },
     ],
   },
   {
@@ -74,7 +87,9 @@ export const SKILLS: SkillCategory[] = [
     icon: Database,
     skills: [
       { name: 'MongoDB', icon: MongoDB },
+      { name: 'PostgreSQL', icon: Postgres },
       { name: 'Firebase', icon: Firebase },
+      { name: 'Redis', icon: Redis },
     ],
   },
   {
@@ -88,9 +103,8 @@ export const SKILLS: SkillCategory[] = [
       { name: 'Docker', icon: Docker },
       { name: 'VS Code', icon: VSCode },
       { name: 'Postman', icon: Postman },
-      { name: 'Figma', icon: Figma },
       { name: 'NPM', icon: NPM },
-      { name: 'PWA', icon: PWA },
+      { name: 'Figma', icon: Figma },
     ],
   },
 ];

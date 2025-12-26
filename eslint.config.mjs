@@ -22,7 +22,6 @@ const compat = new FlatCompat({
 
 /** Base Configuration */
 const baseConfig = {
-  name: 'base',
   extends: [eslintJS.configs.recommended],
   rules: {
     'no-unused-vars': 'error',
@@ -35,7 +34,6 @@ const baseConfig = {
 
 /** TypeScript Configuration */
 const typescriptConfig = {
-  name: 'typescript',
   extends: [...typescriptEslint.configs.recommendedTypeChecked],
   languageOptions: {
     parser: tsParser,
@@ -66,7 +64,6 @@ const typescriptConfig = {
 
 /** React Configuration */
 const reactConfig = {
-  name: 'react',
   extends: [eslintPluginReact.configs.flat['jsx-runtime']],
   rules: {
     'react/jsx-boolean-value': 'error',
@@ -81,7 +78,6 @@ const reactConfig = {
 
 /** JSX A11y Configuration */
 const jsxA11yConfig = {
-  name: 'jsx-a11y',
   ...jsxA11yPlugin.flatConfigs.recommended,
   plugins: { 'jsx-a11y': jsxA11yPlugin },
   rules: {
@@ -92,7 +88,6 @@ const jsxA11yConfig = {
 
 /** Import Sort Configuration */
 const importSortConfig = {
-  name: 'import-sort',
   plugins: { 'simple-import-sort': simpleImportSort },
   rules: {
     'simple-import-sort/imports': [

@@ -1,35 +1,56 @@
-export const EXPERIENCE_DETAILS = [
+export type ProjectItem = { name: string; link?: string };
+
+export interface ExperienceDetail {
+  title: string;
+  company: string;
+  duration: string;
+  description: string;
+  skills: string[];
+  projects: ProjectItem[];
+  website: string;
+  current: boolean;
+  logo: string;
+}
+
+export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
   {
-    title: 'Full Stack Developer',
+    title: 'Full Stack Software Developer',
     company: 'Upachaar Nepal',
     duration: 'Jun 2024 - Present',
     description:
-      'Built and maintained scalable frontends for patient, doctor, clinic, admin, and logger portals using React, Typescript, Tailwind CSS, Shadcn UI, Redux Toolkit, and React Query. Developed RESTful APIs and microservices using Node.js, Express, MongoDB, and Firebase, deployed via PM2, Docker, and GCP. Published reusable UI components to npm and GitHub Registry. Mentored interns and led onboarding processes. Wrote unit and integration tests for backend systems to ensure reliability.',
+      'Built and scaled large healthcare platforms serving patients, doctors, clinics, pharmacies, diagnostics, and admins using React, TypeScript, Tailwind CSS, and modern frontend architecture. Designed and developed RESTful APIs and distributed microservices using Node.js, Express, NestJS, MongoDB, and PostgreSQL. Implemented event-driven microservice communication using Apache Kafka and Redis. Published reusable UI component libraries to npm and GitHub Packages. Mentored interns on React, Git workflows, clean architecture, and system design. Implemented unit and integration tests to ensure performance, reliability, and maintainability of backend services.',
     skills: [
       'React',
+      'TypeScript',
       'Tailwind CSS',
       'Shadcn UI',
-      'TypeScript',
       'Redux Toolkit',
       'React Query',
       'Node.js',
+      'NestJS',
       'Express.js',
       'MongoDB',
+      'PostgreSQL',
       'Firebase',
-      'Khalti Payment Gateway',
-      'WebRTC',
+      'Apache Kafka',
+      'Redis',
+      'Microservices',
       'Docker',
-      'GCP',
       'PM2',
+      'GCP',
+      'WebRTC',
+      'Khalti Payment Gateway',
     ],
     projects: [
-      'Patient Portal',
-      'Doctor Portal',
-      'Clinic Portal',
-      'Admin Panel',
-      'Logger System',
+      { name: 'Patient Portal', link: 'https://upchaarnepal.com' },
+      { name: 'Doctor Portal', link: 'https://doctor.upchaarnepal.com' },
+      { name: 'Clinic Portal', link: 'https://clinic.upchaarnepal.com' },
+      { name: 'Pharmacy Portal', link: 'https://pharmacy.upchaarnepal.com' },
+      { name: 'Diagnostic Portal', link: 'https://diagnostic.upchaarnepal.com' },
+      { name: 'Admin Panel', },
+      { name: 'Logger System' },
     ],
-    website: 'https://patient.upchaarnepal.com',
+    website: 'https://upchaarnepal.com',
     current: true,
     logo: '/company/upchaar-nepal.png',
   },
@@ -51,9 +72,10 @@ export const EXPERIENCE_DETAILS = [
       'AWS EC2',
     ],
     projects: [
-      'Service Provider Application',
-      'Company Website',
-      'Korean Color Analysis',
+      { name: 'Service Provider Application' },
+      { name: 'Company Website', link: 'https://factdigi.com' },
+      { name: 'Themjon Traders', link: "http://13.233.7.146"},
+      { name: 'Korean Color Analysis' },
     ],
     website: 'https://factdigi.com',
     current: false,
@@ -67,9 +89,9 @@ export const EXPERIENCE_DETAILS = [
       'Contributed to the frontend development of e-commerce platforms, booking applications, and portfolio websites. Enhanced existing design systems and applications to ensure a consistent user experience across all platforms. Collaborated with the team to implement frontend functionalities based on project requirements. Worked on improving UI/UX aspects and applied responsive design principles effectively.',
     skills: ['HTML', 'CSS', 'JavaScript', 'React', 'Responsive Design'],
     projects: [
-      'E-commerce Platform',
-      'Booking Application',
-      'Portfolio Website',
+      { name: 'E-commerce Platform' },
+      { name: 'Booking Application' },
+      { name: 'Portfolio Website', link: 'https://kswtechzone.com.np/' },
     ],
     website: 'https://kswtechzone.com.np/',
     current: false,

@@ -67,13 +67,18 @@ export const SectionSeperator = ({ className }: { className?: string }) => {
   );
 };
 
+interface ProjectItem {
+  name: string;
+  link?: string;
+}
+
 interface ISectionCardProps {
   title: string;
   subtitle: React.ReactNode;
   description: string;
   skills: string[];
   Icon: LucideIcon;
-  projects?: string[];
+  projects?: ProjectItem[];
   website?: string;
   current?: boolean;
 }
@@ -109,13 +114,16 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
           </div>
         </CardHeader>
         <CardContent>
-          <p className='text-muted-foreground'>{description}</p>
+          <p
+            className='text-muted-foreground'
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
 
           {/* Render skills */}
-          <div className='text-muted-foreground mt-4 flex flex-wrap gap-4 text-sm'>
+          <div className='text-primary mt-4 flex flex-wrap gap-4 text-sm'>
             {skills.map((skill, index) => (
               <span
-                className='bg-muted inline-block rounded-sm px-3 py-1'
+                className='bg-primary/10 inline-block rounded-sm px-3 py-1'
                 key={index}
               >
                 {skill}
@@ -128,11 +136,34 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
             <div className='mt-4'>
               <h4 className='font-bold'>Projects:</h4>
               <ul className='flex list-disc flex-wrap gap-8 pl-4'>
-                {projects.map((project, index) => (
-                  <li className='text-muted-foreground' key={index}>
-                    {project}
-                  </li>
-                ))}
+                {projects.map((project, index) => {
+                  // Support both string and object format for backward compatibility
+                  if (typeof project === 'string') {
+                    return (
+                      <li className='text-muted-foreground' key={index}>
+                        {project}
+                      </li>
+                    );
+                  } else if (project && typeof project === 'object' && 'name' in project) {
+                    return (
+                      <li className='text-muted-foreground' key={index}>
+                        {project.link ? (
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline"
+                          >
+                            {project.name}
+                          </a>
+                        ) : (
+                          project.name
+                        )}
+                      </li>
+                    );
+                  }
+                  return null;
+                })}
               </ul>
             </div>
           )}
