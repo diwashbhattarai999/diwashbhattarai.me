@@ -2,15 +2,17 @@ import type { Metadata } from "next";
 
 import { getBaseUrl } from "@/utils/helpers";
 
+const baseUrl = getBaseUrl();
+
 export const siteConfig: Metadata = {
     title: "Diwash Bhattarai | Portfolio",
-    metadataBase: new URL(getBaseUrl()),
+    metadataBase: new URL(baseUrl),
     icons: [{ rel: "icon", url: "/favicon.png" }],
     alternates: {
         canonical: "/",
     },
     authors: [
-        { name: "Diwash Bhattarai", url: "https://diwashb.com.np" },
+        { name: "Diwash Bhattarai", url: `${baseUrl}` },
         { name: "दिवस भट्टराई", url: "https://github.com/diwashbhattarai999" },
     ],
     description:
