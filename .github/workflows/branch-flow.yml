@@ -1,0 +1,31 @@
+name: Branch Flow Guard
+
+on:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate branch flow rules
+        run: |
+          BASE="${{ github.base_ref }}"
+          HEAD="${{ github.head_ref }}"
+
+          echo "BASE: $BASE"
+          echo "HEAD: $HEAD"
+
+          if [[ "$BASE" == "dev" ]]; then
+            [[ "$HEAD" =~ ^(feature/|bugfix/|hotfix/) ]] || exit 1
+          elif [[ "$BASE" == "test" ]]; then
+            [[ "$HEAD" == "dev" ]] || exit 1
+          elif [[ "$BASE" == "uat" ]]; then
+            [[ "$HEAD" == "test" ]] || exit 1
+          elif [[ "$BASE" == "main" ]]; then
+            [[ "$HEAD" == "uat" ]] || exit 1
+          else
+            exit 1
+          fi
+
+          echo "Branch flow valid"

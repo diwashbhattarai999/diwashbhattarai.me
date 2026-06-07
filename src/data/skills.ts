@@ -1,109 +1,109 @@
-import { Code, Database, Layout, LucideIcon, Server } from 'lucide-react';
+import { Code, Database, Layout, type LucideIcon, Server } from "lucide-react";
 
-import CSS from '@/assets/skills/css.svg';
-import Docker from '@/assets/skills/docker.svg';
-import Express from '@/assets/skills/express.svg';
-import Figma from '@/assets/skills/figma.svg';
-import Firebase from '@/assets/skills/firebase.svg';
-import Git from '@/assets/skills/git.svg';
-import GitHub from '@/assets/skills/github.svg';
-import GithubActions from '@/assets/skills/github-actions.svg';
-import HTML from '@/assets/skills/html.svg';
-import JS from '@/assets/skills/js.svg';
-import Kafka from '@/assets/skills/kafka.svg';
-import Linux from '@/assets/skills/linux.svg';
-import Microservices from '@/assets/skills/microservices.svg';
-import MongoDB from '@/assets/skills/mongodb.svg';
-import Nest from '@/assets/skills/nestjs.svg';
-import Next from '@/assets/skills/next.svg';
-import Node from '@/assets/skills/node.svg';
-import NPM from '@/assets/skills/npm.svg';
-import Postgres from '@/assets/skills/postgresql.svg';
-import Postman from '@/assets/skills/postman.svg';
-import PWA from '@/assets/skills/pwa.svg';
-import React from '@/assets/skills/react.svg';
-import Redis from '@/assets/skills/redis.svg';
-import Redux from '@/assets/skills/redux.svg';
-import Responsive from '@/assets/skills/responsive.svg';
-import Rest from '@/assets/skills/rest.svg';
-import SASS from '@/assets/skills/sass.svg';
-import Shadcn from '@/assets/skills/shadcn.svg';
-import Tailwind from '@/assets/skills/tailwind.svg';
-import TanstackQuery from '@/assets/skills/tanstack-query.svg';
-import TS from '@/assets/skills/ts.svg';
-import VSCode from '@/assets/skills/vscode.svg';
-import WebRTC from '@/assets/skills/webrtc.svg';
-import Zod from '@/assets/skills/zod.svg';
+import CSS from "@/assets/skills/css.svg";
+import Docker from "@/assets/skills/docker.svg";
+import Express from "@/assets/skills/express.svg";
+import Figma from "@/assets/skills/figma.svg";
+import Firebase from "@/assets/skills/firebase.svg";
+import Git from "@/assets/skills/git.svg";
+import GitHub from "@/assets/skills/github.svg";
+import GithubActions from "@/assets/skills/github-actions.svg";
+import HTML from "@/assets/skills/html.svg";
+import JS from "@/assets/skills/js.svg";
+import Kafka from "@/assets/skills/kafka.svg";
+import Linux from "@/assets/skills/linux.svg";
+import Microservices from "@/assets/skills/microservices.svg";
+import MongoDB from "@/assets/skills/mongodb.svg";
+import Nest from "@/assets/skills/nestjs.svg";
+import Next from "@/assets/skills/next.svg";
+import Node from "@/assets/skills/node.svg";
+import NPM from "@/assets/skills/npm.svg";
+import Postgres from "@/assets/skills/postgresql.svg";
+import Postman from "@/assets/skills/postman.svg";
+import PWA from "@/assets/skills/pwa.svg";
+import React from "@/assets/skills/react.svg";
+import Redis from "@/assets/skills/redis.svg";
+import Redux from "@/assets/skills/redux.svg";
+import Responsive from "@/assets/skills/responsive.svg";
+import Rest from "@/assets/skills/rest.svg";
+import SASS from "@/assets/skills/sass.svg";
+import Shadcn from "@/assets/skills/shadcn.svg";
+import Tailwind from "@/assets/skills/tailwind.svg";
+import TanstackQuery from "@/assets/skills/tanstack-query.svg";
+import TS from "@/assets/skills/ts.svg";
+import VSCode from "@/assets/skills/vscode.svg";
+import WebRTC from "@/assets/skills/webrtc.svg";
+import Zod from "@/assets/skills/zod.svg";
 
 interface Skill {
-  name: string;
-  icon: string;
+    icon: string;
+    name: string;
 }
 
 interface SkillCategory {
-  title: string;
-  icon: LucideIcon;
-  skills: Skill[];
+    icon: LucideIcon;
+    skills: Skill[];
+    title: string;
 }
 
 export const SKILLS: SkillCategory[] = [
-  {
-    title: 'Frontend',
-    icon: Layout,
-    skills: [
-      { name: 'HTML', icon: HTML },
-      { name: 'CSS', icon: CSS },
-      { name: 'JavaScript', icon: JS },
-      { name: 'TypeScript', icon: TS },
-      { name: 'React', icon: React },
-      { name: 'Next.js', icon: Next },
-      { name: 'Redux Toolkit', icon: Redux },
-      { name: 'TanStack Query', icon: TanstackQuery },
-      { name: 'React Hook Form', icon: React },
-      { name: 'Zod', icon: Zod },
-      { name: 'Shadcn UI', icon: Shadcn },
-      { name: 'Tailwind CSS', icon: Tailwind },
-      { name: 'SASS', icon: SASS },
-      { name: 'Responsive Design', icon: Responsive },
-      { name: 'PWA', icon: PWA },
-    ],
-  },
-  {
-    title: 'Backend',
-    icon: Server,
-    skills: [
-      { name: 'Node.js', icon: Node },
-      { name: 'Express.js', icon: Express },
-      { name: 'NestJS', icon: Nest },
-      { name: 'Apache Kafka', icon: Kafka },
-      { name: 'WebRTC', icon: WebRTC },
-      { name: 'REST APIs', icon: Rest },
-      { name: 'Microservices Architecture', icon: Microservices },
-    ],
-  },
-  {
-    title: 'Database',
-    icon: Database,
-    skills: [
-      { name: 'MongoDB', icon: MongoDB },
-      { name: 'PostgreSQL', icon: Postgres },
-      { name: 'Firebase', icon: Firebase },
-      { name: 'Redis', icon: Redis },
-    ],
-  },
-  {
-    title: 'Tools & Others',
-    icon: Code,
-    skills: [
-      { name: 'Linux', icon: Linux },
-      { name: 'Git', icon: Git },
-      { name: 'GitHub', icon: GitHub },
-      { name: 'GitHub Actions', icon: GithubActions },
-      { name: 'Docker', icon: Docker },
-      { name: 'VS Code', icon: VSCode },
-      { name: 'Postman', icon: Postman },
-      { name: 'NPM', icon: NPM },
-      { name: 'Figma', icon: Figma },
-    ],
-  },
+    {
+        title: "Frontend",
+        icon: Layout,
+        skills: [
+            { name: "HTML", icon: HTML },
+            { name: "CSS", icon: CSS },
+            { name: "JavaScript", icon: JS },
+            { name: "TypeScript", icon: TS },
+            { name: "React", icon: React },
+            { name: "Next.js", icon: Next },
+            { name: "Redux Toolkit", icon: Redux },
+            { name: "TanStack Query", icon: TanstackQuery },
+            { name: "React Hook Form", icon: React },
+            { name: "Zod", icon: Zod },
+            { name: "Shadcn UI", icon: Shadcn },
+            { name: "Tailwind CSS", icon: Tailwind },
+            { name: "SASS", icon: SASS },
+            { name: "Responsive Design", icon: Responsive },
+            { name: "PWA", icon: PWA },
+        ],
+    },
+    {
+        title: "Backend",
+        icon: Server,
+        skills: [
+            { name: "Node.js", icon: Node },
+            { name: "Express.js", icon: Express },
+            { name: "NestJS", icon: Nest },
+            { name: "Apache Kafka", icon: Kafka },
+            { name: "WebRTC", icon: WebRTC },
+            { name: "REST APIs", icon: Rest },
+            { name: "Microservices Architecture", icon: Microservices },
+        ],
+    },
+    {
+        title: "Database",
+        icon: Database,
+        skills: [
+            { name: "MongoDB", icon: MongoDB },
+            { name: "PostgreSQL", icon: Postgres },
+            { name: "Firebase", icon: Firebase },
+            { name: "Redis", icon: Redis },
+        ],
+    },
+    {
+        title: "Tools & Others",
+        icon: Code,
+        skills: [
+            { name: "Linux", icon: Linux },
+            { name: "Git", icon: Git },
+            { name: "GitHub", icon: GitHub },
+            { name: "GitHub Actions", icon: GithubActions },
+            { name: "Docker", icon: Docker },
+            { name: "VS Code", icon: VSCode },
+            { name: "Postman", icon: Postman },
+            { name: "NPM", icon: NPM },
+            { name: "Figma", icon: Figma },
+        ],
+    },
 ];

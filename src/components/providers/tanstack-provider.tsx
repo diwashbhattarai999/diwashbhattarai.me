@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type React from "react";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 // The `QueryClient` is a global instance that will be used to cache
@@ -13,14 +13,12 @@ const queryClient = new QueryClient();
  * @param children The children to render
  * @returns The JSX element
  */
-export const TanstackQueryProvider = ({
-  children,
-}: Readonly<{ children: React.ReactNode }>) => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      {children}
+export const TanstackQueryProvider = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+    return (
+        <QueryClientProvider client={queryClient}>
+            {children}
 
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-    </QueryClientProvider>
-  );
+            {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        </QueryClientProvider>
+    );
 };

@@ -1,21 +1,21 @@
-import Axios, { InternalAxiosRequestConfig } from 'axios';
+import Axios, { type InternalAxiosRequestConfig } from "axios";
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
-  if (config.headers) {
-    // Set the Accept header
-    config.headers.Accept = 'application/json';
+    if (config.headers) {
+        // Set the Accept header
+        config.headers.Accept = "application/json";
 
-    // Set the language header
-    const language = 'en';
-    config.headers['Accept-Language'] = language;
+        // Set the language header
+        const language = "en";
+        config.headers["Accept-Language"] = language;
 
-    // Set the Authorization header
-    // const token = localStorage.getItem('token');
-    // config.headers['Authorization'] = token ? `Token ${token}` : '';
-  }
+        // Set the Authorization header
+        // const token = localStorage.getItem('token');
+        // config.headers['Authorization'] = token ? `Token ${token}` : '';
+    }
 
-  config.withCredentials = true;
-  return config;
+    config.withCredentials = true;
+    return config;
 }
 
 // API instance

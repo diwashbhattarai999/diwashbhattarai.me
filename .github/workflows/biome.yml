@@ -1,0 +1,37 @@
+name: Biome CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - dev
+      - test
+      - uat
+
+jobs:
+  biome:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+
+      - name: Run Biome check
+        run: biome ci

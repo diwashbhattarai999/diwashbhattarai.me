@@ -138,97 +138,97 @@
 //   );
 // };
 
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import useIsMounted from '@/hooks/use-is-mounted';
+import useIsMounted from "@/hooks/use-is-mounted";
 
 interface CustomCursorProps {
-  gradientColorStart?: string;
-  gradientColorEnd?: string;
-  size?: number;
-  opacity?: number;
+    gradientColorEnd?: string;
+    gradientColorStart?: string;
+    opacity?: number;
+    size?: number;
 }
 
 export function CustomCursor({
-  gradientColorStart = 'color-mix(in oklab, var(--primary) 10%, transparent)',
-  gradientColorEnd = 'color-mix(in oklab, var(--primary) 5%, transparent)',
-  size = 1000,
+    gradientColorStart = "color-mix(in oklab, var(--primary) 10%, transparent)",
+    gradientColorEnd = "color-mix(in oklab, var(--primary) 5%, transparent)",
+    size = 1000,
 }: CustomCursorProps) {
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  const [smoothPosition, setSmoothPosition] = useState({ x: 0, y: 0 });
-  const [isVisible, setIsVisible] = useState(false);
+    const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+    const [smoothPosition, setSmoothPosition] = useState({ x: 0, y: 0 });
+    const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      setCursorPosition({
-        x: event.clientX,
-        y: event.clientY,
-      });
-      if (!isVisible) setIsVisible(true);
-    };
-
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
-
-    const handleMouseEnter = () => {
-      setIsVisible(true);
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
-    document.addEventListener('mouseenter', handleMouseEnter);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('mouseenter', handleMouseEnter);
-    };
-  }, [isVisible]);
-
-  useEffect(() => {
-    let animationFrameId: number;
-
-    const updateSmoothPosition = () => {
-      setSmoothPosition(prev => {
-        const dx = cursorPosition.x - prev.x;
-        const dy = cursorPosition.y - prev.y;
-        const easingFactor = 0.05;
-
-        return {
-          x: Math.round(prev.x + dx * easingFactor),
-          y: Math.round(prev.y + dy * easingFactor),
+    useEffect(() => {
+        const handleMouseMove = (event: MouseEvent) => {
+            setCursorPosition({
+                x: event.clientX,
+                y: event.clientY,
+            });
+            if (!isVisible) setIsVisible(true);
         };
-      });
-      animationFrameId = requestAnimationFrame(updateSmoothPosition);
-    };
 
-    animationFrameId = requestAnimationFrame(updateSmoothPosition);
+        const handleMouseLeave = () => {
+            setIsVisible(false);
+        };
 
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [cursorPosition]);
+        const handleMouseEnter = () => {
+            setIsVisible(true);
+        };
 
-  const { isMounted } = useIsMounted();
-  if (!isMounted) return null;
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseleave", handleMouseLeave);
+        document.addEventListener("mouseenter", handleMouseEnter);
 
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: `${size}px`,
-        height: `${size}px`,
-        borderRadius: '50%',
-        background: `radial-gradient(circle, ${gradientColorStart} 0%, ${gradientColorEnd} 50%, transparent 80%)`,
-        transform: `translate(${smoothPosition.x - size / 2}px, ${smoothPosition.y - size / 2 + window.scrollY}px)`, // Adjust position for scroll
-        pointerEvents: 'none',
-        boxShadow: `0 0 ${size / 2}px ${size / 4}px color-mix(in oklab, var(--primary) 1%, transparent)`,
-      }}
-    />
-  );
+        return () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseleave", handleMouseLeave);
+            document.removeEventListener("mouseenter", handleMouseEnter);
+        };
+    }, [isVisible]);
+
+    useEffect(() => {
+        let animationFrameId: number;
+
+        const updateSmoothPosition = () => {
+            setSmoothPosition((prev) => {
+                const dx = cursorPosition.x - prev.x;
+                const dy = cursorPosition.y - prev.y;
+                const easingFactor = 0.05;
+
+                return {
+                    x: Math.round(prev.x + dx * easingFactor),
+                    y: Math.round(prev.y + dy * easingFactor),
+                };
+            });
+            animationFrameId = requestAnimationFrame(updateSmoothPosition);
+        };
+
+        animationFrameId = requestAnimationFrame(updateSmoothPosition);
+
+        return () => {
+            cancelAnimationFrame(animationFrameId);
+        };
+    }, [cursorPosition]);
+
+    const { isMounted } = useIsMounted();
+    if (!isMounted) return null;
+
+    return (
+        <div
+            style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: `${size}px`,
+                height: `${size}px`,
+                borderRadius: "50%",
+                background: `radial-gradient(circle, ${gradientColorStart} 0%, ${gradientColorEnd} 50%, transparent 80%)`,
+                transform: `translate(${smoothPosition.x - size / 2}px, ${smoothPosition.y - size / 2 + window.scrollY}px)`, // Adjust position for scroll
+                pointerEvents: "none",
+                boxShadow: `0 0 ${size / 2}px ${size / 4}px color-mix(in oklab, var(--primary) 1%, transparent)`,
+            }}
+        />
+    );
 }

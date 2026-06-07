@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * Custom hook to check if the component is mounted.
  * @returns A boolean indicating if the component is mounted.
  */
 const useIsMounted = () => {
-  const [isMounted, setIsMounted] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
-  return { isMounted };
+    return { isMounted };
 };
 
 export default useIsMounted;
