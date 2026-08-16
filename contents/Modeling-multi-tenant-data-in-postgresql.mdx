@@ -1,0 +1,397 @@
+---
+title: "Modeling Multi-Tenant Data in PostgreSQL"
+date: "2026-08-16"
+author: "Diwash Bhattarai"
+profile: "/profile.png"
+tags: ["PostgreSQL", "System Design", "Backend Engineering", "SaaS", "NestJS"]
+description: "How to design multi-tenant schemas in PostgreSQL — shared databases, tenant
+  isolation, indexing strategies, and the trade-offs that show up in real SaaS backends."
+coverImage: "/contents/multi-tenant-postgresql.png"
+readTime: "12 min read"
+category: "PostgreSQL"
+---
+
+Multi-tenant SaaS almost always starts with one question that looks simple and
+is not: **where does tenant data live?**
+
+If you get the data model wrong, every feature after it becomes harder —
+permissions, reporting, migrations, backups, and incident response. If you get
+it right, NestJS services, Prisma queries, and Next.js dashboards stay boring in
+the best way.
+
+This article covers practical PostgreSQL approaches to multi-tenancy: shared
+schemas, tenant columns, isolation boundaries, indexes, and the engineering
+trade-offs I weigh when designing backend systems.
+
+---
+
+## What “tenant” means in the database
+
+A tenant is the isolation boundary for a customer organization — a company, a
+gym, a clinic, a workspace.
+
+Every row that belongs to a tenant should answer:
+
+1. Which tenant owns this?
+2. Can this request legally access it?
+3. Can we query it efficiently at scale?
+
+If your API can fetch another tenant’s invoice by guessing an ID, the schema did
+not fail alone — the access path failed. The schema should make the correct path
+the easy path.
+
+---
+
+## Three common isolation strategies
+
+### 1. Database-per-tenant
+
+Each tenant gets its own PostgreSQL database (or cluster).
+
+**Strengths**
+
+- Strong isolation
+- Straightforward per-tenant backup/restore
+- No accidental cross-tenant joins
+
+**Costs**
+
+- Operational overhead grows with tenant count
+- Migrations must roll out many times
+- Connection pooling and provisioning get expensive
+
+Use this when isolation, compliance, or noisy-neighbor risk dominate — not as the
+default for early SaaS.
+
+### 2. Schema-per-tenant
+
+One database, one PostgreSQL schema per tenant.
+
+**Strengths**
+
+- Better isolation than a shared table
+- Still one server to operate
+
+**Costs**
+
+- Schema proliferation
+- Tooling and migrations become awkward
+- Cross-tenant analytics are painful
+
+This can work for a moderate number of larger tenants. It rarely ages well as a
+default for product-led growth.
+
+### 3. Shared tables with a tenant key
+
+One schema, shared tables, every tenant-owned row carries `tenant_id`.
+
+**Strengths**
+
+- Simple operations
+- One migration path
+- Easy global observability
+
+**Costs**
+
+- Isolation depends on application discipline
+- One bad query can leak data
+- Hot tenants can contend for shared resources
+
+This is the most common SaaS starting point — and the one this article focuses
+on — because it scales operationally when paired with strict query conventions.
+
+---
+
+## The shared-table model that stays safe
+
+At minimum, tenant-owned tables look like this:
+
+<CodeBlock
+  language='sql'
+  filename='schema.sql'
+  code={`create table tenants (
+  id uuid primary key,
+  name text not null,
+  created_at timestamptz not null default now()
+);
+
+create table members (
+id uuid primary key,
+tenant_id uuid not null references tenants (id),
+email text not null,
+status text not null,
+created_at timestamptz not null default now()
+);
+
+create unique index members_tenant_email_uidx
+on members (tenant_id, email);
+
+create index members_tenant_id_idx
+on members (tenant_id);`}
+/>
+
+Notice the unique constraint is **`(tenant_id, email)`**, not `email` alone.
+Global uniqueness is often wrong in multi-tenant systems.
+
+### Composite identity thinking
+
+Many entities should be treated as unique _within_ a tenant:
+
+- member email
+- branch slug
+- invoice number
+- role name
+
+Make that explicit in constraints. The database should reject illegal states even
+if application code forgets.
+
+---
+
+## Always scope queries by tenant
+
+The most important backend rule:
+
+> Every read and write for tenant data includes `tenant_id` from a trusted source.
+
+Trusted means: session, verified JWT claim, or server-side membership lookup —
+not a client-supplied header you casually trust.
+
+### Bad
+
+<CodeBlock
+  language="ts"
+  filename="members.service.ts"
+  code={`// Dangerous: IDOR waiting to happen
+const member = await db.member.findUnique({
+  where: { id: memberId },
+});`}
+/>
+
+### Better
+
+<CodeBlock
+  language='ts'
+  filename='members.service.ts'
+  code={`const member = await db.member.findFirst({
+  where: {
+    id: memberId,
+    tenantId: access.tenantId,
+  },
+});
+
+if (!member) {
+throw new NotFoundException();
+}`}
+/>
+
+Even with Prisma, NestJS, or raw SQL, the pattern is the same: **tenant scope is
+part of the predicate**, not an afterthought.
+
+In NestJS, I prefer a request-scoped tenant context set after authentication, then
+repositories/services that refuse to run tenant queries without it.
+
+---
+
+## Indexes that match access patterns
+
+Multi-tenant tables are often filtered by `tenant_id` first. Design indexes for
+that.
+
+### Typical patterns
+
+<CodeBlock
+  language='sql'
+  filename='indexes.sql'
+  code={`-- List members in a tenant
+create index members_tenant_created_idx
+  on members (tenant_id, created_at desc);
+
+-- Lookup by business key inside a tenant
+create unique index invoices_tenant_number_uidx
+on invoices (tenant_id, number);
+
+-- Foreign-key style child tables
+create index memberships_tenant_member_idx
+on memberships (tenant_id, member_id);`}
+/>
+
+A lone index on `id` is not enough when almost every query also filters by
+tenant.
+
+If you use soft deletes, include them carefully in partial indexes:
+
+<CodeBlock
+  language="sql"
+  filename="partial-index.sql"
+  code={`create unique index members_active_email_uidx
+  on members (tenant_id, email)
+  where deleted_at is null;`}
+/>
+
+---
+
+## Foreign keys and cascading decisions
+
+Keep foreign keys tenant-aware in spirit even when PostgreSQL cannot express
+“same tenant” in one FK easily.
+
+Practical approaches:
+
+1. **Application invariant** — parent and child must share `tenant_id`; enforce in
+   services and tests.
+2. **Composite foreign keys** — where helpful, reference `(tenant_id, id)` so the
+   child cannot point at a parent from another tenant.
+
+Example composite style:
+
+<CodeBlock
+  language='sql'
+  filename='composite-fk.sql'
+  code={`create table branches (
+  tenant_id uuid not null references tenants (id),
+  id uuid not null,
+  name text not null,
+  primary key (tenant_id, id)
+);
+
+create table staff (
+tenant_id uuid not null,
+id uuid not null,
+branch_id uuid not null,
+primary key (tenant_id, id),
+foreign key (tenant_id, branch_id)
+references branches (tenant_id, id)
+);`}
+/>
+
+Composite keys add verbosity. They also make illegal cross-tenant relationships
+much harder. Choose based on how catastrophic a cross-tenant FK would be.
+
+---
+
+## Platform admins vs tenant users
+
+Many products have both:
+
+- **tenant users** — scoped to one organization
+- **platform operators** — can inspect or support across tenants
+
+Do not model this by omitting `tenant_id` on shared tables. Keep tenant ownership
+intact and grant elevated _application_ capabilities separately.
+
+Cross-tenant admin queries should be explicit, audited, and rare. Quietly
+bypassing tenant filters for convenience is how support tools become breach tools.
+
+---
+
+## Prisma notes without magic
+
+Prisma works well with shared-table multi-tenancy if you stay disciplined:
+
+- Put `tenantId` on tenant-owned models.
+- Prefer queries that always include `tenantId`.
+- Use interactive transactions when creating parent/child graphs that must share
+  one tenant.
+- Avoid “find by id only” helpers for tenant resources.
+
+A thin repository wrapper can help:
+
+<CodeBlock
+  language="ts"
+  filename="tenant-repo.ts"
+  code={`async function findMemberForTenant(
+  tenantId: string,
+  memberId: string,
+) {
+  return prisma.member.findFirst({
+    where: { tenantId, id: memberId },
+  });
+}`}
+/>
+
+The goal is not clever abstractions. The goal is making the unsafe query harder
+to write than the safe one.
+
+---
+
+## Caching and Redis
+
+If you cache tenant data in Redis, namespace keys by tenant:
+
+<CodeBlock
+  language="ts"
+  filename="cache-keys.ts"
+  code={`const memberKey = (tenantId: string, memberId: string) =>
+  \`tenant:\${tenantId}:member:\${memberId}\`;`}
+/>
+
+Never cache a record under a global id key and then serve it to whichever tenant
+asks. Cache invalidation should also be tenant-scoped when a tenant’s data
+changes.
+
+---
+
+## Trade-offs to decide early
+
+### Shared DB vs stronger isolation
+
+Start shared if you need speed of iteration and one operations story. Move hot or
+regulated tenants toward stronger isolation only when evidence demands it.
+
+### `uuid` vs `bigint` tenant keys
+
+UUIDs are convenient for public IDs and merging environments. Bigints can be
+smaller and faster. Either works if used consistently and indexed properly.
+
+### Soft delete vs hard delete
+
+Soft delete helps recovery and audit trails. It complicates uniqueness and
+indexes. Decide intentionally and encode the decision in constraints.
+
+### Row Level Security (RLS)
+
+PostgreSQL RLS can enforce tenant isolation at the database layer. It is powerful
+and operationally serious: every connection role, migration, and admin path must
+understand policies. Worth considering when the threat model demands defense in
+depth — not as a substitute for clean application queries.
+
+---
+
+## Common mistakes
+
+1. **Unique constraints without tenant scope** — one customer blocks another’s email.
+2. **Trusting client-provided tenant IDs** — tenancy becomes a spoofable header.
+3. **`findById` everywhere** — classic IDOR pattern.
+4. **Missing composite indexes** — tenant list endpoints get slow quietly.
+5. **Cross-tenant analytics via copy-paste SQL** — one forgotten filter leaks data.
+6. **Caching without tenant namespacing** — stale or leaked records across accounts.
+7. **Migrating tenancy later “when we scale”** — tenancy is hardest to retrofit.
+
+---
+
+## Practical recommendations
+
+- Default to shared tables with a mandatory `tenant_id`.
+- Make tenant scope part of every repository method for tenant data.
+- Encode tenant-local uniqueness in PostgreSQL constraints.
+- Index `(tenant_id, …)` for your real query patterns.
+- Keep platform-admin cross-tenant access explicit and audited.
+- Namespace Redis keys by tenant.
+- Add automated tests that prove tenant A cannot read tenant B’s resources.
+- Document the tenancy model for frontend and backend teams so Next.js apps and
+  NestJS services share the same assumptions.
+
+---
+
+## Conclusion
+
+Multi-tenant PostgreSQL design is less about picking a fashionable pattern and
+more about making isolation boring and enforceable.
+
+Shared tables with a strict tenant key remain a strong default for many SaaS
+backends. They work when queries are always scoped, constraints are honest, and
+indexes match how the product actually reads data.
+
+If you are building with PostgreSQL, Node.js, NestJS, or Prisma, treat tenancy as
+part of the domain model — not a column you sprinkle on at the end. The database
+will remember the shortcuts you take.
