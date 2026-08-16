@@ -18,8 +18,8 @@ import { PROJECTS } from "@/features/projects/constants/project.constants";
 import { ProjectCard } from "./project-card";
 
 interface ProjectsSectionProps {
-    showViewAll?: boolean;
     limit?: number;
+    showViewAll?: boolean;
 }
 
 export const ProjectsSection = ({ showViewAll = false, limit }: ProjectsSectionProps) => {
