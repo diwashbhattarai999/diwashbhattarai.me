@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 
-import { getBaseUrl } from "@/utils/helpers";
+import { getBaseUrl } from "@/lib/get-base-url";
 
 /**
  * Generates the sitemap metadata for search engines.
- * @returns {MetadataRoute.Sitemap} The sitemap configuration object.
+ *
+ * @returns The sitemap configuration object.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
     return [

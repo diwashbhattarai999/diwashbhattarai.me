@@ -1,24 +1,9 @@
 import type { Metadata } from "next";
 
-import { Projects } from "../(home)/_components/projects";
+import { ProjectsPage, projectsPageMetadata } from "@/features/projects/components/projects-page";
 
-export const metadata: Metadata = {
-    title: "Projects | Diwash Bhattarai",
-    description: "Here's a list of projects I've worked on.",
-    keywords: [
-        "Diwash Bhattarai Projects",
-        "Web Development Projects",
-        "React Projects",
-        "Next.js Projects",
-        "Full Stack Projects",
-        "Portfolio Projects",
-        "Frontend Projects",
-        "Backend Projects",
-        "Modern Web Applications",
-    ],
-    robots: "index, follow",
-};
+export const metadata: Metadata = projectsPageMetadata;
 
-const ProjectsPage = () => <Projects />;
+const Page = () => <ProjectsPage />;
 
-export default ProjectsPage;
+export default Page;

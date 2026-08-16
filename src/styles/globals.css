@@ -157,7 +157,7 @@
 
 body {
     z-index: 50;
-    background-image: url("../assets/noise.png");
+    background-image: url("../assets/images/noise.png");
     background-position: 0 0;
     background-size: 200px 200px;
 }

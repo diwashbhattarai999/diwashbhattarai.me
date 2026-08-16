@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { League_Spartan } from "next/font/google";
 import { Toaster } from "sonner";
 
-import { TanstackQueryProvider } from "@/components/providers/tanstack-provider";
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import { siteConfig } from "@/configs";
+import { Providers } from "@/components/layout/providers";
+import { getSiteMetadata } from "@/lib/site-metadata";
 
 import "@/styles/globals.css";
 
@@ -13,7 +12,7 @@ const robotoFlex = League_Spartan({
     weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-export const metadata: Metadata = siteConfig;
+export const metadata: Metadata = getSiteMetadata();
 
 interface LocaleLayoutProps {
     children: React.ReactNode;
@@ -23,12 +22,10 @@ export default function LocaleLayout({ children }: LocaleLayoutProps) {
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={`${robotoFlex.className} antialiased`}>
-                <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange enableSystem>
-                    <TanstackQueryProvider>
-                        {children}
-                        <Toaster position="bottom-right" richColors />
-                    </TanstackQueryProvider>
-                </ThemeProvider>
+                <Providers>
+                    {children}
+                    <Toaster position="bottom-right" richColors />
+                </Providers>
             </body>
         </html>
     );

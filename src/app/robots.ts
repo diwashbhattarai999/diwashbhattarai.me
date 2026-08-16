@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 
-import { getBaseUrl } from "@/utils/helpers";
+import { getBaseUrl } from "@/lib/get-base-url";
 
 /**
  * Generates the robots.txt metadata for search engine crawlers.
- * @returns {MetadataRoute.Robots} The robots.txt configuration object.
+ *
+ * @returns The robots.txt configuration object.
  */
 export default function robots(): MetadataRoute.Robots {
     return {

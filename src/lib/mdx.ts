@@ -4,11 +4,16 @@ import path from "node:path";
 import matter from "gray-matter";
 import { serialize } from "next-mdx-remote/serialize";
 
-import type { IBlogPost } from "@/data/blogs";
+import type { BlogPost } from "@/features/blogs/types/blogs.types";
 
 const CONTENT_DIR = path.join(process.cwd(), "contents");
 
-export const getAllPosts = () => {
+/**
+ * Reads all MDX posts from the contents directory.
+ *
+ * @returns Blog post front matter for the listing page.
+ */
+export const getAllPosts = (): BlogPost[] => {
     const files = fs.readdirSync(CONTENT_DIR);
 
     return files.map((filename) => {
@@ -27,10 +32,16 @@ export const getAllPosts = () => {
             readTime: data.readTime,
             category: data.category,
             excerpt: data.excerpt,
-        } as IBlogPost;
+        } as BlogPost;
     });
 };
 
+/**
+ * Loads a single MDX post by slug.
+ *
+ * @param slug - Filename without the `.mdx` extension.
+ * @returns Serialized source, front matter, and raw markdown content.
+ */
 export const getPostBySlug = async (slug: string) => {
     const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
     const fileContent = fs.readFileSync(filePath, "utf-8");

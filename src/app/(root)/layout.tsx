@@ -1,10 +1,10 @@
-import { CustomCursor } from "@/components/custom-cursor";
-import { Footer } from "@/components/layouts/footer";
-import { Navbar } from "@/components/layouts/navbar";
-import { SectionSeperator } from "@/components/section-items";
+import { CustomCursor } from "@/components/shared/custom-cursor";
+import { SectionSeperator } from "@/components/shared/section-items";
+import { SiteFooter } from "@/features/footer/components/site-footer";
+import { SiteNavbar } from "@/features/navbar/components/site-navbar";
 
 /**
- * The `RootLayout` component is a layout component that wraps the all root pages.
+ * Layout wrapper for public site pages.
  */
 export default function RootLayout({
     children,
@@ -12,34 +12,27 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <>
-            {/* <PageLoader /> */}
-
-            <main className="relative flex h-full min-h-screen flex-col overflow-hidden">
-                <CustomCursor />
-                {/* Navbar */}
-                <div className="max-container h-full">
-                    <div className="mx-2 h-full border-input border-x border-dashed">
-                        <Navbar />
-                    </div>
+        <main className="relative flex h-full min-h-screen flex-col overflow-hidden">
+            <CustomCursor />
+            <div className="max-container h-full">
+                <div className="mx-2 h-full border-input border-x border-dashed">
+                    <SiteNavbar />
                 </div>
+            </div>
 
-                <SectionSeperator />
+            <SectionSeperator />
 
-                {/* Main */}
-                <div className="max-container flex size-full flex-1">
-                    <div className="mx-2 flex-1 border-input border-x border-dashed">{children}</div>
+            <div className="max-container flex size-full flex-1">
+                <div className="mx-2 flex-1 border-input border-x border-dashed">{children}</div>
+            </div>
+
+            <SectionSeperator />
+
+            <div className="max-container">
+                <div className="mx-2 border-input border-x border-dashed">
+                    <SiteFooter />
                 </div>
-
-                <SectionSeperator />
-
-                {/* Footer */}
-                <div className="max-container">
-                    <div className="mx-2 border-input border-x border-dashed">
-                        <Footer />
-                    </div>
-                </div>
-            </main>
-        </>
+            </div>
+        </main>
     );
 }
