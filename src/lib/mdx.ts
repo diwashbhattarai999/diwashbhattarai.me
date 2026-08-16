@@ -60,3 +60,44 @@ export const getPostBySlug = async (slug: string) => {
 
     return { source: mdxSource, frontMatter: data, content };
 };
+
+const RELATED_POST_LIMIT = 3;
+
+/**
+ * Finds related posts by shared tags and category, newest first as a tiebreaker.
+ *
+ * @param slug - Current post slug to exclude.
+ * @param tags - Tags from the current post.
+ * @param category - Category from the current post.
+ * @param limit - Maximum number of related posts to return.
+ * @returns Related blog posts for the detail page.
+ */
+export const getRelatedPosts = (
+    slug: string,
+    tags: readonly string[] = [],
+    category?: string,
+    limit = RELATED_POST_LIMIT
+): BlogPost[] => {
+    const tagSet = new Set(tags.map((tag) => tag.toLowerCase()));
+
+    return getAllPosts()
+        .filter((post) => post.slug !== slug)
+        .map((post) => {
+            const sharedTags = (post.tags ?? []).filter((tag) => tagSet.has(tag.toLowerCase())).length;
+            const sameCategory = category && post.category === category ? 1 : 0;
+
+            return {
+                post,
+                score: sharedTags * 2 + sameCategory,
+            };
+        })
+        .sort((left, right) => {
+            if (right.score !== left.score) {
+                return right.score - left.score;
+            }
+
+            return Date.parse(right.post.date) - Date.parse(left.post.date);
+        })
+        .slice(0, limit)
+        .map(({ post }) => post);
+};

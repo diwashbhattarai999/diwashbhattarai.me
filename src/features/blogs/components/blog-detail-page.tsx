@@ -9,8 +9,9 @@ import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
 import { Badge } from "@/components/ui/badge";
 import { CodeBlock } from "@/components/ui/codeblock";
 import { ROUTES } from "@/configs/routes";
+import { RelatedBlogs } from "@/features/blogs/components/related-blogs";
 import { getArticleJsonLd } from "@/lib/json-ld";
-import { getPostBySlug } from "@/lib/mdx";
+import { getPostBySlug, getRelatedPosts } from "@/lib/mdx";
 
 interface BlogDetailPageProps {
     slug: string;
@@ -29,6 +30,7 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
     }
 
     const { content, frontMatter } = post;
+    const relatedPosts = getRelatedPosts(slug, frontMatter.tags ?? [], frontMatter.category);
 
     return (
         <div className="flex flex-col gap-5 px-5 py-10">
@@ -125,6 +127,8 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
                     <MDXRemote components={{ CodeBlock }} options={{ blockJS: false }} source={content} />
                 </article>
             </BlurFade>
+
+            <RelatedBlogs posts={relatedPosts} />
         </div>
     );
 };
