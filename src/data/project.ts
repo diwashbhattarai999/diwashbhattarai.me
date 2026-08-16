@@ -6,6 +6,7 @@ import EuroToursImg from "@/assets/projects/euro-tours.png";
 import Finance360Img from "@/assets/projects/finance-360.png";
 import GoodBuyImg from "@/assets/projects/good-buy.png";
 import GovCertifyImg from "@/assets/projects/gov-certify.png";
+import GymGrowImg from "@/assets/projects/gymgrow.png";
 import GymGrowGymImg from "@/assets/projects/gymgrow-gym.png";
 import GymGrowSuperadminImg from "@/assets/projects/gymgrow-superadmin.png";
 import GymGrowTVImg from "@/assets/projects/gymgrow-tv.png";
@@ -25,6 +26,11 @@ import StriideCoachDarkImg from "@/assets/projects/striide-coach-dark.png";
 import StriideCoachLightImg from "@/assets/projects/striide-coach-light.png";
 import StriideSubscriberImg from "@/assets/projects/striide-subscriber.png";
 
+export interface IProjectLink {
+    label: string;
+    url: string;
+}
+
 export interface IProject {
     conclusion: string;
     description: string;
@@ -34,6 +40,7 @@ export interface IProject {
     id: string;
     image: StaticImageData;
     liveUrl: string;
+    liveUrls?: IProjectLink[];
     overview: string;
     poweredBy?: string;
     screenshots?: {
@@ -48,41 +55,23 @@ export interface IProject {
 
 export const PROJECTS: IProject[] = [
     {
-        id: "gymgrow-superadmin",
-        title: "GymGrow Superadmin",
+        id: "gymgrow",
+        title: "GymGrow",
         description:
-            "Platform-level console for Grow HQ — onboard gym owners, review name-change requests, and manage global settings and email templates.",
-        image: GymGrowSuperadminImg,
-        tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "TanStack Query"],
-        liveUrl: "https://uat-sadmin-gymgrow.pbinfosystems.com",
-        overview:
-            "GymGrow Superadmin is the operator console above every gym on Grow HQ. Superadmins create and manage gym owners, search and edit owner records, and handle platform-wide requests such as name changes. Settings cover profile and reusable email templates used across the product.",
-        poweredBy:
-            "This app is the entry point for the multi-tenant platform: a gym only exists after a superadmin creates its owner.",
-        technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "TanStack Query"],
-        features: [
-            "Create and manage gym owners across the platform",
-            "Searchable owner directory with contact details and edit actions",
-            "Name-change request review and processing",
-            "Profile settings and reusable email templates",
-        ],
-        developmentChallenges:
-            "The superadmin surface had to stay strictly above gym data — owners can be created and edited here, but branch, member, and payment details live in the gym app so tenants never leak into each other.",
-        conclusion:
-            "GymGrow Superadmin is the control plane for Grow HQ: onboard owners, keep their records accurate, and configure the templates the rest of the platform uses.",
-    },
-    {
-        id: "gymgrow-gym",
-        title: "GymGrow Gym",
-        description:
-            "Gym-owner dashboard for running branches, members, staff, classes, programming, finances, and Stripe Express payouts.",
-        image: GymGrowGymImg,
+            "A multi-tenant gym management platform spanning superadmin onboarding, gym-owner operations, and a public TV programming display — with memberships, classes, finances, and Stripe Express payouts.",
+        image: GymGrowImg,
         tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "TanStack Query", "Stripe", "RBAC"],
-        liveUrl: "https://uat-admin-gymgrow.pbinfosystems.com",
+        liveUrl: "https://gymgrow.ai",
+        liveUrls: [
+            { label: "Marketing Site", url: "https://gymgrow.ai" },
+            { label: "Superadmin", url: "https://uat-sadmin-gymgrow.pbinfosystems.com" },
+            { label: "Gym Dashboard", url: "https://uat-admin-gymgrow.pbinfosystems.com" },
+            { label: "TV Display", url: "https://uat-gymgrow.pbinfosystems.com" },
+        ],
         overview:
-            "GymGrow Gym is the day-to-day operating system for gym owners and staff. Owners create branches, add members, assign subscriptions, track visits, payments, documents, and activity, and freeze memberships. Staff can be invited with role-based permissions. The dashboard covers class scheduling, recurring classes, calendar views, programming, finances, memberships, leaderboards, communications, and gym settings.",
+            "GymGrow (Grow HQ) is a multi-tenant gym operating system with three connected surfaces. Superadmins onboard gym owners and manage platform settings. Gym owners run branches, members, staff, classes, programming, and finances with role-based permissions. A public TV webapp displays session programming on gym screens. Together they cover the full loop from platform onboarding to floor-ready workouts.",
         poweredBy:
-            "Gyms connect a Stripe Express account to collect payments and manage transactions, refunds, and payouts without mixing tenant accounts.",
+            "Gyms connect a Stripe Express account to collect payments and manage transactions, refunds, and payouts. Programming created in the gym dashboard publishes to the TV display for members.",
         technologies: [
             "Next.js",
             "TypeScript",
@@ -93,45 +82,42 @@ export const PROJECTS: IProject[] = [
             "Role-based access control",
         ],
         features: [
+            "Superadmin console for creating and managing gym owners",
+            "Name-change requests, profile settings, and email templates",
             "Multi-branch gym management with members, staff, and subscriptions",
             "Membership lifecycle including visits, payments, documents, activity, and freeze",
             "Staff roles and permissions per gym",
             "Class scheduling, recurring classes, and calendar views",
-            "Class programming that can be shared to the public TV webapp",
+            "Class programming shared to a public TV webapp",
             "Finance tools for revenue, expenses, tax, transactions, and refunds",
             "Memberships, leaderboards, and custom email communications",
             "Settings for booking, gym hours, payments, waivers, profile, and training spaces",
             "Stripe Express connection for payouts and transaction management",
+            "TV display with date/session selectors and on-screen size scaling",
         ],
         developmentChallenges:
-            "The hardest parts were modeling branch-level data under one owner, keeping role and permission checks consistent across every screen, and wiring Stripe Express so payouts and transactions stay scoped to the right gym.",
-        conclusion:
-            "GymGrow Gym is the core product — a full operations suite for memberships, scheduling, programming, finance, and payments inside each gym.",
-    },
-    {
-        id: "gymgrow-tv",
-        title: "GymGrow TV",
-        description:
-            "Public programming display for gym TVs — session workouts scaled for the wall, with date, class, and size controls.",
-        image: GymGrowTVImg,
-        tags: ["Next.js", "TypeScript", "Tailwind CSS"],
-        liveUrl: "https://uat-gymgrow.pbinfosystems.com",
-        overview:
-            "GymGrow TV is the public webapp gyms use to put class programming on a screen. Coaches pick a date and session; the display renders warmup, strength, and metcon blocks with sets, reps, and loads. A size control scales the layout for different TVs.",
-        poweredBy:
-            "Programming created in the gym dashboard is published here so members see the workout of the day without signing in.",
-        technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
-        features: [
-            "Public, login-free programming display for gym TVs",
-            "Date and session selectors for the class on the floor",
-            "Workout blocks for warmup, strength, and metcon with sets, reps, and loads",
-            "On-screen size scaling for different TV resolutions",
-            "Grow HQ branding on the display",
+            "The hardest parts were modeling multi-tenant gyms with branch-level data, keeping role and permission checks consistent across every screen, wiring Stripe Express so owners could onboard and take payments without mixing accounts, and keeping the TV display readable from across a gym floor while staying in sync with published programming.",
+        screenshots: [
+            {
+                src: GymGrowSuperadminImg,
+                alt: "GymGrow superadmin gym owners dashboard",
+                caption: "Superadmin console for onboarding and managing gym owners across the platform.",
+            },
+            {
+                src: GymGrowGymImg,
+                alt: "GymGrow gym owner dashboard",
+                caption:
+                    "Gym-owner dashboard with revenue metrics, today's classes, member health, and branch operations.",
+            },
+            {
+                src: GymGrowTVImg,
+                alt: "GymGrow TV programming display",
+                caption:
+                    "Public TV webapp showing warmup, strength, and metcon blocks scaled for gym screens.",
+            },
         ],
-        developmentChallenges:
-            "The display had to stay readable from across a gym floor — large type, clear block structure, and a zoom control — while staying in sync with programming published from the gym dashboard.",
         conclusion:
-            "GymGrow TV turns class programming into a wall-ready workout board so members can follow the session without a staff tablet.",
+            "GymGrow is the largest product I shipped at Plex Bit — a full gym operations suite spanning platform onboarding, day-to-day gym management, and wall-ready programming displays.",
     },
     {
         id: "coach-hq",
@@ -182,9 +168,15 @@ export const PROJECTS: IProject[] = [
             "Three connected web apps for a female cricket coaching platform — admin operations, coach publishing and monetization, and subscriber auth and payments.",
         image: StriideImg,
         tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "Stripe"],
-        liveUrl: "https://subscriber-striide.pbinfosystems.com/",
+        liveUrl: "https://striide.app/",
+        liveUrls: [
+            { label: "Main Site", url: "https://striide.app/" },
+            { label: "Admin", url: "https://admin-striide.pbinfosystems.com/" },
+            { label: "Coach", url: "https://coach-striide.pbinfosystems.com/" },
+            { label: "Subscriber", url: "https://subscriber-striide.pbinfosystems.com/" },
+        ],
         overview:
-            "Striide is a coaching platform for female cricketers. I built three web apps that share the product: an admin console for content, monetization, and operations; a coach app for publishing, insights, and Stripe Express payouts; and a subscriber app for authentication and payments. Together they cover the full loop from content review to paid access.",
+            "Striide is a coaching platform for female cricketers at striide.app. I built three connected web apps around that product: an admin console for content, monetization, and operations; a coach app for publishing, insights, and Stripe Express payouts; and a subscriber app for authentication and payments. Together they cover the full loop from content review to paid access.",
         poweredBy:
             "Coaches connect Stripe Express for monetization, while subscribers authenticate and pay through the consumer app. Admin remains the source of truth for plans, vouchers, taxonomy, and content approval.",
         technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "Stripe Express", "OAuth"],

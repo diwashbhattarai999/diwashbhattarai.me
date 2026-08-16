@@ -49,21 +49,25 @@ export default async function ProjectPage({ params }: { params: Promise<{ projec
             <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                 <BlurFadeText className="font-bold text-4xl md:text-5xl" delay={0.08} text={project.title} />
                 <BlurFade delay={0.08}>
-                    <div className="flex gap-3">
-                        {project.liveUrl && (
+                    <div className="flex flex-wrap gap-3">
+                        {(
+                            project.liveUrls ??
+                            (project.liveUrl ? [{ label: "Live URL", url: project.liveUrl }] : [])
+                        ).map((link) => (
                             <a
                                 className={cn(
                                     buttonVariants({ variant: "outline" }),
                                     "h-auto rounded-full py-1.5"
                                 )}
-                                href={project.liveUrl}
+                                href={link.url}
+                                key={link.url}
                                 rel="noopener noreferrer"
                                 target="_blank"
                             >
                                 <ExternalLink size={14} />
-                                <span>Live URL</span>
+                                <span>{link.label}</span>
                             </a>
-                        )}
+                        ))}
                         {project.githubUrl && (
                             <a
                                 className={cn(
