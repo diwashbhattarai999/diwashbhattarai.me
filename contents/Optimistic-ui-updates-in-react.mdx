@@ -1,0 +1,391 @@
+---
+title: "Optimistic UI Updates in React: Patterns, Rollbacks, and the Mistakes That Break Them"
+date: "2026-08-04"
+author: "Diwash Bhattarai"
+profile: "/profile.png"
+tags: ["React", "Next.js", "TypeScript", "Frontend Architecture", "State Management"]
+description: "A practical guide to implementing optimistic UI updates in React —
+  when they help, how to roll them back correctly, and the concurrency mistakes
+  that quietly corrupt UI state."
+coverImage: "/contents/optimistic-ui-updates-react.png"
+readTime: "10 min read"
+category: "React"
+---
+
+The first optimistic update I shipped looked simple: toggle a like button,
+update the count immediately, send the request in the background. It worked
+great in every demo. Then a slow network, a failed request, and a second click
+before the first one resolved turned the like count into a number that never
+matched the server — and stayed wrong until the next full page reload.
+
+Optimistic UI is one of those patterns that is trivial to demo and easy to get
+subtly wrong in production. This article covers how I actually implement it in
+**React** and **Next.js** apps — the update/rollback lifecycle, where React
+Query fits, and the concurrency mistakes that show up once real users start
+clicking things twice.
+
+---
+
+## What "optimistic" actually means
+
+An optimistic update assumes the request will succeed and updates the UI
+before the server confirms it. The alternative — wait for the response, then
+update — is safer but feels slow for anything a user expects to be instant:
+likes, toggles, drag-and-drop reordering, adding an item to a cart, checking
+off a to-do.
+
+The trade you're making is explicit: **faster perceived UI in exchange for
+owning the rollback path when the request fails.** If you're not willing to
+build the rollback, don't build the optimistic update — a slow-but-correct UI
+beats a fast-but-wrong one.
+
+---
+
+## When it's worth it
+
+Optimistic updates earn their complexity when:
+
+- The action is **low-risk and reversible** (like, favorite, mark as read).
+- The **success rate is high** — rollbacks should be the rare path, not the
+  common one.
+- The user has **immediate visual expectation** — a checkbox that doesn't
+  check instantly reads as broken, even if it's technically "loading."
+
+They're usually not worth it for:
+
+- **Payments or anything financial** — the cost of showing a wrong "success"
+  state outweighs the UX win.
+- **Multi-step or irreversible actions** — deleting an account, submitting a
+  form with side effects you can't cleanly undo.
+- **Low-confidence requests** — if failures are common (flaky third-party
+  integration, validation-heavy endpoint), the rollback becomes the primary
+  experience, not the exception.
+
+---
+
+## The core lifecycle
+
+Every optimistic update, regardless of library, follows the same shape:
+
+1. **Snapshot** the current state before mutating.
+2. **Apply** the optimistic change immediately.
+3. **Fire** the request.
+4. **On success** — reconcile with the server response (don't just leave the
+   optimistic guess in place if the server returns different data).
+5. **On failure** — roll back to the snapshot, and surface the failure.
+
+Skipping step 1 is the most common mistake I see. Without a snapshot, "roll
+back" becomes "guess what the previous state was," which is how UI state
+drifts from server state over a session.
+
+---
+
+## Manual implementation with `useState`
+
+For a single, local piece of state, you don't need a library:
+
+<CodeBlock
+  language="tsx"
+  filename="LikeButton.tsx"
+  code={`function LikeButton({ postId, initialLiked, initialCount }: Props) {
+  const [liked, setLiked] = useState(initialLiked);
+  const [count, setCount] = useState(initialCount);
+
+async function toggleLike() {
+const snapshot = { liked, count };
+
+    // 1. Apply optimistically
+    const nextLiked = !liked;
+    setLiked(nextLiked);
+    setCount((c) => c + (nextLiked ? 1 : -1));
+
+    try {
+      // 2. Fire the request
+      const result = await api.toggleLike(postId);
+
+      // 3. Reconcile with the server's actual numbers, not our guess
+      setLiked(result.liked);
+      setCount(result.count);
+    } catch {
+      // 4. Roll back on failure
+      setLiked(snapshot.liked);
+      setCount(snapshot.count);
+      toast.error("Couldn't update like, please try again.");
+    }
+
+}
+
+return (
+<button onClick={toggleLike} aria-pressed={liked}>
+{liked ? "♥" : "♡"} {count}
+</button>
+);
+}`}
+/>
+
+Notice the reconciliation step: on success, we set state to `result.liked`
+and `result.count` from the server — not just leave our optimistic guess in
+place. If another client liked the same post in the meantime, the server's
+count is the truth, and our guess was only ever a placeholder.
+
+---
+
+## The double-click race condition
+
+Here's where the naive version breaks. If the user clicks twice before the
+first request resolves, you get two in-flight requests racing against a
+single snapshot and a single rollback path. Whichever response lands last
+wins — regardless of which click it actually belongs to.
+
+The fix is to key the in-flight request and ignore stale responses:
+
+<CodeBlock
+  language="tsx"
+  filename="LikeButton.tsx"
+  code={`function LikeButton({ postId, initialLiked, initialCount }: Props) {
+  const [liked, setLiked] = useState(initialLiked);
+  const [count, setCount] = useState(initialCount);
+  const requestIdRef = useRef(0);
+
+async function toggleLike() {
+const snapshot = { liked, count };
+const thisRequestId = ++requestIdRef.current;
+
+    const nextLiked = !liked;
+    setLiked(nextLiked);
+    setCount((c) => c + (nextLiked ? 1 : -1));
+
+    try {
+      const result = await api.toggleLike(postId);
+
+      // Ignore this response if a newer click has already superseded it
+      if (requestIdRef.current !== thisRequestId) return;
+
+      setLiked(result.liked);
+      setCount(result.count);
+    } catch {
+      if (requestIdRef.current !== thisRequestId) return;
+
+      setLiked(snapshot.liked);
+      setCount(snapshot.count);
+      toast.error("Couldn't update like, please try again.");
+    }
+
+}
+
+return (
+<button onClick={toggleLike} aria-pressed={liked}>
+{liked ? "♥" : "♡"} {count}
+</button>
+);
+}`}
+/>
+
+This is the same class of problem as a server-side race condition — a stale
+read (or in this case, a stale response) landing after a newer one already
+changed the state. The fix is conceptually identical too: tag the operation
+and ignore anything that isn't current, rather than trusting arrival order.
+
+---
+
+## Doing it with React Query / TanStack Query
+
+For anything backed by cached server state, I'd rather not hand-roll snapshot
+and rollback logic per component. `useMutation`'s `onMutate`/`onError`/
+`onSettled` lifecycle exists for exactly this:
+
+<CodeBlock
+  language="tsx"
+  filename="useToggleLike.ts"
+  code={`function useToggleLike(postId: string) {
+  const queryClient = useQueryClient();
+  const queryKey = ["post", postId];
+
+return useMutation({
+mutationFn: () => api.toggleLike(postId),
+
+    onMutate: async () => {
+      // Cancel in-flight refetches so they don't clobber our optimistic write
+      await queryClient.cancelQueries({ queryKey });
+
+      const previous = queryClient.getQueryData<Post>(queryKey);
+
+      queryClient.setQueryData<Post>(queryKey, (old) =>
+        old
+          ? {
+              ...old,
+              liked: !old.liked,
+              likeCount: old.likeCount + (old.liked ? -1 : 1),
+            }
+          : old,
+      );
+
+      // Passed to onError as context — this is the snapshot
+      return { previous };
+    },
+
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(queryKey, context.previous);
+      }
+      toast.error("Couldn't update like, please try again.");
+    },
+
+    onSettled: () => {
+      // Reconcile with the server regardless of outcome
+      queryClient.invalidateQueries({ queryKey });
+    },
+
+});
+}`}
+/>
+
+`cancelQueries` in `onMutate` matters more than it looks: without it, a
+background refetch that was already in flight can resolve _after_ your
+optimistic write and silently overwrite it with stale data. `onSettled`
+calling `invalidateQueries` closes the loop by refetching the real state once
+the mutation is done — success or failure — so the optimistic guess never
+outlives its usefulness.
+
+---
+
+## Optimistic updates on lists
+
+Single-object toggles are the easy case. Reordering or adding to a list adds
+a wrinkle: the optimistic item usually doesn't have a real ID yet.
+
+<CodeBlock
+  language="tsx"
+  filename="useAddTodo.ts"
+  code={`function useAddTodo() {
+  const queryClient = useQueryClient();
+
+return useMutation({
+mutationFn: (title: string) => api.createTodo(title),
+
+    onMutate: async (title) => {
+      await queryClient.cancelQueries({ queryKey: ["todos"] });
+      const previous = queryClient.getQueryData<Todo[]>(["todos"]);
+
+      const optimisticTodo: Todo = {
+        id: \`optimistic-\${crypto.randomUUID()}\`,
+        title,
+        done: false,
+        pending: true, // used to render a subtle loading state on this row
+      };
+
+      queryClient.setQueryData<Todo[]>(["todos"], (old = []) => [
+        ...old,
+        optimisticTodo,
+      ]);
+
+      return { previous, optimisticId: optimisticTodo.id };
+    },
+
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["todos"], context.previous);
+      }
+    },
+
+    onSuccess: (created, _vars, context) => {
+      // Swap the temporary optimistic row for the real server record
+      queryClient.setQueryData<Todo[]>(["todos"], (old = []) =>
+        old.map((todo) =>
+          todo.id === context?.optimisticId ? created : todo,
+        ),
+      );
+    },
+
+});
+}`}
+/>
+
+The `pending: true` flag lets you render the row slightly differently (muted
+text, a small spinner) while it's unconfirmed — which is often better UX than
+pretending the optimistic item is fully real. The temporary `optimistic-`
+prefixed ID also matters: it stops the optimistic row from colliding with a
+real ID if the server later returns one that happens to match something
+else in the cache.
+
+---
+
+## Trade-offs
+
+### Optimistic vs pessimistic (wait-then-update)
+
+Optimistic wins on perceived speed for cheap, high-success-rate actions.
+Pessimistic wins when correctness matters more than snappiness, or when the
+failure rate is high enough that rollbacks would be the common case rather
+than the exception.
+
+### Reconcile vs trust the optimistic guess
+
+Some implementations skip reconciliation and just leave the optimistic state
+in place after success, assuming it matches. That's fine for a boolean toggle
+where the guess is always right. It's not fine for anything with derived or
+shared state — like counts, balances, positions in a list — where the server
+is the only source of truth that accounts for other clients.
+
+### Per-component rollback vs a shared mutation cache
+
+Hand-rolled `useState` rollback is fine for one-off, purely local UI (a
+disclosure toggle, a draft field). Once state is shared across components or
+already lives in a query cache, React Query's mutation lifecycle is less code
+than reimplementing snapshot/rollback per component, and it composes with
+cache invalidation you likely already have.
+
+---
+
+## Common mistakes
+
+1. **No snapshot before the optimistic write.** Without one, rollback becomes
+   a guess instead of a restore.
+2. **Ignoring response order on rapid repeated actions.** The double-click
+   race condition above — treat this the same way you'd treat a backend race
+   condition, because it is one.
+3. **Trusting the optimistic guess instead of reconciling.** Fine for a
+   boolean; wrong for anything derived from server-side state shared across
+   users.
+4. **Forgetting to cancel in-flight queries before an optimistic write** in
+   React Query — a stale background refetch can silently overwrite your
+   optimistic state.
+5. **No visual distinction for unconfirmed state.** A user should be able to
+   tell, even subtly, that a new list item hasn't been confirmed by the
+   server yet — especially if failures aren't rare.
+6. **Applying optimistic updates to irreversible or high-stakes actions**,
+   where a UI that briefly lies about success is worse than a UI that waits.
+
+---
+
+## Practical recommendations
+
+- Reserve optimistic updates for actions that are cheap, reversible, and
+  usually succeed.
+- Always snapshot before mutating, and always define the rollback before
+  shipping the optimistic path.
+- Reconcile with the server response on success — don't assume your
+  optimistic guess was exactly right.
+- Guard against out-of-order responses on anything a user can trigger
+  repeatedly in quick succession.
+- If you're on React Query, use `onMutate` / `onError` / `onSettled` rather
+  than hand-rolling the same lifecycle per component.
+- Give unconfirmed optimistic items a visual signal, however subtle, so a
+  failure doesn't feel like the UI lied.
+
+---
+
+## Conclusion
+
+Optimistic UI is a genuine UX win, but it's a contract: the UI is allowed to
+lie briefly about the outcome only if you've built a correct way to take the
+lie back. Snapshot, apply, reconcile, roll back — the lifecycle doesn't
+change whether you write it by hand or lean on a library's mutation cache.
+Most of the bugs I've seen in this pattern come from skipping one of those
+four steps, not from getting the UI itself wrong.
+
+The same discipline that keeps a backend correct under concurrent writes —
+don't trust arrival order, always have a source of truth to reconcile
+against — applies just as directly on the client. Optimistic UI just moves
+the question of "what happens between the read and the write" from the
+server into the browser.
