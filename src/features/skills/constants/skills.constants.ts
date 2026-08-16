@@ -34,7 +34,7 @@ import TS from "@/assets/icons/ts.svg";
 import VSCode from "@/assets/icons/vscode.svg";
 import WebRTC from "@/assets/icons/webrtc.svg";
 import Zod from "@/assets/icons/zod.svg";
-import type { SkillCategory } from "@/features/home/types/skills.types";
+import type { SkillCategory } from "@/features/skills/types/skills.types";
 
 export const SKILLS: SkillCategory[] = [
     {

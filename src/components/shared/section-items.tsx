@@ -1,9 +1,11 @@
-import type { LucideIcon } from "lucide-react";
+import { type LucideIcon, MoveRight } from "lucide-react";
+import Link from "next/link";
 
 import BlurFade from "@/components/animations/blur-fade";
 import BlurFadeText from "@/components/animations/blur-fade-text";
 import { BlinkingCircle } from "@/components/shared/blinking-circle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ROUTES } from "@/configs/routes";
 import { cn } from "@/lib/utils";
 
 export const SectionTitle = ({ children, className }: { children: string; className?: string }) => (
@@ -41,6 +43,7 @@ export const SectionSeperator = ({ className }: { className?: string }) => (
 interface ProjectItem {
     link?: string;
     name: string;
+    projectId?: string;
 }
 
 interface ISectionCardProps {
@@ -50,7 +53,7 @@ interface ISectionCardProps {
     projects?: ProjectItem[];
     skills: string[];
     subtitle: React.ReactNode;
-    title: string;
+    title: React.ReactNode;
     website?: string;
 }
 
@@ -73,9 +76,11 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
                     <div className="relative rounded-full bg-primary/10 p-2">
                         <Icon className="size-6 text-primary" />
                         {current && (
-                            <div className="absolute right-0.5 bottom-0.5">
-                                <BlinkingCircle />
-                            </div>
+                            <BlinkingCircle
+                                className="absolute right-0.5 bottom-0.5"
+                                label="Current role"
+                                size="sm"
+                            />
                         )}
                     </div>
 
@@ -98,41 +103,40 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
                         ))}
                     </div>
 
-                    {/* Render projects if available */}
                     {projects && projects.length > 0 && (
-                        <div className="mt-4">
+                        <div className="mt-4 space-y-2.5">
                             <h4 className="font-bold">Projects:</h4>
                             <ul className="flex list-disc flex-wrap gap-x-8 gap-y-4 pl-4">
-                                {projects.map((project, index) => {
-                                    // Support both string and object format for backward compatibility
-                                    if (typeof project === "string") {
-                                        return (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: index is unique
-                                            <li className="text-muted-foreground" key={index}>
-                                                {project}
-                                            </li>
+                                {projects.map((project) => {
+                                    let projectLabel: React.ReactNode = project.name;
+
+                                    if (project.link) {
+                                        projectLabel = (
+                                            <a
+                                                className="text-primary hover:underline"
+                                                href={project.link}
+                                                rel="noopener noreferrer"
+                                                target="_blank"
+                                            >
+                                                {project.name}
+                                            </a>
+                                        );
+                                    } else if (project.projectId) {
+                                        projectLabel = (
+                                            <Link
+                                                className="text-primary hover:underline"
+                                                href={ROUTES.PROJECT(project.projectId)}
+                                            >
+                                                {project.name}
+                                            </Link>
                                         );
                                     }
-                                    if (project && typeof project === "object" && "name" in project) {
-                                        return (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: index is unique
-                                            <li className="text-muted-foreground" key={index}>
-                                                {project.link ? (
-                                                    <a
-                                                        className="text-primary hover:underline"
-                                                        href={project.link}
-                                                        rel="noopener noreferrer"
-                                                        target="_blank"
-                                                    >
-                                                        {project.name}
-                                                    </a>
-                                                ) : (
-                                                    project.name
-                                                )}
-                                            </li>
-                                        );
-                                    }
-                                    return null;
+
+                                    return (
+                                        <li className="text-muted-foreground" key={project.name}>
+                                            {projectLabel}
+                                        </li>
+                                    );
                                 })}
                             </ul>
                         </div>
@@ -140,14 +144,15 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
 
                     {/* Render website */}
                     {website && (
-                        <div className="mt-4">
+                        <div className="mt-6">
                             <a
-                                className="text-primary hover:underline"
+                                className="group flex items-center gap-2 text-primary hover:underline"
                                 href={website}
                                 rel="noopener noreferrer"
                                 target="_blank"
                             >
                                 Visit Website
+                                <MoveRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
                             </a>
                         </div>
                     )}

@@ -1,25 +1,15 @@
 import type { Metadata } from "next";
 
+import { ROUTES } from "@/configs/routes";
 import { BlogsPage } from "@/features/blogs/components/blogs-page";
+import { createPageMetadata } from "@/lib/site-metadata";
 
-export const metadata: Metadata = {
-    title: "Blogs | Diwash Bhattarai",
+export const metadata: Metadata = createPageMetadata({
+    title: "Blog | Diwash Bhattarai",
     description:
-        "Explore my blog for insights, tutorials, and thoughts on web development, React, Next.js, and modern web technologies.",
-    keywords: [
-        "Diwash Bhattarai Blogs",
-        "Web Development Blog",
-        "React Blog",
-        "Next.js Blog",
-        "Frontend Blog",
-        "Backend Blog",
-        "JavaScript Blog",
-        "TypeScript Blog",
-        "Web Development Tutorials",
-        "Modern Web Technologies",
-        "Programming Insights",
-    ],
-};
+        "Technical articles by Diwash Bhattarai on CSS, frontend engineering, and modern web development.",
+    path: ROUTES.BLOGS,
+});
 
 export default function Page() {
     return <BlogsPage />;

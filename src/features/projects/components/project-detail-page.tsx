@@ -1,18 +1,9 @@
 import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import BlurFade from "@/components/animations/blur-fade";
-import BlurFadeText from "@/components/animations/blur-fade-text";
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
 import { buttonVariants } from "@/components/ui/button";
 import { ROUTES } from "@/configs/routes";
 import { PROJECTS } from "@/features/projects/constants/project.constants";
@@ -21,27 +12,6 @@ import { cn } from "@/lib/utils";
 interface ProjectDetailPageProps {
     projectId: string;
 }
-
-interface BreadcrumbNavigationProps {
-    className?: string;
-    title: string;
-}
-
-const BreadcrumbNavigation = ({ title, className }: BreadcrumbNavigationProps) => (
-    <Breadcrumb className={className}>
-        <BreadcrumbList>
-            <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                    <Link href={ROUTES.PROJECTS}>Projects</Link>
-                </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-                <BreadcrumbPage>{title}</BreadcrumbPage>
-            </BreadcrumbItem>
-        </BreadcrumbList>
-    </Breadcrumb>
-);
 
 /**
  * Project detail view for a single portfolio case study.
@@ -58,11 +28,18 @@ export const ProjectDetailPage = ({ projectId }: ProjectDetailPageProps) => {
     return (
         <div className="px-6 py-8">
             <BlurFade delay={0.06}>
-                <BreadcrumbNavigation className="mb-8" title={project.title} />
+                <PageBreadcrumb
+                    className="mb-8"
+                    items={[
+                        { label: "Home", href: ROUTES.HOME, path: ROUTES.HOME },
+                        { label: "Projects", href: ROUTES.PROJECTS, path: ROUTES.PROJECTS },
+                        { label: project.title, path: ROUTES.PROJECT(project.id) },
+                    ]}
+                />
             </BlurFade>
 
             <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-                <BlurFadeText className="font-bold text-4xl md:text-5xl" delay={0.08} text={project.title} />
+                <h1 className="font-bold text-4xl md:text-5xl">{project.title}</h1>
                 <BlurFade delay={0.08}>
                     <div className="flex flex-wrap gap-3">
                         {(

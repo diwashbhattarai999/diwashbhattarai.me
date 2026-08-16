@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 
-import { ProjectsPage, projectsPageMetadata } from "@/features/projects/components/projects-page";
+import { ROUTES } from "@/configs/routes";
+import { ProjectsPage } from "@/features/projects/components/projects-page";
+import { createPageMetadata } from "@/lib/site-metadata";
 
-export const metadata: Metadata = projectsPageMetadata;
+export const metadata: Metadata = createPageMetadata({
+    title: "Projects | Diwash Bhattarai",
+    description:
+        "Selected software projects by Diwash Bhattarai, including GymGrow, Coach HQ, Striide, and other production web applications.",
+    path: ROUTES.PROJECTS,
+});
 
 const Page = () => <ProjectsPage />;
 

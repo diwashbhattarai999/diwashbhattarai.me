@@ -1,7 +1,5 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import React, { useState } from "react";
 
 import BlurFade from "@/components/animations/blur-fade";
@@ -11,7 +9,7 @@ import {
     SectionTitle,
     SectionWrapper,
 } from "@/components/shared/section-items";
-import { Button } from "@/components/ui/button";
+import { SectionViewAllButton } from "@/components/shared/section-view-all-button";
 import { ROUTES } from "@/configs/routes";
 import { PROJECTS } from "@/features/projects/constants/project.constants";
 
@@ -29,16 +27,11 @@ export const ProjectsSection = ({ showViewAll = false, limit }: ProjectsSectionP
     return (
         <SectionWrapper id="projects">
             <div className="mb-4 flex flex-col gap-2">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-4">
                     <SectionTitle>{limit ? "Featured Projects" : "All Projects"}</SectionTitle>
-                    {showViewAll && (
-                        <Button asChild variant="outline">
-                            <Link className="flex items-center" href={ROUTES.PROJECTS}>
-                                View All{" "}
-                                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                            </Link>
-                        </Button>
-                    )}
+                    {showViewAll ? (
+                        <SectionViewAllButton href={ROUTES.PROJECTS} label="View all projects" />
+                    ) : null}
                 </div>
                 {!limit && <SectionSubTitle>Here are some of the projects I have worked on.</SectionSubTitle>}
             </div>

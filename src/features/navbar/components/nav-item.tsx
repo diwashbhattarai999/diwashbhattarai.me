@@ -16,7 +16,7 @@ export const NavItem = ({ name, icon: Icon, path, className }: NavItemProps) => 
         <>
             <Link
                 className={cn(
-                    "hidden rounded-md px-4 py-1 transition-colors hover:bg-muted hover:text-primary md:inline",
+                    "hidden rounded-md px-3 py-1 transition-colors hover:bg-muted hover:text-primary md:inline",
                     isActive ? "bg-muted text-primary" : "text-foreground/60",
                     className
                 )}
@@ -30,7 +30,7 @@ export const NavItem = ({ name, icon: Icon, path, className }: NavItemProps) => 
                 <Tooltip>
                     <TooltipTrigger asChild className="md:hidden">
                         <Link
-                            className="relative cursor-default rounded-md p-2.5 text-foreground/80 transition-colors hover:bg-muted hover:text-secondary-foreground"
+                            className="relative rounded-md p-2.5 text-foreground/80 transition-colors hover:bg-muted hover:text-secondary-foreground"
                             href={path}
                             key={path}
                         >

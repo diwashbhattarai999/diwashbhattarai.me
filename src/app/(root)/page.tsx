@@ -1,10 +1,21 @@
 import { SectionSeperator } from "@/components/shared/section-items";
-import { HomeContact } from "@/features/home/components/home-contact";
+import { ROUTES } from "@/configs/routes";
+import { siteConfig } from "@/configs/site";
+import { ContactSection } from "@/features/contact/components/contact-section";
+import { HomeAbout } from "@/features/home/components/home-about";
+import { HomeArticles } from "@/features/home/components/home-articles";
 import { HomeEducation } from "@/features/home/components/home-education";
 import { HomeExperience } from "@/features/home/components/home-experience";
 import { HomeHero } from "@/features/home/components/home-hero";
 import { HomeSkills } from "@/features/home/components/home-skills";
 import { ProjectsSection } from "@/features/projects/components/projects-section";
+import { createPageMetadata } from "@/lib/site-metadata";
+
+export const metadata = createPageMetadata({
+    title: siteConfig.title,
+    description: siteConfig.description,
+    path: ROUTES.HOME,
+});
 
 export default function HomePage() {
     return (
@@ -14,15 +25,19 @@ export default function HomePage() {
 
             <HomeHero />
             <SectionSeperator />
-            <HomeExperience />
-            <SectionSeperator />
-            <HomeEducation />
-            <SectionSeperator />
             <ProjectsSection limit={3} showViewAll />
+            <SectionSeperator />
+            <HomeExperience />
             <SectionSeperator />
             <HomeSkills />
             <SectionSeperator />
-            <HomeContact />
+            <HomeAbout />
+            <SectionSeperator />
+            <HomeEducation />
+            <SectionSeperator />
+            <HomeArticles />
+            <SectionSeperator />
+            <ContactSection />
         </>
     );
 }

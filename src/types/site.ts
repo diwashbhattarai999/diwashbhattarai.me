@@ -18,6 +18,10 @@ export interface SiteConfig {
     }[];
     contactEmail: string;
     description: string;
+    jobTitle: string;
+    knowsAbout: readonly string[];
+    location: string;
+    name: string;
     pwa: {
         display: MetadataRoute.Manifest["display"];
         backgroundColor: string;
@@ -40,4 +44,13 @@ export interface SiteConfig {
 export interface ThemeColors {
     dark: string;
     light: string;
+}
+
+export interface PageMetadataInput {
+    description: string;
+    image?: string;
+    path: string;
+    publishedTime?: string;
+    title: string;
+    type?: "website" | "article";
 }

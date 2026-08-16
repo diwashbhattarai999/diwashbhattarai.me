@@ -27,6 +27,16 @@ const nextConfig: NextConfig = {
     reactStrictMode: true,
 
     // Security headers
+    async redirects() {
+        return [
+            {
+                source: "/contact",
+                destination: "/",
+                permanent: true,
+            },
+        ];
+    },
+
     async headers() {
         return [
             {

@@ -1,25 +1,17 @@
-import { Briefcase } from "lucide-react";
+import { SectionHeading } from "@/components/shared/section-heading";
+import { ROUTES } from "@/configs/routes";
+import { ExperienceList } from "@/features/experience/components/experience-list";
 
-import { SectionCard, SectionWrapper } from "@/components/shared/section-items";
-import { EXPERIENCE_DETAILS } from "@/features/home/constants/experience.constants";
-
+/**
+ * Compact professional history summary for the homepage.
+ */
 export const HomeExperience = () => (
-    <SectionWrapper id="experience" title="Experience">
-        <div className="grid gap-8">
-            {EXPERIENCE_DETAILS.map((exp, index) => (
-                <SectionCard
-                    current={exp.current}
-                    description={exp.description}
-                    Icon={Briefcase}
-                    // biome-ignore lint/suspicious/noArrayIndexKey: index is unique
-                    key={index}
-                    projects={exp.projects}
-                    skills={exp.skills}
-                    subtitle={`${exp.company} · ${exp.duration}`}
-                    title={exp.title}
-                    website={exp.website}
-                />
-            ))}
-        </div>
-    </SectionWrapper>
+    <SectionHeading
+        actionHref={ROUTES.EXPERIENCE}
+        actionLabel="View all experience"
+        id="experience"
+        title="Experience"
+    >
+        <ExperienceList compact />
+    </SectionHeading>
 );

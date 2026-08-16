@@ -31,14 +31,14 @@ const BlurFadeText = ({
 }: BlurFadeTextProps) => {
     const defaultVariants: Variants = {
         hidden: { y: yOffset, opacity: 0, filter: "blur(8px)" },
-        visible: { y: -yOffset, opacity: 1, filter: "blur(0px)" },
+        visible: { y: 0, opacity: 1, filter: "blur(0px)" },
     };
     const combinedVariants = variant || defaultVariants;
     const characters = useMemo(() => Array.from(text ?? ""), [text]);
 
     if (animateByCharacter && text) {
         return (
-            <div className="z-0">
+            <span className="z-0 inline-block">
                 <AnimatePresence>
                     {characters.map((char, i) => (
                         <motion.span
@@ -60,12 +60,12 @@ const BlurFadeText = ({
                         </motion.span>
                     ))}
                 </AnimatePresence>
-            </div>
+            </span>
         );
     }
 
     return (
-        <div className="flex">
+        <span className="inline-block w-full">
             <AnimatePresence>
                 <motion.span
                     animate="visible"
@@ -81,7 +81,7 @@ const BlurFadeText = ({
                     {...(dangerouslySetInnerHTML ? { dangerouslySetInnerHTML } : { children: text })}
                 />
             </AnimatePresence>
-        </div>
+        </span>
     );
 };
 

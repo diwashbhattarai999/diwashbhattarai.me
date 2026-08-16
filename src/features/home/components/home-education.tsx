@@ -1,23 +1,26 @@
-import { GraduationCap } from "lucide-react";
+import { SectionHeading } from "@/components/shared/section-heading";
+import { ROUTES } from "@/configs/routes";
+import { EDUCATION_DETAILS } from "@/features/education/constants/education.constants";
 
-import { SectionCard, SectionWrapper } from "@/components/shared/section-items";
-import { EDUCATION_DETAILS } from "@/features/home/constants/education.constants";
-
+/**
+ * Compact education entries for the homepage.
+ */
 export const HomeEducation = () => (
-    <SectionWrapper id="education" title="Education">
-        <div className="grid gap-8">
-            {EDUCATION_DETAILS.map((edu, index) => (
-                <SectionCard
-                    current={edu.current}
-                    description={edu.description}
-                    Icon={GraduationCap}
-                    // biome-ignore lint/suspicious/noArrayIndexKey: index is unique
-                    key={index}
-                    skills={edu.skills}
-                    subtitle={`${edu.degree} · ${edu.duration}`}
-                    title={edu.institution}
-                />
+    <SectionHeading
+        actionHref={ROUTES.EDUCATION}
+        actionLabel="View education"
+        id="education"
+        title="Education"
+    >
+        <ul className="space-y-4">
+            {EDUCATION_DETAILS.map((education) => (
+                <li key={education.institution}>
+                    <p className="font-medium">{education.shortDegree}</p>
+                    <p className="text-muted-foreground text-sm">
+                        {education.institution} · {education.duration}
+                    </p>
+                </li>
             ))}
-        </div>
-    </SectionWrapper>
+        </ul>
+    </SectionHeading>
 );

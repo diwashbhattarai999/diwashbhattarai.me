@@ -1,7 +1,10 @@
-import type { ExperienceDetail } from "@/features/home/types/experience.types";
+import type { ExperienceDetail } from "@/features/experience/types/experience.types";
+
+const SUMMARY_SENTENCE_PATTERN = /^[^.!?]+[.!?]/;
 
 export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
     {
+        slug: "full-stack-software-developer-plexbit",
         title: "Full Stack Software Developer",
         company: "Plex Bit Infosystems",
         duration: "Jan 2026 - Present",
@@ -21,19 +24,24 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
             "Role-based Access",
         ],
         projects: [
-            { name: "GymGrow", link: "https://gymgrow.ai" },
-            { name: "Coach HQ", link: "https://uat-coachhq.pbinfosystems.com" },
-            { name: "Striide", link: "https://striide.app" },
-            { name: "Plex Bit Website", link: "https://v2.pbinfosystems.com" },
-            { name: "Luxe", link: "https://luxe.pbinfosystems.com" },
-            { name: "Euro Tours Travel", link: "https://eurotourstravel.com" },
-            { name: "Finance 360 Degree", link: "https://finance360degree.com" },
+            { name: "GymGrow", link: "https://gymgrow.ai", projectId: "gymgrow" },
+            { name: "Coach HQ", link: "https://uat-coachhq.pbinfosystems.com", projectId: "coach-hq" },
+            { name: "Striide", link: "https://striide.app", projectId: "striide" },
+            { name: "Plex Bit Website", link: "https://v2.pbinfosystems.com", projectId: "plexbit-website" },
+            { name: "Luxe", link: "https://luxe.pbinfosystems.com", projectId: "luxe" },
+            { name: "Euro Tours Travel", link: "https://eurotourstravel.com", projectId: "euro-tours" },
+            {
+                name: "Finance 360 Degree",
+                link: "https://finance360degree.com",
+                projectId: "finance-360",
+            },
         ],
         website: "https://pbinfosystems.com",
         current: true,
         logo: "/company/plexbit.png",
     },
     {
+        slug: "full-stack-software-developer-upachaar-nepal",
         title: "Full Stack Software Developer",
         company: "Upachaar Nepal",
         duration: "Jun 2024 - Dec 2025",
@@ -62,22 +70,46 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
             "Khalti Payment Gateway",
         ],
         projects: [
-            { name: "Patient Portal", link: "https://upchaarnepal.com" },
-            { name: "Doctor Portal", link: "https://doctor.upchaarnepal.com" },
-            { name: "Clinic Portal", link: "https://clinic.upchaarnepal.com" },
-            { name: "Pharmacy Portal", link: "https://pharmacy.upchaarnepal.com" },
+            {
+                name: "Patient Portal",
+                link: "https://upchaarnepal.com",
+                projectId: "upchaar-patient-portal",
+            },
+            {
+                name: "Doctor Portal",
+                link: "https://doctor.upchaarnepal.com",
+                projectId: "upchaar-doctor-portal",
+            },
+            {
+                name: "Clinic Portal",
+                link: "https://clinic.upchaarnepal.com",
+                projectId: "upchaar-clinic-portal",
+            },
+            {
+                name: "Pharmacy Portal",
+                link: "https://pharmacy.upchaarnepal.com",
+                projectId: "upchaar-pharmacy-portal",
+            },
             {
                 name: "Diagnostic Portal",
                 link: "https://diagnostic.upchaarnepal.com",
+                projectId: "upchaar-diagnostic-portal",
             },
-            { name: "Admin Panel" },
-            { name: "Logger System" },
+            {
+                name: "Admin Portal",
+                projectId: "upchaar-admin-portal",
+            },
+            {
+                name: "Logger System",
+                projectId: "upchaar-logger-system",
+            },
         ],
         website: "https://upchaarnepal.com",
         current: false,
         logo: "/company/upchaar-nepal.png",
     },
     {
+        slug: "junior-frontend-developer-fact-digi",
         title: "Junior Frontend Developer",
         company: "Fact Digi",
         duration: "Jan 2024 - Jun 2024",
@@ -105,6 +137,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
         logo: "/company/fact-digi.png",
     },
     {
+        slug: "frontend-developer-intern-ksw-techzone",
         title: "Frontend Developer Intern",
         company: "KSW Techzone",
         duration: "Nov 2023 - Jan 2024",
@@ -121,3 +154,24 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
         logo: "/company/ksw.png",
     },
 ];
+
+/**
+ * Returns the first sentence of an experience description for summary cards.
+ *
+ * @param description - Full experience description.
+ * @returns Opening sentence used on the homepage.
+ */
+export const getExperienceSummary = (description: string): string => {
+    const match = description.match(SUMMARY_SENTENCE_PATTERN);
+
+    return match ? match[0].trim() : description;
+};
+
+/**
+ * Finds an experience entry by slug.
+ *
+ * @param slug - Stable URL slug.
+ * @returns Matching experience or undefined.
+ */
+export const getExperienceBySlug = (slug: string): ExperienceDetail | undefined =>
+    EXPERIENCE_DETAILS.find((experience) => experience.slug === slug);

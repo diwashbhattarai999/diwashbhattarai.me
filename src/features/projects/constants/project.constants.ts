@@ -23,6 +23,7 @@ import StriideAdminLightImg from "@/assets/images/projects/striide-admin-light.p
 import StriideCoachDarkImg from "@/assets/images/projects/striide-coach-dark.png";
 import StriideCoachLightImg from "@/assets/images/projects/striide-coach-light.png";
 import StriideSubscriberImg from "@/assets/images/projects/striide-subscriber.png";
+import { UPCHAAR_PROJECTS } from "@/features/projects/constants/upchaar-projects.constants";
 import type { Project } from "@/features/projects/types/project.types";
 
 export const PROJECTS: Project[] = [
@@ -92,48 +93,6 @@ export const PROJECTS: Project[] = [
             "GymGrow is the largest product I shipped at Plex Bit — a full gym operations suite spanning platform onboarding, day-to-day gym management, and wall-ready programming displays.",
     },
     {
-        id: "coach-hq",
-        title: "Coach HQ",
-        description:
-            "An AI-led coaching platform with public marketing pages and a permission-driven dashboard for superadmins, coaches, and content creators.",
-        image: CoachHqImg,
-        tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "Stripe", "RBAC"],
-        liveUrl: "https://uat-coachhq.pbinfosystems.com/",
-        overview:
-            "Coach HQ helps teachers and coaches find drills, lesson plans, and playlists across sports. I built the landing and public pages plus a dashboard where the sidebar, actions, and features all resolve from the signed-in role and permissions. Superadmins manage the content library, users, catalog, subscriptions, and site content. Coaches and content creators work inside the same product with a narrower surface — submitting drills, browsing the library, and handling Stripe subscriptions.",
-        poweredBy:
-            "Content submitted by creators is reviewed by superadmins before it reaches the library, keeping the catalog expert-led while still scaling contributions.",
-        technologies: [
-            "Next.js",
-            "TypeScript",
-            "Tailwind CSS",
-            "Shadcn UI",
-            "Stripe",
-            "Role-based access control",
-        ],
-        features: [
-            "Marketing site covering home, about, pricing, contact, FAQ, and webinars",
-            "Dashboard UI that changes with role and permission — sidebar, buttons, and features",
-            "Superadmin CRUD for drills, including approve/reject of creator submissions",
-            "Lesson plans, playlists, coaches, content creators, categories, sub-categories, and sport tags",
-            "Subscription plans, transactions, subscribers, and newsletter management",
-            "Contact messages, FAQs, and app version management",
-            "Coach and content creator access to the content library and Stripe subscriptions",
-        ],
-        developmentChallenges:
-            "Every dashboard surface had to stay permission-aware so a missing grant hid the nav item, the button, and the feature — not just the API. That meant a single source of truth for roles across layout, actions, and content workflows like drill review.",
-        screenshots: [
-            {
-                src: CoachHqAdminImg,
-                alt: "Coach HQ admin overview dashboard",
-                caption:
-                    "Admin overview with content, coach, and subscription metrics plus drill moderation.",
-            },
-        ],
-        conclusion:
-            "Coach HQ shows how a coaching product can stay one codebase while still feeling purpose-built for superadmins, coaches, and content creators.",
-    },
-    {
         id: "striide",
         title: "Striide",
         description:
@@ -194,6 +153,49 @@ export const PROJECTS: Project[] = [
         conclusion:
             "Striide is a three-app coaching system — operations, creator tools, and consumer access — built so content, payments, and permissions stay in sync.",
     },
+    {
+        id: "coach-hq",
+        title: "Coach HQ",
+        description:
+            "An AI-led coaching platform with public marketing pages and a permission-driven dashboard for superadmins, coaches, and content creators.",
+        image: CoachHqImg,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "Stripe", "RBAC"],
+        liveUrl: "https://uat-coachhq.pbinfosystems.com/",
+        overview:
+            "Coach HQ helps teachers and coaches find drills, lesson plans, and playlists across sports. I built the landing and public pages plus a dashboard where the sidebar, actions, and features all resolve from the signed-in role and permissions. Superadmins manage the content library, users, catalog, subscriptions, and site content. Coaches and content creators work inside the same product with a narrower surface — submitting drills, browsing the library, and handling Stripe subscriptions.",
+        poweredBy:
+            "Content submitted by creators is reviewed by superadmins before it reaches the library, keeping the catalog expert-led while still scaling contributions.",
+        technologies: [
+            "Next.js",
+            "TypeScript",
+            "Tailwind CSS",
+            "Shadcn UI",
+            "Stripe",
+            "Role-based access control",
+        ],
+        features: [
+            "Marketing site covering home, about, pricing, contact, FAQ, and webinars",
+            "Dashboard UI that changes with role and permission — sidebar, buttons, and features",
+            "Superadmin CRUD for drills, including approve/reject of creator submissions",
+            "Lesson plans, playlists, coaches, content creators, categories, sub-categories, and sport tags",
+            "Subscription plans, transactions, subscribers, and newsletter management",
+            "Contact messages, FAQs, and app version management",
+            "Coach and content creator access to the content library and Stripe subscriptions",
+        ],
+        developmentChallenges:
+            "Every dashboard surface had to stay permission-aware so a missing grant hid the nav item, the button, and the feature — not just the API. That meant a single source of truth for roles across layout, actions, and content workflows like drill review.",
+        screenshots: [
+            {
+                src: CoachHqAdminImg,
+                alt: "Coach HQ admin overview dashboard",
+                caption:
+                    "Admin overview with content, coach, and subscription metrics plus drill moderation.",
+            },
+        ],
+        conclusion:
+            "Coach HQ shows how a coaching product can stay one codebase while still feeling purpose-built for superadmins, coaches, and content creators.",
+    },
+    ...UPCHAAR_PROJECTS,
     {
         id: "euro-tours",
         title: "Euro Tours Travel",
@@ -654,3 +656,12 @@ export const PROJECTS: Project[] = [
             "Portfolio v1 is a simple yet effective introduction to my work, featuring an easy-to-navigate layout that showcases my projects, skills, and contact information. This version marked the beginning of my journey in building a personal online presence as a developer.",
     },
 ];
+
+/**
+ * Finds a portfolio project by its stable id.
+ *
+ * @param projectId - Project id used in routes and experience links.
+ * @returns Matching project or undefined.
+ */
+export const getProjectById = (projectId: string): Project | undefined =>
+    PROJECTS.find((project) => project.id === projectId);

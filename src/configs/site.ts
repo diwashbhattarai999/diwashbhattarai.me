@@ -3,6 +3,9 @@ import type { MetadataRoute } from "next";
 import { env } from "@/env/client";
 import type { SiteConfig, ThemeColors } from "@/types/site";
 
+const TRAILING_SLASH_PATTERN = /\/$/;
+const SITE_ORIGIN = env.NEXT_PUBLIC_APP_URL.replace(TRAILING_SLASH_PATTERN, "");
+
 const PWA_MANIFEST_ICONS: MetadataRoute.Manifest["icons"] = [
     {
         src: "/android-chrome-192x192.png",
@@ -20,35 +23,52 @@ const PWA_MANIFEST_ICONS: MetadataRoute.Manifest["icons"] = [
  * Site-wide configuration for metadata, PWA, and social links.
  */
 export const siteConfig: SiteConfig = {
-    title: "Diwash Bhattarai | Portfolio",
+    name: "Diwash Bhattarai",
+    title: "Diwash Bhattarai | Full Stack Software Developer in Nepal",
     shortTitle: "Diwash Bhattarai",
+    jobTitle: "Full Stack Software Developer",
+    location: "Nepal",
     description:
-        "I am Diwash Bhattarai, a Full Stack Web Developer specializing in modern, responsive, and high-performance web applications.",
-    url: env.NEXT_PUBLIC_APP_URL,
+        "Diwash Bhattarai is a full stack software developer from Nepal specializing in React, Next.js, Node.js, NestJS, TypeScript, PostgreSQL, and scalable web applications.",
+    url: SITE_ORIGIN,
     contactEmail: "diwashb999@gmail.com",
+    knowsAbout: [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Node.js",
+        "NestJS",
+        "PostgreSQL",
+        "MongoDB",
+        "Redis",
+        "REST APIs",
+        "Microservices",
+        "Software Architecture",
+    ],
     authors: [
-        { name: "Diwash Bhattarai", url: env.NEXT_PUBLIC_APP_URL },
+        { name: "Diwash Bhattarai", url: SITE_ORIGIN },
         { name: "दिवस भट्टराई", url: "https://github.com/diwashbhattarai999" },
     ],
     seo: {
         keywords: [
             "Diwash Bhattarai",
-            "Full Stack Developer",
-            "Web Development",
+            "Full Stack Software Developer",
+            "Software Developer",
+            "Software Engineer",
+            "Software Developer in Nepal",
             "React",
             "Next.js",
+            "Node.js",
+            "NestJS",
             "TypeScript",
-            "TailwindCSS",
-            "Frontend",
-            "Backend",
-            "portfolio",
+            "PostgreSQL",
         ],
         openGraph: {
             type: "website",
             image: "/og-image.png",
             imageWidth: 1200,
             imageHeight: 630,
-            imageAlt: "Diwash Bhattarai Portfolio",
+            imageAlt: "Diwash Bhattarai, Full Stack Software Developer",
         },
     },
     pwa: {

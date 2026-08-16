@@ -1,13 +1,15 @@
-import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 import BlurFade from "@/components/animations/blur-fade";
 import BlurFadeText from "@/components/animations/blur-fade-text";
+import { JsonLd } from "@/components/shared/json-ld";
+import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
 import { Badge } from "@/components/ui/badge";
 import { CodeBlock } from "@/components/ui/codeblock";
 import { ROUTES } from "@/configs/routes";
+import { getArticleJsonLd } from "@/lib/json-ld";
 import { getPostBySlug } from "@/lib/mdx";
 
 interface BlogDetailPageProps {
@@ -20,19 +22,44 @@ interface BlogDetailPageProps {
  * @param slug - MDX filename without extension.
  */
 export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
-    const { content, frontMatter } = await getPostBySlug(slug);
+    const post = await getPostBySlug(slug);
+
+    if (!post) {
+        notFound();
+    }
+
+    const { content, frontMatter } = post;
 
     return (
         <div className="flex flex-col gap-5 px-5 py-10">
-            <BlurFade>
+            <JsonLd
+                data={getArticleJsonLd({
+                    headline: frontMatter.title,
+                    description: frontMatter.description ?? frontMatter.excerpt,
+                    image: frontMatter.coverImage,
+                    datePublished: frontMatter.date,
+                    path: ROUTES.BLOG(slug),
+                })}
+            />
+
+            <PageBreadcrumb
+                className="mb-5"
+                items={[
+                    { label: "Home", href: ROUTES.HOME, path: ROUTES.HOME },
+                    { label: "Blog", href: ROUTES.BLOGS, path: ROUTES.BLOGS },
+                    { label: frontMatter.title, path: ROUTES.BLOG(slug) },
+                ]}
+            />
+
+            {/* <BlurFade>
                 <Link
                     className="mb-4 inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground md:mb-8"
                     href={ROUTES.BLOGS}
                 >
                     <ArrowLeft className="h-4 w-4" />
-                    Back to all blogs
+                    Back to all articles
                 </Link>
-            </BlurFade>
+            </BlurFade> */}
 
             <BlurFadeText
                 className="font-bold text-3xl leading-tight sm:text-4xl"
@@ -63,7 +90,7 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
             <div className="mt-4 flex flex-col gap-6">
                 <BlurFade delay={0.12}>
                     {frontMatter.coverImage && (
-                        <div className="relative h-[400px] overflow-hidden rounded-xl">
+                        <div className="relative h-100 overflow-hidden rounded-xl">
                             <Image
                                 alt={frontMatter.title}
                                 className="size-full object-cover"
@@ -79,7 +106,11 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
                     {frontMatter.tags && (
                         <div className="flex flex-wrap gap-2">
                             {frontMatter.tags.map((tag: string) => (
-                                <Badge className="text-sm" key={tag} variant="outline">
+                                <Badge
+                                    className="rounded-full px-3 text-sm"
+                                    key={tag}
+                                    variant="secondary-outline"
+                                >
                                     {tag}
                                 </Badge>
                             ))}
