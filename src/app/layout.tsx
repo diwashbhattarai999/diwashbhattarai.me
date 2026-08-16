@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { League_Spartan } from "next/font/google";
 import { Toaster } from "sonner";
@@ -24,6 +25,7 @@ export default function LocaleLayout({ children }: LocaleLayoutProps) {
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={`${robotoFlex.className} antialiased`}>
+                <SpeedInsights />
                 <JsonLd data={getSiteJsonLd()} />
                 <Providers>
                     {children}
