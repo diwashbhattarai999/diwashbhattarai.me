@@ -1,6 +1,7 @@
 import type { StaticImageData } from "next/image";
 
 import CoachHqImg from "@/assets/projects/coach-hq.png";
+import CoachHqAdminImg from "@/assets/projects/coach-hq-admin.png";
 import EuroToursImg from "@/assets/projects/euro-tours.png";
 import Finance360Img from "@/assets/projects/finance-360.png";
 import GoodBuyImg from "@/assets/projects/good-buy.png";
@@ -18,6 +19,11 @@ import Portfoliov1Img from "@/assets/projects/portfolio-v1.png";
 import Portfoliov2Img from "@/assets/projects/portfolio-v2.png";
 import SmartYatraImg from "@/assets/projects/smart-yatra-light.png";
 import StriideImg from "@/assets/projects/striide.png";
+import StriideAdminDarkImg from "@/assets/projects/striide-admin-dark.png";
+import StriideAdminLightImg from "@/assets/projects/striide-admin-light.png";
+import StriideCoachDarkImg from "@/assets/projects/striide-coach-dark.png";
+import StriideCoachLightImg from "@/assets/projects/striide-coach-light.png";
+import StriideSubscriberImg from "@/assets/projects/striide-subscriber.png";
 
 export interface IProject {
     conclusion: string;
@@ -31,7 +37,7 @@ export interface IProject {
     overview: string;
     poweredBy?: string;
     screenshots?: {
-        src: string;
+        src: StaticImageData | string;
         alt: string;
         caption: string;
     }[];
@@ -158,6 +164,14 @@ export const PROJECTS: IProject[] = [
         ],
         developmentChallenges:
             "Every dashboard surface had to stay permission-aware so a missing grant hid the nav item, the button, and the feature — not just the API. That meant a single source of truth for roles across layout, actions, and content workflows like drill review.",
+        screenshots: [
+            {
+                src: CoachHqAdminImg,
+                alt: "Coach HQ admin overview dashboard",
+                caption:
+                    "Admin overview with content, coach, and subscription metrics plus drill moderation.",
+            },
+        ],
         conclusion:
             "Coach HQ shows how a coaching product can stay one codebase while still feeling purpose-built for superadmins, coaches, and content creators.",
     },
@@ -185,6 +199,34 @@ export const PROJECTS: IProject[] = [
         ],
         developmentChallenges:
             "Splitting one product into three apps meant keeping roles, content approval, and payments aligned. Admin review gates coach uploads, coach monetization depends on Stripe Express, and subscribers only see approved, paid content.",
+        screenshots: [
+            {
+                src: StriideAdminLightImg,
+                alt: "Striide admin dashboard in light mode",
+                caption: "Admin dashboard with subscriber, coach, content, and engagement metrics.",
+            },
+            {
+                src: StriideAdminDarkImg,
+                alt: "Striide admin dashboard in dark mode",
+                caption: "Admin console covering content review, commerce, ticketing, and platform health.",
+            },
+            {
+                src: StriideCoachLightImg,
+                alt: "Striide coach dashboard in light mode",
+                caption: "Coach dashboard for uploading training content, analytics, and recent activity.",
+            },
+            {
+                src: StriideCoachDarkImg,
+                alt: "Striide coach dashboard in dark mode",
+                caption:
+                    "Coach workspace with category uploads, performance stats, and payout notifications.",
+            },
+            {
+                src: StriideSubscriberImg,
+                alt: "Striide subscriber login page",
+                caption: "Subscriber authentication with featured coaches, social login, and email sign-in.",
+            },
+        ],
         conclusion:
             "Striide is a three-app coaching system — operations, creator tools, and consumer access — built so content, payments, and permissions stay in sync.",
     },

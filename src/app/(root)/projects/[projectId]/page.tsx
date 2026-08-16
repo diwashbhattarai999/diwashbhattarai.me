@@ -145,10 +145,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ projec
                     {project.screenshots?.map((screenshot, index) => (
                         // biome-ignore lint/suspicious/noArrayIndexKey: index is unique
                         <div className="space-y-2" key={index}>
-                            <div className="relative aspect-video overflow-hidden rounded-xl border border-zinc-800">
+                            <div className="relative aspect-video overflow-hidden rounded-xl border">
                                 <Image
                                     alt={screenshot.alt}
-                                    className="object-cover"
+                                    className="object-cover object-top"
                                     fill
                                     sizes="(min-width: 1024px) 1024px, 100vw"
                                     src={screenshot.src || "/placeholder.svg"}
