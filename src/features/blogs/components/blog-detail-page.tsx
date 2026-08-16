@@ -33,7 +33,7 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
     const relatedPosts = getRelatedPosts(slug, frontMatter.tags ?? [], frontMatter.category);
 
     return (
-        <div className="flex flex-col gap-5 px-5 py-10">
+        <div className="flex min-w-0 flex-col gap-5 px-5 py-10">
             <JsonLd
                 data={getArticleJsonLd({
                     headline: frontMatter.title,
@@ -89,15 +89,16 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
                 </div>
             </BlurFade>
 
-            <div className="mt-4 flex flex-col gap-6">
-                <BlurFade delay={0.12}>
+            <div className="mt-4 flex min-w-0 flex-col gap-6">
+                <BlurFade className="min-w-0" delay={0.12}>
                     {frontMatter.coverImage && (
-                        <div className="aspect-3/2 max-h-160 w-full overflow-hidden rounded-xl bg-muted/20">
+                        <div className="relative aspect-3/2 max-h-160 w-full min-w-0 max-w-full overflow-hidden rounded-xl bg-muted/20">
                             <Image
                                 alt={frontMatter.title}
-                                className="h-auto w-full object-cover"
+                                className="h-auto max-w-full object-cover"
                                 height={800}
                                 priority
+                                sizes="(max-width: 1024px) 100vw, 1024px"
                                 src={frontMatter.coverImage}
                                 width={1200}
                             />
@@ -122,8 +123,12 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
                 </BlurFade>
             </div>
 
+            {/*
+              Do not wrap MDX in BlurFade: filter/blur on large articles (many CodeBlocks)
+              keeps content at opacity 0 or stalls the animation in the browser.
+            */}
             <BlurFade delay={0.2}>
-                <article className="prose xl:prose-lg dark:prose-invert mt-8 w-full prose-hr:border-input md:max-w-none">
+                <article className="prose xl:prose-lg dark:prose-invert prose-code:wrap-break-word [&_pre]:wrap-break-word mt-8 w-full min-w-0 max-w-full prose-pre:max-w-full overflow-x-auto prose-pre:overflow-x-auto prose-hr:border-input md:max-w-none [&_pre]:whitespace-pre-wrap">
                     <MDXRemote components={{ CodeBlock }} options={{ blockJS: false }} source={content} />
                 </article>
             </BlurFade>

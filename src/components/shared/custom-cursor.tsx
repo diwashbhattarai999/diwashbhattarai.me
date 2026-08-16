@@ -217,16 +217,15 @@ export function CustomCursor({
 
     return (
         <div
+            aria-hidden
+            className="pointer-events-none fixed top-0 left-0 z-0 hidden md:block"
             style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
                 width: `${size}px`,
                 height: `${size}px`,
                 borderRadius: "50%",
                 background: `radial-gradient(circle, ${gradientColorStart} 0%, ${gradientColorEnd} 50%, transparent 80%)`,
-                transform: `translate(${smoothPosition.x - size / 2}px, ${smoothPosition.y - size / 2 + window.scrollY}px)`, // Adjust position for scroll
-                pointerEvents: "none",
+                transform: `translate3d(${smoothPosition.x - size / 2}px, ${smoothPosition.y - size / 2}px, 0)`,
+                opacity: isVisible ? 1 : 0,
                 boxShadow: `0 0 ${size / 2}px ${size / 4}px color-mix(in oklab, var(--primary) 1%, transparent)`,
             }}
         />

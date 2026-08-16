@@ -1,0 +1,576 @@
+---
+title: "Integrating Khalti Web Checkout in a Next.js + NestJS App"
+date: "2026-08-15"
+author: "Diwash Bhattarai"
+profile: "/profile.png"
+tags: ["NestJS", "Next.js", "Payments", "Khalti", "Nepal"]
+description: "A complete Khalti KPG-2 Web Checkout integration for Next.js and NestJS —
+  merchant setup, initiate + pidx, return_url callback, lookup verification, and
+  the status rules that decide whether you may fulfill an order."
+coverImage: "/contents/esewa-khalti-nextjs-nestjs.png"
+readTime: "12 min read"
+category: "System Design"
+---
+
+**Khalti** Web Checkout (KPG-2) is the usual path for accepting wallet,
+banking, and related payments in a Nepali web app. The flow is
+server-initiated: your backend asks Khalti for a `pidx` and `payment_url`,
+the user pays on Khalti's page, then you **must** confirm with the lookup API
+before treating the order as paid.
+
+This guide covers a full integration with **Next.js** and **NestJS**, aligned
+with Khalti's official docs:
+
+- [Getting started](https://docs.khalti.com/getting-started/)
+- [Web Checkout (KPG-2)](https://docs.khalti.com/khalti-epayment/)
+- [Khalti docs home](https://docs.khalti.com/)
+
+If you need eSewa instead, see
+[Integrating eSewa ePay v2 in Next.js + NestJS](/blogs/Integrating-esewa-in-nextjs).
+
+---
+
+## Official docs and endpoints
+
+**Base URLs**
+
+- Sandbox: `https://dev.khalti.com/api/v2/`
+- Production: `https://khalti.com/api/v2/`
+
+**Endpoints (relative to the base)**
+
+- Initiate: `POST /epayment/initiate/`
+- Lookup / verify: `POST /epayment/lookup/`
+
+**Merchant dashboards**
+
+- Sandbox signup / keys: [test-admin.khalti.com](https://test-admin.khalti.com)
+  (sign up via the sandbox merchant flow in
+  [Getting started](https://docs.khalti.com/getting-started/))
+- Production: [admin.khalti.com](https://admin.khalti.com)
+
+Authorization header on every server call:
+
+```http
+Authorization: Key <live_secret_key>
+```
+
+Use the **live secret key** from the sandbox admin while testing, and the live
+secret key from the production admin when you go live. Never expose it as
+`NEXT_PUBLIC_*`.
+
+---
+
+## What the flow actually is
+
+From Khalti's [getting started](https://docs.khalti.com/getting-started/) and
+[Web Checkout](https://docs.khalti.com/khalti-epayment/) docs:
+
+1. Your merchant backend creates a unique `purchase_order_id`.
+2. Backend `POST`s to `/epayment/initiate/` with amount (in **paisa**),
+   `return_url`, `website_url`, and order details.
+3. Khalti returns `pidx`, `payment_url`, and expiry metadata.
+4. You redirect the user to `payment_url`.
+5. After payment (or cancel), Khalti redirects to `return_url` with query
+   params (`pidx`, `status`, `amount`, …).
+6. Your backend calls `/epayment/lookup/` with that `pidx`.
+7. **Only** lookup status `Completed` means you may fulfill the order.
+
+Khalti is explicit: incomplete lookup integration, or fulfilling without
+checking lookup status, is on you — they will not cover losses from that.
+
+---
+
+## Step 1 — Sign up as a merchant
+
+1. Create a sandbox merchant account (link from
+   [Getting started → Test Environment](https://docs.khalti.com/getting-started/)).
+2. Copy the **live secret key** from the sandbox merchant dashboard for server
+   calls.
+3. For production later, create a live merchant account and replace the base
+   URL + secret key.
+
+**Sandbox test users** (from the docs):
+
+- Khalti IDs: `9800000000` … `9800000005`
+- MPIN: `1111`
+- OTP: `987654`
+- Login OTP for sandbox merchant flows: `987654`
+
+Note: eBanking and card payments are **not** available in the test
+environment. Wallet test IDs are what you use in UAT.
+
+---
+
+## Step 2 — Configure environment variables
+
+```txt
+KHALTI_SECRET_KEY=live_secret_key_from_dashboard
+KHALTI_BASE_URL=https://dev.khalti.com/api/v2
+APP_URL=https://your-app.example
+WEBSITE_URL=https://your-app.example
+```
+
+Production later:
+
+```txt
+KHALTI_BASE_URL=https://khalti.com/api/v2
+```
+
+---
+
+## Step 3 — Know the initiate payload
+
+Required fields ([Web Checkout docs](https://docs.khalti.com/khalti-epayment/)):
+
+- `return_url` — landing page after the transaction (must support **GET**)
+- `website_url` — your site URL
+- `amount` — total payable in **paisa** (Rs 1 = 100 paisa). Minimum is
+  **Rs 10** (1000 paisa)
+- `purchase_order_id` — unique id from your system
+- `purchase_order_name` — product / order name
+
+Optional but useful:
+
+- `customer_info` — `{ name, email, phone }`
+- `amount_breakdown` — labels that **must sum exactly** to `amount`
+- `product_details` — line items
+- Any extra fields prefixed with `merchant_` (returned on success callback)
+
+---
+
+## Step 4 — Initiate payment from NestJS
+
+Every initiate call is a **server-side** POST. Persist a `PENDING` order with
+the same `purchase_order_id` and expected amount (in paisa or rupees —
+pick one unit and stay consistent) before calling Khalti.
+
+<CodeBlock
+  language="ts"
+  filename="khalti.service.ts"
+  code={`import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { HttpService } from "@nestjs/axios";
+import { firstValueFrom } from "rxjs";
+
+interface InitiateInput {
+  purchaseOrderId: string;
+  purchaseOrderName: string;
+  amountInRupees: number;
+  customer?: { name: string; email: string; phone: string };
+}
+
+interface InitiateResponse {
+  pidx: string;
+  payment_url: string;
+  expires_at: string;
+  expires_in: number;
+}
+
+@Injectable()
+export class KhaltiService {
+  private readonly secretKey: string;
+  private readonly baseUrl: string;
+
+  constructor(
+    private readonly config: ConfigService,
+    private readonly http: HttpService,
+  ) {
+    this.secretKey = this.config.getOrThrow("KHALTI_SECRET_KEY");
+    this.baseUrl = this.config.getOrThrow("KHALTI_BASE_URL");
+  }
+
+  async initiate(input: InitiateInput): Promise<InitiateResponse> {
+    const amountPaisa = Math.round(input.amountInRupees * 100);
+
+    if (amountPaisa < 1000) {
+      throw new Error("Khalti minimum amount is Rs 10 (1000 paisa)");
+    }
+
+    const { data } = await firstValueFrom(
+      this.http.post<InitiateResponse>(
+        \`\${this.baseUrl}/epayment/initiate/\`,
+        {
+          return_url: \`\${this.config.getOrThrow("APP_URL")}/api/payments/khalti/verify\`,
+          website_url: this.config.getOrThrow("WEBSITE_URL"),
+          amount: amountPaisa,
+          purchase_order_id: input.purchaseOrderId,
+          purchase_order_name: input.purchaseOrderName,
+          customer_info: input.customer,
+        },
+        {
+          headers: {
+            Authorization: \`Key \${this.secretKey}\`,
+            "Content-Type": "application/json",
+          },
+        },
+      ),
+    );
+
+    return data;
+  }
+
+  async lookup(pidx: string) {
+    const { data } = await firstValueFrom(
+      this.http.post(
+        \`\${this.baseUrl}/epayment/lookup/\`,
+        { pidx },
+        {
+          headers: {
+            Authorization: \`Key \${this.secretKey}\`,
+            "Content-Type": "application/json",
+          },
+        },
+      ),
+    );
+
+    return data as {
+      pidx: string;
+      total_amount: number;
+      status: string;
+      transaction_id: string | null;
+      fee: number;
+      refunded: boolean;
+    };
+  }
+}`}
+/>
+
+Controller:
+
+<CodeBlock
+  language="ts"
+  filename="payments.controller.ts"
+  code={`@Post("khalti/initiate")
+async initiateKhalti(
+  @Body()
+  body: {
+    orderId: string;
+    amountInRupees: number;
+    orderName: string;
+  },
+) {
+  await this.ordersService.createPending(body.orderId, body.amountInRupees);
+
+  const session = await this.khaltiService.initiate({
+    purchaseOrderId: body.orderId,
+    purchaseOrderName: body.orderName,
+    amountInRupees: body.amountInRupees,
+  });
+
+  // Persist pidx so reconciliation can look up without the browser callback
+  await this.ordersService.attachPidx(body.orderId, session.pidx);
+
+  return { paymentUrl: session.payment_url, pidx: session.pidx };
+}`}
+/>
+
+Successful initiate response shape:
+
+```json
+{
+  "pidx": "bZQLD9wRVWo4CdESSfuSsB",
+  "payment_url": "https://test-pay.khalti.com/?pidx=bZQLD9wRVWo4CdESSfuSsB",
+  "expires_at": "2023-05-25T16:26:16.471649+05:45",
+  "expires_in": 1800
+}
+```
+
+Redirect the browser to `payment_url` immediately. Do not invent your own
+checkout UI for the wallet step.
+
+---
+
+## Step 5 — Redirect from Next.js
+
+<CodeBlock
+  language="tsx"
+  filename="components/pay-with-khalti-button.tsx"
+  code={`"use client";
+
+import { useState } from "react";
+
+export function PayWithKhaltiButton({
+  orderId,
+  amountInRupees,
+  orderName,
+}: {
+  orderId: string;
+  amountInRupees: number;
+  orderName: string;
+}) {
+  const [loading, setLoading] = useState(false);
+
+  async function handlePay() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/payments/khalti/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId, amountInRupees, orderName }),
+      });
+      const { paymentUrl } = (await res.json()) as { paymentUrl: string };
+      window.location.assign(paymentUrl);
+    } catch {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <button disabled={loading} onClick={handlePay} type="button">
+      {loading ? "Redirecting…" : "Pay with Khalti"}
+    </button>
+  );
+}`}
+/>
+
+---
+
+## Step 6 — Handle the return_url callback
+
+`return_url` must accept **GET**. Khalti appends query parameters.
+
+**Success example** (from the docs):
+
+```txt
+https://example.com/payment/
+  ?pidx=...
+  &status=Completed
+  &transaction_id=...
+  &amount=1000
+  &total_amount=1000
+  &purchase_order_id=test12
+  &purchase_order_name=test
+  &mobile=98XXXXX904
+  &tidx=...
+```
+
+**Canceled example:**
+
+```txt
+...?pidx=...
+  &status=User canceled
+  &amount=1000
+  &total_amount=1000
+  &purchase_order_id=test12
+  &purchase_order_name=test
+```
+
+Callback `status` values you will see include `Completed`, `Pending`, and
+`User canceled`. Treat the callback as a **hint**. Khalti recommends always
+confirming with lookup after redirect.
+
+Payment links expire (docs: about **60 minutes** in production by default).
+Sandbox initiate responses also include `expires_in` (often 1800 seconds).
+
+---
+
+## Step 7 — Lookup verification (the step that isn't optional)
+
+`POST /epayment/lookup/` with body `{ "pidx": "..." }` and the same
+`Authorization: Key …` header.
+
+Lookup `status` meanings (summarized from the docs):
+
+- `Completed` — success; you may provide the service
+- `Pending` — hold; do not fulfill; contact Khalti if it sticks
+- `Refunded` / `Partially Refunded` — do not fulfill
+- `Expired` — user did not pay; do not fulfill
+- `User canceled` — do not fulfill
+- `Initiated` — not finished; do not fulfill
+
+**Only `Completed` is success.**
+
+<CodeBlock
+  language="ts"
+  filename="khalti.controller.ts"
+  code={`@Get("khalti/verify")
+async verifyKhalti(
+  @Query("pidx") pidx: string,
+  @Query("purchase_order_id") purchaseOrderId: string,
+  @Res() res: Response,
+) {
+  if (!pidx) {
+    return res.redirect("/payment/failed");
+  }
+
+  const lookup = await this.khaltiService.lookup(pidx);
+
+  if (lookup.status !== "Completed") {
+    return res.redirect("/payment/failed");
+  }
+
+  const expectedPaisa = await this.ordersService.getPendingAmountPaisa(
+    purchaseOrderId ?? lookup.pidx,
+  );
+
+  if (lookup.total_amount !== expectedPaisa) {
+    return res.redirect("/payment/failed");
+  }
+
+  await this.ordersService.markPaidIfPending(
+    purchaseOrderId,
+    expectedPaisa / 100,
+    lookup.transaction_id,
+  );
+
+  return res.redirect(\`/payment/success?orderId=\${purchaseOrderId}\`);
+}`}
+/>
+
+Compare amounts in the **same unit** Khalti uses on lookup (`total_amount` is
+in paisa).
+
+---
+
+## Step 8 — Idempotent order updates
+
+Users refresh, networks retry, and you may also run a reconciliation job on
+stored `pidx` values. Guard side effects:
+
+<CodeBlock
+  language="ts"
+  filename="orders.service.ts"
+  code={`async markPaidIfPending(
+  purchaseOrderId: string,
+  amountInRupees: number,
+  khaltiTransactionId: string | null,
+) {
+  const result = await this.prisma.order.updateMany({
+    where: {
+      id: purchaseOrderId,
+      status: "PENDING",
+      totalAmount: amountInRupees,
+    },
+    data: {
+      status: "PAID",
+      paidAt: new Date(),
+      gatewayRef: khaltiTransactionId,
+    },
+  });
+
+  if (result.count === 0) {
+    return;
+  }
+
+  await this.notifications.sendPaymentConfirmation(purchaseOrderId);
+}`}
+/>
+
+---
+
+## Step 9 — Success page reads DB status, not the URL
+
+<CodeBlock
+  language="tsx"
+  filename="app/payment/success/page.tsx"
+  code={`import { redirect } from "next/navigation";
+
+export default async function PaymentSuccessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ orderId?: string }>;
+}) {
+  const { orderId } = await searchParams;
+  if (!orderId) redirect("/");
+
+  const order = await getOrder(orderId);
+
+  if (order.status !== "PAID") {
+    redirect("/payment/pending");
+  }
+
+  return <OrderConfirmation order={order} />;
+}`}
+/>
+
+If lookup is slow or the user bookmarks a crafted URL, the page still stays
+honest because it only celebrates a `PAID` row.
+
+---
+
+## Step 10 — Reconciliation for missed redirects
+
+Store `pidx` at initiate time. Periodically:
+
+1. Find orders still `PENDING` with a non-null `pidx` and not expired.
+2. Call lookup.
+3. If `Completed` and amount matches, run the same `markPaidIfPending`.
+4. If `Expired` or `User canceled`, mark the order failed / canceled.
+
+That covers closed tabs and mobile browsers that never hit `return_url`.
+
+---
+
+## Step 11 — Go live
+
+From [Going Live](https://docs.khalti.com/getting-started/):
+
+1. Create a live merchant account.
+2. Replace sandbox base URL with `https://khalti.com/api/v2`.
+3. Replace the secret key with the production live secret key.
+4. Retest initiate → pay → callback → lookup.
+5. Complete KYC / contact Khalti to lift the default **NPR 200 per
+   transaction** limit that applies until they remove it (phone numbers are
+   listed on the getting-started page).
+
+---
+
+## Initiate validation errors to handle
+
+Khalti returns field errors for things like:
+
+- blank / invalid `return_url` or `website_url`
+- amount below 1000 paisa
+- non-integer amount
+- blank `purchase_order_id` / `purchase_order_name`
+- `amount_breakdown` that does not sum to `amount`
+- invalid / missing `Authorization` (`Invalid token.`,
+  `Authentication credentials were not provided.`)
+
+Surface these to your checkout UI instead of sending the user to a broken
+payment page.
+
+---
+
+## Common mistakes
+
+1. Marking paid from `status=Completed` on the return URL alone.
+2. Skipping lookup, or treating `Pending` as success.
+3. Sending amount in rupees instead of paisa on initiate.
+4. Putting the secret key in `NEXT_PUBLIC_*`.
+5. Non-idempotent success handlers.
+6. Not storing `pidx`, so missed redirects can never be reconciled.
+7. Fulfilling on cancel / expired / refunded lookup statuses.
+8. Forgetting the NPR 200 live limit until KYC is cleared.
+
+---
+
+## Practical checklist
+
+- [ ] Sandbox merchant + live secret key configured
+- [ ] Pending order + `pidx` persisted before redirect
+- [ ] Initiate uses paisa and minimum Rs 10
+- [ ] User redirected to `payment_url`
+- [ ] `return_url` accepts GET query params
+- [ ] Lookup called on every callback
+- [ ] Only `Completed` marks the order paid
+- [ ] Amount checked against your order
+- [ ] Idempotent `markPaidIfPending`
+- [ ] Success page reads DB status
+- [ ] Reconciliation job for stored `pidx`
+- [ ] Production URL, live key, and KYC limit handled
+
+---
+
+## Conclusion
+
+Khalti Web Checkout is straightforward if you follow the documented contract:
+initiate on the server, redirect to `payment_url`, then **lookup** before
+fulfillment. The callback query string is convenience for UX, not proof of
+payment.
+
+Official references:
+
+- [docs.khalti.com/getting-started](https://docs.khalti.com/getting-started/)
+- [docs.khalti.com/khalti-epayment](https://docs.khalti.com/khalti-epayment/)

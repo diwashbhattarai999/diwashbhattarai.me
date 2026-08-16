@@ -1,0 +1,516 @@
+---
+title: "Integrating eSewa ePay v2 in a Next.js + NestJS App"
+date: "2026-08-16"
+author: "Diwash Bhattarai"
+profile: "/profile.png"
+tags: ["NestJS", "Next.js", "Payments", "eSewa", "Nepal"]
+description: "A complete eSewa ePay v2 integration for Next.js and NestJS —
+  HMAC signature generation, form redirect, callback decoding, response signature
+  checks, and the status API you must call before marking an order paid."
+coverImage: "/contents/esewa-khalti-nextjs-nestjs.png"
+readTime: "12 min read"
+category: "System Design"
+---
+
+If you ship products for the Nepali market, **eSewa** is usually not a
+nice-to-have — it is how people expect to pay. The integration looks simple
+on the surface: build a signed form, redirect the user, wait for them to come
+back. The part that goes wrong in production is trusting that return URL.
+
+This guide walks through a full **eSewa ePay v2** integration with a
+**Next.js** frontend and a **NestJS** API, aligned with the official
+[eSewa ePay documentation](https://developer.esewa.com.np/pages/Epay). Every
+step below is one you need before you can safely mark an order as paid.
+
+If you need Khalti instead, see
+[Integrating Khalti Web Checkout in Next.js + NestJS](/blogs/Integrating-khalti-in-nextjs).
+
+---
+
+## Official docs and endpoints
+
+Bookmark these first:
+
+- [eSewa ePay overview and integration](https://developer.esewa.com.np/pages/Epay)
+- [ePay v2 page](https://developer.esewa.com.np/pages/Epay-V2)
+- Merchant dashboard (production): [merchant.esewa.com.np](https://merchant.esewa.com.np)
+
+**Payment form (POST)**
+
+- Development: `https://rc-epay.esewa.com.np/api/epay/main/v2/form`
+- Production: `https://epay.esewa.com.np/api/epay/main/v2/form`
+
+**Transaction status check (GET)**
+
+- Development: `https://rc.esewa.com.np/api/epay/transaction/status/`
+- Production: `https://esewa.com.np/api/epay/transaction/status/`
+
+---
+
+## What the flow actually is
+
+From eSewa's own transaction flow:
+
+1. The user chooses eSewa on your checkout page.
+2. Your backend builds a signed payload and the browser POSTs it to eSewa's
+   payment form URL.
+3. The user logs in on eSewa, confirms the amount, and completes payment
+   (OTP / token step included).
+4. On success, eSewa redirects to your `success_url` with a base64-encoded
+   `data` query parameter. On failure or pending, it redirects to
+   `failure_url`.
+5. Your backend decodes that payload, verifies the **response signature**,
+   then calls the **status check API**.
+6. Only after the status API returns `COMPLETE` — and the amount matches your
+   order — do you mark the order paid.
+
+eSewa also notes that if a response is not received within about five minutes,
+you should use the status check API to confirm the payment. That same API is
+what you should use on every success callback for fraud filtering.
+
+---
+
+## Step 1 — Get merchant credentials
+
+For Development (from the [official credentials section](https://developer.esewa.com.np/pages/Epay)):
+
+- **Merchant / product code:** `EPAYTEST`
+- **Secret key:** `8gBm/:&EnhH.1/q`
+- **Test eSewa IDs:** `9711111111`, `9711111112`, `9711111113`, `9711111114`
+  (confirm against the current
+  [credentials section](https://developer.esewa.com.np/pages/Epay) — eSewa
+  occasionally updates UAT numbers)
+- **Password:** `Nepal@123`
+- **MPIN (app):** `1122`
+- **Token (testing):** `123456`
+
+For production, eSewa issues your real `product_code` and `SecretKey`. Never
+put the secret in a `NEXT_PUBLIC_*` variable.
+
+Store server-only env vars:
+
+```txt
+ESEWA_PRODUCT_CODE=EPAYTEST
+ESEWA_SECRET_KEY=8gBm/:&EnhH.1/q
+ESEWA_PAYMENT_URL=https://rc-epay.esewa.com.np/api/epay/main/v2/form
+ESEWA_STATUS_URL=https://rc.esewa.com.np/api/epay/transaction/status/
+APP_URL=https://your-app.example
+```
+
+Swap the URLs and keys when you go live.
+
+---
+
+## Step 2 — Understand every request field
+
+All of these are required by eSewa. If tax / service / delivery charges do not
+apply, send `0` — do not omit them.
+
+- `amount` — product amount
+- `tax_amount` — tax on the product
+- `product_service_charge` — merchant service charge
+- `product_delivery_charge` — delivery charge
+- `total_amount` — must equal
+  `amount + tax_amount + product_service_charge + product_delivery_charge`
+- `transaction_uuid` — unique per request; alphanumeric and hyphen (`-`) only
+- `product_code` — merchant code from eSewa
+- `success_url` — where eSewa redirects after a successful payment
+- `failure_url` — where eSewa redirects after failure or pending
+- `signed_field_names` — fields used to build the signature (typically
+  `total_amount,transaction_uuid,product_code`)
+- `signature` — HMAC-SHA256 of those fields, Base64-encoded
+
+---
+
+## Step 3 — Generate the HMAC-SHA256 signature (server-side)
+
+Per the docs, the message must use the signed fields **in order**:
+
+```txt
+total_amount=100,transaction_uuid=11-201-13,product_code=EPAYTEST
+```
+
+Algorithm: HMAC-SHA256 with your merchant secret. Output: Base64.
+
+<CodeBlock
+  language="ts"
+  filename="esewa.service.ts"
+  code={`import { createHmac } from "node:crypto";
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+
+export interface EsewaFormPayload {
+  amount: string;
+  tax_amount: string;
+  total_amount: string;
+  transaction_uuid: string;
+  product_code: string;
+  product_service_charge: string;
+  product_delivery_charge: string;
+  success_url: string;
+  failure_url: string;
+  signed_field_names: string;
+  signature: string;
+}
+
+@Injectable()
+export class EsewaService {
+  private readonly secretKey: string;
+  private readonly productCode: string;
+  readonly paymentUrl: string;
+  readonly statusUrl: string;
+
+  constructor(private readonly config: ConfigService) {
+    this.secretKey = this.config.getOrThrow("ESEWA_SECRET_KEY");
+    this.productCode = this.config.getOrThrow("ESEWA_PRODUCT_CODE");
+    this.paymentUrl = this.config.getOrThrow("ESEWA_PAYMENT_URL");
+    this.statusUrl = this.config.getOrThrow("ESEWA_STATUS_URL");
+  }
+
+  buildFormPayload(orderId: string, amount: number): EsewaFormPayload {
+    const amountStr = amount.toFixed(2);
+    const payload = {
+      amount: amountStr,
+      tax_amount: "0",
+      total_amount: amountStr,
+      transaction_uuid: orderId,
+      product_code: this.productCode,
+      product_service_charge: "0",
+      product_delivery_charge: "0",
+      success_url: \`\${this.config.getOrThrow("APP_URL")}/api/payments/esewa/verify\`,
+      failure_url: \`\${this.config.getOrThrow("APP_URL")}/payment/failed\`,
+      signed_field_names: "total_amount,transaction_uuid,product_code",
+    };
+
+    return {
+      ...payload,
+      signature: this.sign(
+        \`total_amount=\${payload.total_amount},transaction_uuid=\${payload.transaction_uuid},product_code=\${payload.product_code}\`,
+      ),
+    };
+  }
+
+  /**
+   * Verifies the signature eSewa returns on the success redirect.
+   * signed_field_names in the response lists the fields to hash, in order.
+   */
+  verifyResponseSignature(decoded: Record<string, string>): boolean {
+    const fieldNames = decoded.signed_field_names?.split(",") ?? [];
+    const message = fieldNames
+      .map((name) => \`\${name}=\${decoded[name]}\`)
+      .join(",");
+    const expected = this.sign(message);
+    return expected === decoded.signature;
+  }
+
+  private sign(message: string): string {
+    return createHmac("sha256", this.secretKey).update(message).digest("base64");
+  }
+}`}
+/>
+
+Do this only on the server. If the secret ever reaches the browser bundle,
+anyone can forge initiation payloads.
+
+---
+
+## Step 4 — Create a pending order, then return the form fields
+
+Before redirecting, persist an order in `PENDING` with the same
+`transaction_uuid` and expected `total_amount`. That record is your source of
+truth for amount checks later.
+
+<CodeBlock
+  language="ts"
+  filename="payments.controller.ts"
+  code={`@Post("esewa/initiate")
+async initiateEsewa(@Body() body: { orderId: string; amount: number }) {
+  await this.ordersService.createPending(body.orderId, body.amount);
+
+  const form = this.esewaService.buildFormPayload(body.orderId, body.amount);
+
+  return {
+    paymentUrl: this.esewaService.paymentUrl,
+    form,
+  };
+}`}
+/>
+
+---
+
+## Step 5 — Auto-submit the form from Next.js
+
+eSewa expects a browser **form POST**, not a JSON API call from your frontend
+to their payment URL.
+
+<CodeBlock
+  language="tsx"
+  filename="components/pay-with-esewa-button.tsx"
+  code={`"use client";
+
+import { useState } from "react";
+
+type EsewaForm = Record<string, string>;
+
+export function PayWithEsewaButton({
+  orderId,
+  amount,
+}: {
+  orderId: string;
+  amount: number;
+}) {
+  const [loading, setLoading] = useState(false);
+
+  async function handlePay() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/payments/esewa/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId, amount }),
+      });
+      const { paymentUrl, form } = (await res.json()) as {
+        paymentUrl: string;
+        form: EsewaForm;
+      };
+
+      const el = document.createElement("form");
+      el.method = "POST";
+      el.action = paymentUrl;
+
+      for (const [name, value] of Object.entries(form)) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        el.appendChild(input);
+      }
+
+      document.body.appendChild(el);
+      el.submit();
+    } catch {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <button disabled={loading} onClick={handlePay} type="button">
+      {loading ? "Redirecting…" : "Pay with eSewa"}
+    </button>
+  );
+}`}
+/>
+
+After submit, the user is on eSewa's login page. They authenticate, confirm
+the amount, enter the OTP / token, and finish payment.
+
+---
+
+## Step 6 — Handle the success redirect
+
+On success, eSewa redirects to your `success_url` with a Base64 `data` query
+param. Decoded, it looks like:
+
+```json
+{
+  "transaction_code": "000AWEO",
+  "status": "COMPLETE",
+  "total_amount": "1000.0",
+  "transaction_uuid": "250610-162413",
+  "product_code": "EPAYTEST",
+  "signed_field_names": "transaction_code,status,total_amount,transaction_uuid,product_code,signed_field_names",
+  "signature": "62GcfZTmVkzhtUeh+QJ1AqiJrjoWWGof3U+eTPTZ7fA="
+}
+```
+
+That payload is what the *browser* is claiming. You still must:
+
+1. Verify the response `signature` the same way you signed the request.
+2. Call the status check API.
+3. Compare amounts to your pending order.
+
+---
+
+## Step 7 — Status check API (non-negotiable)
+
+Query params: `product_code`, `total_amount`, `transaction_uuid`.
+
+Possible statuses from the docs include `PENDING`, `COMPLETE`, `FULL_REFUND`,
+`PARTIAL_REFUND`, `AMBIGUOUS`, `NOT_FOUND`, and `CANCELED`. Treat only
+`COMPLETE` as paid.
+
+<CodeBlock
+  language="ts"
+  filename="esewa.controller.ts"
+  code={`@Get("esewa/verify")
+async verifyEsewa(@Query("data") data: string, @Res() res: Response) {
+  if (!data) {
+    return res.redirect("/payment/failed");
+  }
+
+  const decoded = JSON.parse(
+    Buffer.from(data, "base64").toString("utf8"),
+  ) as Record<string, string>;
+
+  if (!this.esewaService.verifyResponseSignature(decoded)) {
+    return res.redirect("/payment/failed");
+  }
+
+  const statusRes = await this.httpService.axiosRef.get(
+    this.esewaService.statusUrl,
+    {
+      params: {
+        product_code: decoded.product_code,
+        total_amount: decoded.total_amount,
+        transaction_uuid: decoded.transaction_uuid,
+      },
+    },
+  );
+
+  if (statusRes.data.status !== "COMPLETE") {
+    return res.redirect("/payment/failed");
+  }
+
+  const expected = await this.ordersService.getPendingAmount(
+    decoded.transaction_uuid,
+  );
+  if (Number(decoded.total_amount) !== expected) {
+    return res.redirect("/payment/failed");
+  }
+
+  await this.ordersService.markPaidIfPending(
+    decoded.transaction_uuid,
+    Number(decoded.total_amount),
+  );
+
+  return res.redirect(
+    \`/payment/success?orderId=\${decoded.transaction_uuid}\`,
+  );
+}`}
+/>
+
+If the user never returns (closed tab, killed mobile browser), run the same
+status check from a reconciliation job using the stored `transaction_uuid` and
+amount — that is exactly what eSewa documents for the five-minute no-response
+case.
+
+---
+
+## Step 8 — Idempotent order updates
+
+Callbacks can fire more than once. Guard on `PENDING` so side effects run once:
+
+<CodeBlock
+  language="ts"
+  filename="orders.service.ts"
+  code={`async markPaidIfPending(transactionUuid: string, amount: number) {
+  const result = await this.prisma.order.updateMany({
+    where: {
+      transactionUuid,
+      status: "PENDING",
+      totalAmount: amount,
+    },
+    data: { status: "PAID", paidAt: new Date() },
+  });
+
+  if (result.count === 0) {
+    return;
+  }
+
+  await this.notifications.sendPaymentConfirmation(transactionUuid);
+}`}
+/>
+
+---
+
+## Step 9 — Success page reads DB status, not the URL
+
+<CodeBlock
+  language="tsx"
+  filename="app/payment/success/page.tsx"
+  code={`import { redirect } from "next/navigation";
+
+export default async function PaymentSuccessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ orderId?: string }>;
+}) {
+  const { orderId } = await searchParams;
+  if (!orderId) redirect("/");
+
+  const order = await getOrder(orderId);
+
+  if (order.status !== "PAID") {
+    redirect("/payment/pending");
+  }
+
+  return <OrderConfirmation order={order} />;
+}`}
+/>
+
+Reaching `/payment/success` only means a browser hit that route. Confirmation
+UI must follow the order row your NestJS verification already updated.
+
+---
+
+## Step 10 — Go to production
+
+When eSewa gives you live credentials:
+
+1. Replace `ESEWA_PRODUCT_CODE` and `ESEWA_SECRET_KEY`.
+2. Point `ESEWA_PAYMENT_URL` to
+   `https://epay.esewa.com.np/api/epay/main/v2/form`.
+3. Point `ESEWA_STATUS_URL` to
+   `https://esewa.com.np/api/epay/transaction/status/`.
+4. Use HTTPS `success_url` / `failure_url` that eSewa can reach.
+5. Re-test happy path, cancel, expired session, and duplicate callback.
+
+Monitor payments in [merchant.esewa.com.np](https://merchant.esewa.com.np).
+
+---
+
+## Common mistakes
+
+1. Marking paid from the redirect `data` alone — skip signature + status API
+   and anyone can fake success by crafting a URL.
+2. Checking only `decoded.status === "COMPLETE"` without the status API.
+3. Not verifying the **response** signature eSewa sends back.
+4. Not comparing `total_amount` to your pending order amount.
+5. Non-idempotent handlers that email / decrement stock twice.
+6. Putting `ESEWA_SECRET_KEY` in `NEXT_PUBLIC_*`.
+7. Invalid `transaction_uuid` characters (only alphanumeric and `-`).
+8. `total_amount` that does not equal amount + tax + service + delivery.
+9. No reconciliation when the redirect never arrives.
+
+---
+
+## Practical checklist
+
+- [ ] UAT credentials and env URLs configured
+- [ ] Pending order created before redirect
+- [ ] HMAC signature generated server-side in field order
+- [ ] Browser form POST to the ePay v2 form URL
+- [ ] Success handler decodes Base64 `data`
+- [ ] Response signature verified
+- [ ] Status API returns `COMPLETE`
+- [ ] Amount matches your order
+- [ ] `markPaidIfPending` is idempotent
+- [ ] Success page reads DB status
+- [ ] Reconciliation job for missed redirects
+- [ ] Production URLs and live keys swapped
+
+---
+
+## Conclusion
+
+eSewa ePay v2 is a classic redirect gateway: initiate with a signed form,
+receive a callback, then **prove** the payment with eSewa's status API before
+you fulfill anything. The official docs are clear that merchants must verify
+transactions to filter fraud — that step is not optional polish.
+
+Get signature generation, status verification, and idempotent updates right
+once, and support stops becoming a manual ledger of "did this person actually
+pay?"
+
+Official reference:
+[developer.esewa.com.np/pages/Epay](https://developer.esewa.com.np/pages/Epay).

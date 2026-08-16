@@ -23,13 +23,13 @@ export const RelatedBlogCard = ({ post }: RelatedBlogCardProps) => (
         href={ROUTES.BLOG(post.slug)}
     >
         <Card className="overflow-hidden border bg-card/20 p-0 transition-colors hover:border-primary/30 hover:bg-card/40">
-            <div className="flex gap-4 p-3 sm:gap-5 sm:p-4">
-                <div className="relative aspect-3/2 w-28 shrink-0 overflow-hidden rounded-lg bg-muted/20 sm:w-36 md:w-44">
+            <div className="flex min-w-0 flex-col gap-3 p-3 sm:flex-row sm:gap-5 sm:p-4">
+                <div className="relative aspect-3/2 w-full shrink-0 overflow-hidden rounded-lg bg-muted/20 sm:w-36 md:w-44">
                     <Image
                         alt={post.title}
                         className="object-cover object-left"
                         fill
-                        sizes="176px"
+                        sizes="(max-width: 640px) 100vw, 176px"
                         src={post.coverImage || "/placeholder.svg"}
                     />
                 </div>
