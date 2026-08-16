@@ -1,15 +1,14 @@
 ---
-title: 'Mastering CSS Blend Modes: Create Stunning Visual Effects'
-date: '2025-03-18'
-author: 'Diwash Bhattarai'
-profile: '/profile.png'
-tags: ['CSS', 'Web Development', 'Frontend', 'Design']
-description:
-  'Learn how to use CSS blend modes to create stunning visual effects for your
-  web projects. From image overlays to text effects, this guide covers it all.'
-coverImage: '/contents/css-blend-mode.webp'
-readTime: '7 min read'
-category: 'CSS'
+title: "Mastering CSS Blend Modes: Create Stunning Visual Effects"
+date: "2025-03-18"
+author: "Diwash Bhattarai"
+profile: "/profile.png"
+tags: ["CSS", "Web Development", "Frontend", "Design"]
+description: "Learn how to use CSS blend modes to create stunning visual effects for your
+  web projects. From image overlays to text effects, this guide covers it all."
+coverImage: "/contents/css-blend-mode.jpg"
+readTime: "7 min read"
+category: "CSS"
 ---
 
 CSS blend modes are a powerful yet often overlooked feature that can take your
@@ -59,8 +58,8 @@ Here are some of the most commonly used blend modes:
 Create a dark overlay effect on an image using `multiply`:
 
 <CodeBlock
-  language='css'
-  filename='styles.css'
+  language="css"
+  filename="styles.css"
   code={`.container {
    position: relative;
  }
@@ -84,8 +83,8 @@ Create a dark overlay effect on an image using `multiply`:
 <br />
 
 <CodeBlock
-  language='html'
-  filename='index.html'
+  language="html"
+  filename="index.html"
   code={`<div class="container">
    <img src="image.jpg" alt="Example Image" class="image" />
    <div class="overlay"></div>
@@ -99,8 +98,8 @@ Create a dark overlay effect on an image using `multiply`:
 using `difference`:
 
 <CodeBlock
-  language='css'
-  filename='styles.css'
+  language="css"
+  filename="styles.css"
   code={`.container {
    position: relative;
  }
@@ -124,8 +123,8 @@ using `difference`:
 <br />
 
 <CodeBlock
-  language='html'
-  filename='index.html'
+  language="html"
+  filename="index.html"
   code={`<div class="container">
    <img src="image.jpg" alt="Example Image" class="image" />
    <h1 class="text">Hello, World!</h1>
@@ -139,8 +138,8 @@ using `difference`:
 background using `background-blend-mode`:
 
 <CodeBlock
-  language='css'
-  filename='styles.css'
+  language="css"
+  filename="styles.css"
   code={`.hero {
    background-image: linear-gradient(45deg, #ff9a9e, #fad0c4), url('texture.jpg');
    background-blend-mode: overlay;
@@ -156,8 +155,8 @@ background using `background-blend-mode`:
 <br />
 
 <CodeBlock
-  language='html'
-  filename='index.html'
+  language="html"
+  filename="index.html"
   code={`<section class="hero">
    <h1>Welcome to My Website</h1>
  </section>`}
@@ -168,8 +167,8 @@ background using `background-blend-mode`:
 ### 4. Duotone Effect with `screen` Create a duotone effect using `screen`:
 
 <CodeBlock
-  language='css'
-  filename='styles.css'
+  language="css"
+  filename="styles.css"
   code={`.duotone {
    background-image: url('image.jpg');
    background-color: #00f; /* Blue */
@@ -181,11 +180,7 @@ background using `background-blend-mode`:
 
 <br />
 
-<CodeBlock
-  language='html'
-  filename='index.html'
-  code={`<div class="duotone"></div>`}
-/>
+<CodeBlock language="html" filename="index.html" code={`<div class="duotone"></div>`} />
 
 ---
 
@@ -194,8 +189,8 @@ background using `background-blend-mode`:
 ### 1. Animating Blend Modes You can animate blend modes using CSS transitions or keyframes:
 
 <CodeBlock
-  language='css'
-  filename='styles.css'
+  language="css"
+  filename="styles.css"
   code={`.element {
    mix-blend-mode: multiply;
    transition: mix-blend-mode 0.5s ease;
@@ -209,8 +204,8 @@ background using `background-blend-mode`:
 ### 2. Combining Multiple Blend Modes Layer multiple elements with different blend modes for complex effects:
 
 <CodeBlock
-  language='css'
-  filename='styles.css'
+  language="css"
+  filename="styles.css"
   code={`.layer1 {
    background-color: #ff6347;
    mix-blend-mode: multiply;

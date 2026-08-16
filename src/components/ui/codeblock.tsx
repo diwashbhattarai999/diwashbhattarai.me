@@ -137,7 +137,7 @@ export const CodeBlock = ({ language, filename, code, highlightLines = [], tabs 
                 wrapLines
                 wrapLongLines
             >
-                {String(activeCode)}
+                {activeCode ?? ""}
             </SyntaxHighlighter>
         </div>
     );

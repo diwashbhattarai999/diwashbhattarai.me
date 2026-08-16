@@ -56,7 +56,7 @@ export const getPostBySlug = async (slug: string) => {
 
     const fileContent = fs.readFileSync(filePath, "utf-8");
     const { content, data } = matter(fileContent);
-    const mdxSource = await serialize(content);
+    const mdxSource = await serialize(content, { blockJS: false });
 
     return { source: mdxSource, frontMatter: data, content };
 };

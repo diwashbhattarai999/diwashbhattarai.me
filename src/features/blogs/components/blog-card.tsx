@@ -19,16 +19,14 @@ export const BlogCard = ({ post }: BlogCardProps) => {
         <Card className="group relative overflow-hidden rounded-xl border bg-card/20 p-0 backdrop-blur-md">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] lg:grid-cols-[1fr_2fr]">
                 {/* Image Section */}
-                <div className="relative rounded-md md:h-72">
+                <div className="relative aspect-3/2 w-full overflow-hidden bg-muted/20 md:aspect-auto md:h-full md:min-h-72">
                     <Image
                         alt={post.title}
-                        className="size-full object-cover object-top"
-                        height={500}
+                        className="object-cover object-left"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 40vw"
                         src={post.coverImage || "/placeholder.svg"}
-                        width={500}
                     />
-
-                    <div className="absolute inset-0 size-full bg-gradient-to-b from-transparent to-card/80" />
                 </div>
 
                 {/* Content Section */}

@@ -90,11 +90,12 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
             <div className="mt-4 flex flex-col gap-6">
                 <BlurFade delay={0.12}>
                     {frontMatter.coverImage && (
-                        <div className="relative h-100 overflow-hidden rounded-xl">
+                        <div className="aspect-3/2 max-h-160 w-full overflow-hidden rounded-xl bg-muted/20">
                             <Image
                                 alt={frontMatter.title}
-                                className="size-full object-cover"
+                                className="h-auto w-full object-cover"
                                 height={800}
+                                priority
                                 src={frontMatter.coverImage}
                                 width={1200}
                             />
@@ -121,7 +122,7 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
 
             <BlurFade delay={0.2}>
                 <article className="prose xl:prose-lg dark:prose-invert mt-8 w-full prose-hr:border-input md:max-w-none">
-                    <MDXRemote components={{ CodeBlock }} source={content} />
+                    <MDXRemote components={{ CodeBlock }} options={{ blockJS: false }} source={content} />
                 </article>
             </BlurFade>
         </div>
