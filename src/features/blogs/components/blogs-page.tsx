@@ -25,7 +25,7 @@ export const BlogsPage = () => {
                 Insights, tutorials, and thoughts on web development
             </SectionSubTitle>
 
-            <div className="space-y-12">
+            <div className="space-y-8">
                 {posts.map((post, index) => (
                     <BlurFade delay={0.1 + index * 0.1} key={post.slug}>
                         <BlogCard post={post} />
