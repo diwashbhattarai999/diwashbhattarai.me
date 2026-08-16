@@ -18,8 +18,44 @@ export interface ExperienceDetail {
 export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
     {
         title: "Full Stack Software Developer",
+        company: "Plex Bit Infosystems",
+        duration: "Jan 2026 - Present",
+        description:
+            "Built and shipped production web platforms for sports, fitness, travel, ecommerce, and finance clients using React, Next.js, TypeScript, and Tailwind CSS. Designed GymGrow as a multi-tenant gym management system covering memberships, class scheduling, programming, finances, and Stripe Express payouts. Delivered Coach HQ and Striide as permission-driven coaching platforms with content workflows, subscriptions, and monetization. Launched marketing sites and dashboards for Euro Tours, Finance 360, and Luxe, and redesigned the Plex Bit homepage.",
+        skills: [
+            "React",
+            "Next.js",
+            "TypeScript",
+            "Tailwind CSS",
+            "Shadcn UI",
+            "TanStack Query",
+            "React Hook Form",
+            "Zod",
+            "Node.js",
+            "Stripe",
+            "Role-based Access",
+        ],
+        projects: [
+            { name: "GymGrow Superadmin", link: "https://uat-sadmin-gymgrow.pbinfosystems.com" },
+            { name: "GymGrow Gym", link: "https://uat-admin-gymgrow.pbinfosystems.com" },
+            { name: "GymGrow TV", link: "https://uat-gymgrow.pbinfosystems.com" },
+            { name: "Coach HQ", link: "https://uat-coachhq.pbinfosystems.com" },
+            { name: "Striide Admin", link: "https://admin-striide.pbinfosystems.com" },
+            { name: "Striide Coach", link: "https://coach-striide.pbinfosystems.com" },
+            { name: "Striide Subscriber", link: "https://subscriber-striide.pbinfosystems.com" },
+            { name: "Plex Bit Website", link: "https://v2.pbinfosystems.com" },
+            { name: "Luxe", link: "https://luxe.pbinfosystems.com" },
+            { name: "Euro Tours Travel", link: "https://eurotourstravel.com" },
+            { name: "Finance 360 Degree", link: "https://finance360degree.com" },
+        ],
+        website: "https://pbinfosystems.com",
+        current: true,
+        logo: "/company/plexbit.png",
+    },
+    {
+        title: "Full Stack Software Developer",
         company: "Upachaar Nepal",
-        duration: "Jun 2024 - Present",
+        duration: "Jun 2024 - Dec 2025",
         description:
             "Built and scaled large healthcare platforms serving patients, doctors, clinics, pharmacies, diagnostics, and admins using React, TypeScript, Tailwind CSS, and modern frontend architecture. Designed and developed RESTful APIs and distributed microservices using Node.js, Express, NestJS, MongoDB, and PostgreSQL. Implemented event-driven microservice communication using Apache Kafka and Redis. Published reusable UI component libraries to npm and GitHub Packages. Mentored interns on React, Git workflows, clean architecture, and system design. Implemented unit and integration tests to ensure performance, reliability, and maintainability of backend services.",
         skills: [
@@ -57,7 +93,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
             { name: "Logger System" },
         ],
         website: "https://upchaarnepal.com",
-        current: true,
+        current: false,
         logo: "/company/upchaar-nepal.png",
     },
     {
@@ -90,7 +126,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
     {
         title: "Frontend Developer Intern",
         company: "KSW Techzone",
-        duration: "Dec 2023 - Feb 2024",
+        duration: "Nov 2023 - Jan 2024",
         description:
             "Contributed to the frontend development of e-commerce platforms, booking applications, and portfolio websites. Enhanced existing design systems and applications to ensure a consistent user experience across all platforms. Collaborated with the team to implement frontend functionalities based on project requirements. Worked on improving UI/UX aspects and applied responsive design principles effectively.",
         skills: ["HTML", "CSS", "JavaScript", "React", "Responsive Design"],

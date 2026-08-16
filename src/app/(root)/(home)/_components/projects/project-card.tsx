@@ -73,8 +73,12 @@ export const ProjectCard = ({
                 <ProjectTags limit={8} tags={project.tags} />
 
                 <div className="mt-6 flex gap-3 md:hidden">
-                    <ExternalLinkButton href={project.githubUrl || "#"} icon={Github} label="View Code" />
-                    <ExternalLinkButton href={project.liveUrl || "#"} icon={ExternalLink} label="Live Demo" />
+                    {project.githubUrl && (
+                        <ExternalLinkButton href={project.githubUrl} icon={Github} label="View Code" />
+                    )}
+                    {project.liveUrl && (
+                        <ExternalLinkButton href={project.liveUrl} icon={ExternalLink} label="Live Demo" />
+                    )}
                 </div>
 
                 <span className="absolute top-1/2 right-0 -z-10 hidden -translate-y-1/2 text-7xl text-muted-foreground/5 md:inline">

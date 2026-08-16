@@ -46,10 +46,11 @@ export function Hero() {
                             // Highlight important phrases
                             const highlights = [
                                 "full-stack developer",
-                                "2 years of experience",
+                                "3.5 years of experience",
                                 "React, Next.js, Node.js",
+                                "Plex Bit Infosystems",
                                 "Upachaar Nepal",
-                                "RESTful APIs and microservices",
+                                "RESTful APIs",
                                 "mentoring interns",
                             ];
 

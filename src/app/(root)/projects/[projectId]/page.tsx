@@ -50,30 +50,34 @@ export default async function ProjectPage({ params }: { params: Promise<{ projec
                 <BlurFadeText className="font-bold text-4xl md:text-5xl" delay={0.08} text={project.title} />
                 <BlurFade delay={0.08}>
                     <div className="flex gap-3">
-                        <a
-                            className={cn(
-                                buttonVariants({ variant: "outline" }),
-                                "h-auto rounded-full py-1.5"
-                            )}
-                            href={project.liveUrl}
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            <ExternalLink size={14} />
-                            <span>Live URL</span>
-                        </a>
-                        <a
-                            className={cn(
-                                buttonVariants({ variant: "outline" }),
-                                "h-auto rounded-full py-1.5"
-                            )}
-                            href={project.githubUrl}
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            <Github size={14} />
-                            <span>GitHub</span>
-                        </a>
+                        {project.liveUrl && (
+                            <a
+                                className={cn(
+                                    buttonVariants({ variant: "outline" }),
+                                    "h-auto rounded-full py-1.5"
+                                )}
+                                href={project.liveUrl}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                            >
+                                <ExternalLink size={14} />
+                                <span>Live URL</span>
+                            </a>
+                        )}
+                        {project.githubUrl && (
+                            <a
+                                className={cn(
+                                    buttonVariants({ variant: "outline" }),
+                                    "h-auto rounded-full py-1.5"
+                                )}
+                                href={project.githubUrl}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                            >
+                                <Github size={14} />
+                                <span>GitHub</span>
+                            </a>
+                        )}
                     </div>
                 </BlurFade>
             </div>

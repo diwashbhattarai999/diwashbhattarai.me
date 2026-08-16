@@ -33,15 +33,19 @@ export const ProjectOverlay = ({ project, position }: { project: IProject; posit
                     </p>
                     <ProjectTags limit={6} tags={project.tags} />
                     <div className="mt-6 flex gap-3">
-                        <ExternalLinkButton href={project.githubUrl || "#"} icon={Github} label="View Code" />
-                        <ExternalLinkButton
-                            href={project.liveUrl || "#"}
-                            icon={ExternalLink}
-                            label="Live Demo"
-                        />
+                        {project.githubUrl && (
+                            <ExternalLinkButton href={project.githubUrl} icon={Github} label="View Code" />
+                        )}
+                        {project.liveUrl && (
+                            <ExternalLinkButton
+                                href={project.liveUrl}
+                                icon={ExternalLink}
+                                label="Live Demo"
+                            />
+                        )}
                     </div>
                 </div>
-                <div className="relative h-[300px] overflow-hidden rounded-xl">
+                <div className="relative h-75 overflow-hidden rounded-xl">
                     <Image
                         alt={project.title}
                         className="size-full object-cover object-top transition-all duration-700"

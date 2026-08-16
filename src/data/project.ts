@@ -1,21 +1,30 @@
 import type { StaticImageData } from "next/image";
 
+import CoachHqImg from "@/assets/projects/coach-hq.png";
+import EuroToursImg from "@/assets/projects/euro-tours.png";
+import Finance360Img from "@/assets/projects/finance-360.png";
 import GoodBuyImg from "@/assets/projects/good-buy.png";
 import GovCertifyImg from "@/assets/projects/gov-certify.png";
+import GymGrowGymImg from "@/assets/projects/gymgrow-gym.png";
+import GymGrowSuperadminImg from "@/assets/projects/gymgrow-superadmin.png";
+import GymGrowTVImg from "@/assets/projects/gymgrow-tv.png";
+import LuxeImg from "@/assets/projects/luxe.png";
 import MetaLogicImg from "@/assets/projects/metalogic.png";
 import MovizImg from "@/assets/projects/moviez.png";
 import NextAuthV5Img from "@/assets/projects/next-auth-v5.png";
 import NextStarterImg from "@/assets/projects/next-starter.png";
+import PlexbitImg from "@/assets/projects/plexbit.png";
 import Portfoliov1Img from "@/assets/projects/portfolio-v1.png";
 import Portfoliov2Img from "@/assets/projects/portfolio-v2.png";
 import SmartYatraImg from "@/assets/projects/smart-yatra-light.png";
+import StriideImg from "@/assets/projects/striide.png";
 
 export interface IProject {
     conclusion: string;
     description: string;
     developmentChallenges?: string;
     features: string[];
-    githubUrl: string;
+    githubUrl?: string;
     id: string;
     image: StaticImageData;
     liveUrl: string;
@@ -32,6 +41,249 @@ export interface IProject {
 }
 
 export const PROJECTS: IProject[] = [
+    {
+        id: "gymgrow-superadmin",
+        title: "GymGrow Superadmin",
+        description:
+            "Platform-level console for Grow HQ — onboard gym owners, review name-change requests, and manage global settings and email templates.",
+        image: GymGrowSuperadminImg,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "TanStack Query"],
+        liveUrl: "https://uat-sadmin-gymgrow.pbinfosystems.com",
+        overview:
+            "GymGrow Superadmin is the operator console above every gym on Grow HQ. Superadmins create and manage gym owners, search and edit owner records, and handle platform-wide requests such as name changes. Settings cover profile and reusable email templates used across the product.",
+        poweredBy:
+            "This app is the entry point for the multi-tenant platform: a gym only exists after a superadmin creates its owner.",
+        technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "TanStack Query"],
+        features: [
+            "Create and manage gym owners across the platform",
+            "Searchable owner directory with contact details and edit actions",
+            "Name-change request review and processing",
+            "Profile settings and reusable email templates",
+        ],
+        developmentChallenges:
+            "The superadmin surface had to stay strictly above gym data — owners can be created and edited here, but branch, member, and payment details live in the gym app so tenants never leak into each other.",
+        conclusion:
+            "GymGrow Superadmin is the control plane for Grow HQ: onboard owners, keep their records accurate, and configure the templates the rest of the platform uses.",
+    },
+    {
+        id: "gymgrow-gym",
+        title: "GymGrow Gym",
+        description:
+            "Gym-owner dashboard for running branches, members, staff, classes, programming, finances, and Stripe Express payouts.",
+        image: GymGrowGymImg,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "TanStack Query", "Stripe", "RBAC"],
+        liveUrl: "https://uat-admin-gymgrow.pbinfosystems.com",
+        overview:
+            "GymGrow Gym is the day-to-day operating system for gym owners and staff. Owners create branches, add members, assign subscriptions, track visits, payments, documents, and activity, and freeze memberships. Staff can be invited with role-based permissions. The dashboard covers class scheduling, recurring classes, calendar views, programming, finances, memberships, leaderboards, communications, and gym settings.",
+        poweredBy:
+            "Gyms connect a Stripe Express account to collect payments and manage transactions, refunds, and payouts without mixing tenant accounts.",
+        technologies: [
+            "Next.js",
+            "TypeScript",
+            "Tailwind CSS",
+            "Shadcn UI",
+            "TanStack Query",
+            "Stripe Express",
+            "Role-based access control",
+        ],
+        features: [
+            "Multi-branch gym management with members, staff, and subscriptions",
+            "Membership lifecycle including visits, payments, documents, activity, and freeze",
+            "Staff roles and permissions per gym",
+            "Class scheduling, recurring classes, and calendar views",
+            "Class programming that can be shared to the public TV webapp",
+            "Finance tools for revenue, expenses, tax, transactions, and refunds",
+            "Memberships, leaderboards, and custom email communications",
+            "Settings for booking, gym hours, payments, waivers, profile, and training spaces",
+            "Stripe Express connection for payouts and transaction management",
+        ],
+        developmentChallenges:
+            "The hardest parts were modeling branch-level data under one owner, keeping role and permission checks consistent across every screen, and wiring Stripe Express so payouts and transactions stay scoped to the right gym.",
+        conclusion:
+            "GymGrow Gym is the core product — a full operations suite for memberships, scheduling, programming, finance, and payments inside each gym.",
+    },
+    {
+        id: "gymgrow-tv",
+        title: "GymGrow TV",
+        description:
+            "Public programming display for gym TVs — session workouts scaled for the wall, with date, class, and size controls.",
+        image: GymGrowTVImg,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS"],
+        liveUrl: "https://uat-gymgrow.pbinfosystems.com",
+        overview:
+            "GymGrow TV is the public webapp gyms use to put class programming on a screen. Coaches pick a date and session; the display renders warmup, strength, and metcon blocks with sets, reps, and loads. A size control scales the layout for different TVs.",
+        poweredBy:
+            "Programming created in the gym dashboard is published here so members see the workout of the day without signing in.",
+        technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
+        features: [
+            "Public, login-free programming display for gym TVs",
+            "Date and session selectors for the class on the floor",
+            "Workout blocks for warmup, strength, and metcon with sets, reps, and loads",
+            "On-screen size scaling for different TV resolutions",
+            "Grow HQ branding on the display",
+        ],
+        developmentChallenges:
+            "The display had to stay readable from across a gym floor — large type, clear block structure, and a zoom control — while staying in sync with programming published from the gym dashboard.",
+        conclusion:
+            "GymGrow TV turns class programming into a wall-ready workout board so members can follow the session without a staff tablet.",
+    },
+    {
+        id: "coach-hq",
+        title: "Coach HQ",
+        description:
+            "An AI-led coaching platform with public marketing pages and a permission-driven dashboard for superadmins, coaches, and content creators.",
+        image: CoachHqImg,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "Stripe", "RBAC"],
+        liveUrl: "https://uat-coachhq.pbinfosystems.com/",
+        overview:
+            "Coach HQ helps teachers and coaches find drills, lesson plans, and playlists across sports. I built the landing and public pages plus a dashboard where the sidebar, actions, and features all resolve from the signed-in role and permissions. Superadmins manage the content library, users, catalog, subscriptions, and site content. Coaches and content creators work inside the same product with a narrower surface — submitting drills, browsing the library, and handling Stripe subscriptions.",
+        poweredBy:
+            "Content submitted by creators is reviewed by superadmins before it reaches the library, keeping the catalog expert-led while still scaling contributions.",
+        technologies: [
+            "Next.js",
+            "TypeScript",
+            "Tailwind CSS",
+            "Shadcn UI",
+            "Stripe",
+            "Role-based access control",
+        ],
+        features: [
+            "Marketing site covering home, about, pricing, contact, FAQ, and webinars",
+            "Dashboard UI that changes with role and permission — sidebar, buttons, and features",
+            "Superadmin CRUD for drills, including approve/reject of creator submissions",
+            "Lesson plans, playlists, coaches, content creators, categories, sub-categories, and sport tags",
+            "Subscription plans, transactions, subscribers, and newsletter management",
+            "Contact messages, FAQs, and app version management",
+            "Coach and content creator access to the content library and Stripe subscriptions",
+        ],
+        developmentChallenges:
+            "Every dashboard surface had to stay permission-aware so a missing grant hid the nav item, the button, and the feature — not just the API. That meant a single source of truth for roles across layout, actions, and content workflows like drill review.",
+        conclusion:
+            "Coach HQ shows how a coaching product can stay one codebase while still feeling purpose-built for superadmins, coaches, and content creators.",
+    },
+    {
+        id: "striide",
+        title: "Striide",
+        description:
+            "Three connected web apps for a female cricket coaching platform — admin operations, coach publishing and monetization, and subscriber auth and payments.",
+        image: StriideImg,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "Stripe"],
+        liveUrl: "https://subscriber-striide.pbinfosystems.com/",
+        overview:
+            "Striide is a coaching platform for female cricketers. I built three web apps that share the product: an admin console for content, monetization, and operations; a coach app for publishing, insights, and Stripe Express payouts; and a subscriber app for authentication and payments. Together they cover the full loop from content review to paid access.",
+        poweredBy:
+            "Coaches connect Stripe Express for monetization, while subscribers authenticate and pay through the consumer app. Admin remains the source of truth for plans, vouchers, taxonomy, and content approval.",
+        technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI", "Stripe Express", "OAuth"],
+        features: [
+            "Admin dashboard for coaches, content review, playlists, and lesson plans",
+            "Paid lesson plans, monetization, subscribers, logs, subscriptions, and vouchers",
+            "Ticketing with events and a scanner, plus incident and contact response handling",
+            "Admin settings for app versions, FAQs, taxonomy, avatars, badges, and plans",
+            "Coach app for uploading content, playlists, insights, and Stripe Express monetization",
+            "Coach profile settings including notifications, privacy, connected accounts, agreements, and danger zone",
+            "Subscriber authentication, social login, and payments",
+        ],
+        developmentChallenges:
+            "Splitting one product into three apps meant keeping roles, content approval, and payments aligned. Admin review gates coach uploads, coach monetization depends on Stripe Express, and subscribers only see approved, paid content.",
+        conclusion:
+            "Striide is a three-app coaching system — operations, creator tools, and consumer access — built so content, payments, and permissions stay in sync.",
+    },
+    {
+        id: "euro-tours",
+        title: "Euro Tours Travel",
+        description:
+            "A tour and travel website with an admin dashboard for managing destinations, packages, and bookings.",
+        image: EuroToursImg,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI"],
+        liveUrl: "https://eurotourstravel.com/",
+        overview:
+            "Euro Tours Travel is a public tour and travel site paired with an admin dashboard. Visitors browse destinations and packages from a visual homepage, while admins manage the catalog and operations behind the scenes.",
+        poweredBy:
+            "The public site and dashboard share the same product so package content stays consistent from the admin editor to the customer-facing pages.",
+        technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Shadcn UI"],
+        features: [
+            "Marketing site for destinations, services, and tour packages",
+            "Hero and package carousels for featured itineraries",
+            "Admin dashboard for managing travel content and operations",
+            "Contact and inquiry paths for travelers",
+        ],
+        developmentChallenges:
+            "The site needed to feel like a travel brand on the public side while still giving admins a practical way to keep packages, destinations, and inquiries up to date.",
+        conclusion:
+            "Euro Tours Travel combines a destination-led marketing site with a dashboard so the team can run tours without a separate CMS.",
+    },
+    {
+        id: "finance-360",
+        title: "Finance 360 Degree",
+        description:
+            "A marketing site for a Nepal-based finance, accounting, and tax consultancy covering services, social proof, and consultation intake.",
+        image: Finance360Img,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS"],
+        liveUrl: "https://finance360degree.com/",
+        overview:
+            "Finance 360 Degree is the public site for a CA-led consultancy in Nepal. I built the landing experience — positioning, services, social proof, and consultation CTAs — so startups and SMEs can understand the offer and get in touch.",
+        poweredBy:
+            "The site is the firm’s primary digital presence, connecting visitors to tax, accounting, VAT, BPO, and academy pathways.",
+        technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
+        features: [
+            "Hero and positioning for 360° finance, accounting, and tax services",
+            "Service and process sections for tax, accounting systems, and ongoing support",
+            "Social proof, locations, and consultation call-to-actions",
+            "Academy and content links for financial literacy",
+        ],
+        developmentChallenges:
+            "The page had to explain a broad service mix — tax, VAT, MIS, BPO, and education — without turning into a brochure dump. Hierarchy and conversion paths were the main design constraints.",
+        conclusion:
+            "Finance 360 Degree gives the consultancy a clear public face: what they do, who they serve, and how to start a conversation.",
+    },
+    {
+        id: "luxe",
+        title: "Luxe",
+        description:
+            "A multi-vendor premium beauty ecommerce experience — landing page plus selected dashboard surfaces for catalogs, deals, and storefront merchandising.",
+        image: LuxeImg,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS"],
+        liveUrl: "https://luxe.pbinfosystems.com/",
+        overview:
+            "Luxe is a multi-vendor ecommerce storefront for premium beauty. I built the landing page and parts of the dashboard, including merchandising-led sections such as exclusive launches, flash sales, seasonal campaigns, and deal modules.",
+        poweredBy:
+            "The storefront is designed around campaigns and collections so brands can push launches, bundles, and seasonal offers without rebuilding the homepage each time.",
+        technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
+        features: [
+            "Campaign-led homepage with hero sliders and exclusive launches",
+            "Flash sale, seasonal, and deal modules for merchandising",
+            "Multi-vendor beauty catalog presentation",
+            "Selected dashboard work for storefront content and campaigns",
+        ],
+        developmentChallenges:
+            "The landing page had to support several campaign types at once — launches, sales, palettes, and deals — while staying fast and on-brand for a premium beauty store.",
+        conclusion:
+            "Luxe is a campaign-driven beauty storefront where the homepage and dashboard work together to merchandise products and promotions.",
+    },
+    {
+        id: "plexbit-website",
+        title: "Plex Bit Website",
+        description:
+            "Homepage redesign for Plex Bit Infosystems, repositioning the company around AI-native engineering, services, and proof.",
+        image: PlexbitImg,
+        tags: ["Next.js", "TypeScript", "Tailwind CSS"],
+        liveUrl: "https://v2.pbinfosystems.com/",
+        overview:
+            "I redesigned the Plex Bit homepage to match how the company actually sells work today — AI-powered delivery, services, industries, case studies, and social proof. The previous site was a generic IT brochure; the new homepage is a productized engineering narrative with clearer CTAs.",
+        poweredBy:
+            "The redesign sits on the v2 site while the company still operates from pbinfosystems.com, so the new homepage had to stand on its own as a complete first impression.",
+        technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
+        features: [
+            "AI-led hero with services and consultation CTAs",
+            "Services, industries, workflow, and technology sections",
+            "Featured work, testimonials, blogs, and recognition",
+            "Hire-a-developer and newsletter conversion paths",
+        ],
+        developmentChallenges:
+            "The homepage had to feel like a global AI engineering firm without losing the existing brand. That meant tightening information architecture, rebuilding the hero, and making case studies and proof easier to scan.",
+        conclusion:
+            "The Plex Bit homepage redesign turns a generic IT landing page into a focused first impression for AI, cloud, and product engineering work.",
+    },
     {
         id: "smart-yatra",
         title: "Smart Yatra",

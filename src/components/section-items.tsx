@@ -103,7 +103,7 @@ export const SectionCard: React.FC<ISectionCardProps> = ({
                     {projects && projects.length > 0 && (
                         <div className="mt-4">
                             <h4 className="font-bold">Projects:</h4>
-                            <ul className="flex list-disc flex-wrap gap-8 pl-4">
+                            <ul className="flex list-disc flex-wrap gap-x-8 gap-y-4 pl-4">
                                 {projects.map((project, index) => {
                                     // Support both string and object format for backward compatibility
                                     if (typeof project === "string") {
