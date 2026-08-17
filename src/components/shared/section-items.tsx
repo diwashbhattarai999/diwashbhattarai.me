@@ -8,14 +8,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ROUTES } from "@/configs/routes";
 import { cn } from "@/lib/utils";
 
-export const SectionTitle = ({ children, className }: { children: string; className?: string }) => (
-    <div className={cn("relative font-bold", className)}>
+type SectionTitleHeading = "h1" | "h2";
+
+interface SectionTitleProps {
+    as?: SectionTitleHeading;
+    children: string;
+    className?: string;
+}
+
+/**
+ * Section heading with the decorative background label hidden from assistive tech.
+ *
+ * @param as - Heading level. Use `h1` on dedicated listing pages and `h2` on the homepage.
+ */
+export const SectionTitle = ({ as: Heading = "h2", children, className }: SectionTitleProps) => (
+    <Heading className={cn("relative font-bold", className)}>
         <BlurFadeText className="text-3xl" delay={0.08} text={children} />
 
-        <span className="pointer-events-none absolute top-1/2 left-0 z-[-1] -translate-y-1/2 select-none text-nowrap text-6xl text-muted/20 md:text-[7rem]">
+        <span
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 left-0 z-[-1] -translate-y-1/2 select-none text-nowrap text-6xl text-muted/20 md:text-[7rem]"
+        >
             {children}
         </span>
-    </div>
+    </Heading>
 );
 
 export const SectionSubTitle = ({ children, className }: { children: string; className?: string }) => (

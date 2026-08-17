@@ -17,8 +17,10 @@ export const ProjectCard = ({
     onHover,
     isHovered,
     index,
+    headingLevel: Heading = "h3",
 }: {
     project: Project;
+    headingLevel?: "h2" | "h3";
     // eslint-disable-next-line no-unused-vars
     onHover: (id: string | null) => void;
     isHovered: boolean;
@@ -65,9 +67,9 @@ export const ProjectCard = ({
                         />
                     </div>
 
-                    <h3 className="text-nowrap font-bold text-xl transition-colors group-hover:text-primary">
+                    <Heading className="text-nowrap font-bold text-xl transition-colors group-hover:text-primary">
                         {project.title}
-                    </h3>
+                    </Heading>
 
                     <p className="line-clamp-2 md:hidden">{project.description}</p>
                 </Link>

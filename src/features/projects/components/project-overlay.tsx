@@ -27,7 +27,7 @@ export const ProjectOverlay = ({ project, position }: { project: Project; positi
         >
             <div className="grid grid-cols-1 gap-8 p-8 xl:grid-cols-2">
                 <div className="flex flex-col justify-between gap-4">
-                    <h3 className="font-bold text-2xl text-foreground">{project.title}</h3>
+                    <p className="font-bold text-2xl text-foreground">{project.title}</p>
                     <p className="line-clamp-4 max-w-md text-foreground/80 xl:max-w-full">
                         {project.description}
                     </p>
