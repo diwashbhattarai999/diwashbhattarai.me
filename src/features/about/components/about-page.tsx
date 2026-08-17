@@ -6,16 +6,29 @@ import { SectionSeperator, SectionWrapper } from "@/components/shared/section-it
 import { SectionViewAllButton } from "@/components/shared/section-view-all-button";
 import { ROUTES } from "@/configs/routes";
 import { siteConfig } from "@/configs/site";
-import { ABOUT_ME } from "@/features/about/constants/about.constants";
+import {
+    ABOUT_APPROACH,
+    ABOUT_BACKGROUND,
+    ABOUT_CAREER_FOCUS,
+    ABOUT_EXPERTISE,
+    ABOUT_INTRODUCTION,
+    ABOUT_ME,
+} from "@/features/about/constants/about.constants";
+import { WRITING_LINKS } from "@/features/blogs/constants/writing-links.constants";
 import { ContactSection } from "@/features/contact/components/contact-section";
+import { EDUCATION_DETAILS } from "@/features/education/constants/education.constants";
 import { EXPERIENCE_DETAILS } from "@/features/experience/constants/experience.constants";
 import { SKILLS } from "@/features/skills/constants/skills.constants";
+
+const ABOUT_LINK_CLASS = "text-primary underline-offset-4 hover:underline";
 
 /**
  * Detailed personal profile for Diwash Bhattarai.
  */
 export const AboutPage = () => {
-    const focusSkills = SKILLS.flatMap((category) => category.skills.map((skill) => skill.name)).slice(0, 12);
+    const focusSkills = SKILLS.flatMap((category) => category.skills.map((skill) => skill.name)).slice(0, 16);
+    const currentRole = EXPERIENCE_DETAILS.find((experience) => experience.current);
+    const featuredProjects = currentRole?.projects.filter((project) => project.projectId) ?? [];
 
     return (
         <>
@@ -32,22 +45,82 @@ export const AboutPage = () => {
                     <p className="text-primary">{ABOUT_ME.headline}</p>
                     <h1 className="mt-2 font-bold text-4xl">{ABOUT_ME.name}</h1>
                     <p className="mt-4 text-muted-foreground">
-                        {ABOUT_ME.title}. I specialize in React, Next.js, Node.js, NestJS, and TypeScript,
-                        with a focus on clean architecture, performance, and developer experience.
+                        {ABOUT_ME.title}. Over 3.5 years building production web applications with React,
+                        Next.js, Node.js, NestJS, and TypeScript.
                     </p>
                 </BlurFade>
 
                 <BlurFade delay={0.08}>
-                    <div className="mt-10 space-y-6 text-muted-foreground leading-relaxed">
-                        {ABOUT_ME.description.map((paragraph) => (
-                            <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+                    <section className="mt-10 space-y-4 text-muted-foreground leading-relaxed">
+                        <h2 className="font-semibold text-foreground text-xl">Professional introduction</h2>
+                        {ABOUT_INTRODUCTION.map((paragraph) => (
+                            <p key={paragraph.slice(0, 40)}>{paragraph}</p>
                         ))}
-                    </div>
+                    </section>
                 </BlurFade>
 
-                <div className="mt-12 grid gap-10">
-                    <BlurFade delay={0.08}>
-                        <h2 className="mb-3 font-semibold text-xl">Technical focus</h2>
+                <BlurFade delay={0.1}>
+                    <section className="mt-10 space-y-4 text-muted-foreground leading-relaxed">
+                        <h2 className="font-semibold text-foreground text-xl">Development background</h2>
+                        {ABOUT_BACKGROUND.map((paragraph) => (
+                            <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+                        ))}
+                        <p>
+                            The academic sequence is on the{" "}
+                            <Link className={ABOUT_LINK_CLASS} href={ROUTES.EDUCATION}>
+                                education
+                            </Link>{" "}
+                            page. The job history is on{" "}
+                            <Link className={ABOUT_LINK_CLASS} href={ROUTES.EXPERIENCE}>
+                                experience
+                            </Link>
+                            .
+                        </p>
+                    </section>
+                </BlurFade>
+
+                <BlurFade delay={0.12}>
+                    <section className="mt-10 space-y-6">
+                        <h2 className="font-semibold text-xl">Areas of expertise</h2>
+                        <div className="space-y-5">
+                            {ABOUT_EXPERTISE.map((area) => (
+                                <div key={area.title}>
+                                    <h3 className="font-medium text-lg">{area.title}</h3>
+                                    <p className="mt-2 text-muted-foreground leading-relaxed">{area.body}</p>
+                                </div>
+                            ))}
+                        </div>
+                        {featuredProjects.length > 0 ? (
+                            <p className="text-muted-foreground leading-relaxed">
+                                Current product work at {currentRole?.company} includes{" "}
+                                {featuredProjects.map((project, index) => (
+                                    <span key={project.projectId}>
+                                        {index > 0 ? ", " : ""}
+                                        <Link
+                                            className={ABOUT_LINK_CLASS}
+                                            href={ROUTES.PROJECT(project.projectId ?? "")}
+                                        >
+                                            {project.name}
+                                        </Link>
+                                    </span>
+                                ))}
+                                .
+                            </p>
+                        ) : null}
+                    </section>
+                </BlurFade>
+
+                <BlurFade delay={0.14}>
+                    <section className="mt-10">
+                        <h2 className="mb-3 font-semibold text-xl">Technologies I work with</h2>
+                        <p className="mb-4 max-w-3xl text-muted-foreground leading-relaxed">
+                            The names below are from the{" "}
+                            <Link className={ABOUT_LINK_CLASS} href={ROUTES.SKILLS}>
+                                technical stack
+                            </Link>
+                            . Frontend work is React and Next.js. Backend work is Node.js and NestJS.
+                            TypeScript is the default language across both.
+                        </p>
                         <div className="flex flex-wrap gap-x-2.5 gap-y-3">
                             {focusSkills.map((skill) => (
                                 <span
@@ -64,9 +137,27 @@ export const AboutPage = () => {
                                 label="View the full technical stack"
                             />
                         </div>
-                    </BlurFade>
+                    </section>
+                </BlurFade>
 
-                    <BlurFade delay={0.12}>
+                <BlurFade delay={0.16}>
+                    <section className="mt-10 space-y-4 text-muted-foreground leading-relaxed">
+                        <h2 className="font-semibold text-foreground text-xl">
+                            Engineering approach and interests
+                        </h2>
+                        <p>{ABOUT_APPROACH}</p>
+                    </section>
+                </BlurFade>
+
+                <BlurFade delay={0.18}>
+                    <section className="mt-10 space-y-4 text-muted-foreground leading-relaxed">
+                        <h2 className="font-semibold text-foreground text-xl">Career focus</h2>
+                        <p>{ABOUT_CAREER_FOCUS}</p>
+                    </section>
+                </BlurFade>
+
+                <BlurFade delay={0.2}>
+                    <section className="mt-12">
                         <h2 className="mb-3 font-semibold text-xl">Recent roles</h2>
                         <ul className="space-y-5">
                             {EXPERIENCE_DETAILS.slice(0, 3).map((experience) => (
@@ -78,7 +169,6 @@ export const AboutPage = () => {
                                         {experience.title} at {experience.company}
                                     </Link>
                                     <p className="text-muted-foreground text-sm">{experience.duration}</p>
-
                                     <SectionSeperator className="my-3" />
                                 </li>
                             ))}
@@ -86,10 +176,60 @@ export const AboutPage = () => {
                         <div className="mt-4">
                             <SectionViewAllButton href={ROUTES.EXPERIENCE} label="View full experience" />
                         </div>
-                    </BlurFade>
-                </div>
+                    </section>
+                </BlurFade>
 
-                <BlurFade delay={0.16}>
+                <BlurFade delay={0.22}>
+                    <section className="mt-12">
+                        <h2 className="mb-3 font-semibold text-xl">Education</h2>
+                        <ul className="space-y-3 text-muted-foreground">
+                            {EDUCATION_DETAILS.map((education) => (
+                                <li key={education.id}>
+                                    <Link
+                                        className="font-medium text-foreground transition-colors hover:text-primary"
+                                        href={ROUTES.EDUCATION_DETAIL(education.id)}
+                                    >
+                                        {education.shortDegree}
+                                    </Link>
+                                    <span>
+                                        {" "}
+                                        · {education.institution} · {education.duration}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                </BlurFade>
+
+                <BlurFade delay={0.24}>
+                    <section className="mt-12">
+                        <h2 className="mb-3 font-semibold text-xl">Writing</h2>
+                        <p className="mb-3 text-muted-foreground leading-relaxed">
+                            Longer notes on becoming a developer in Nepal, React, Next.js, and Node.js live on
+                            the{" "}
+                            <Link className={ABOUT_LINK_CLASS} href={ROUTES.BLOGS}>
+                                blog
+                            </Link>
+                            .
+                        </p>
+                        <ul className="space-y-2">
+                            {[
+                                WRITING_LINKS.fullStackNepal,
+                                WRITING_LINKS.reactDeveloper,
+                                WRITING_LINKS.nextSeo,
+                                WRITING_LINKS.backendNode,
+                            ].map((article) => (
+                                <li key={article.href}>
+                                    <Link className={ABOUT_LINK_CLASS} href={article.href}>
+                                        {article.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                </BlurFade>
+
+                <BlurFade delay={0.26}>
                     <p className="mt-12 text-muted-foreground text-sm">
                         {siteConfig.name} · {ABOUT_ME.headline} · {siteConfig.location}
                     </p>

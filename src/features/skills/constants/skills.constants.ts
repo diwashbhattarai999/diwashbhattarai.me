@@ -38,6 +38,8 @@ import type { SkillCategory } from "@/features/skills/types/skills.types";
 
 export const SKILLS: SkillCategory[] = [
     {
+        description:
+            "This is the client-side stack I use as a React and Next.js developer. HTML, CSS, JavaScript, and TypeScript sit under React and Next.js apps with Tailwind CSS and Shadcn UI. Redux Toolkit, TanStack Query, React Hook Form, and Zod show up on permission-driven dashboards. SASS, responsive design, and PWA work sit alongside that product UI. I used this layer at Plex Bit Infosystems, Upachaar Nepal, Fact Digi, and KSW Techzone.",
         icon: Layout,
         skills: [
             { icon: HTML, name: "HTML" },
@@ -59,6 +61,8 @@ export const SKILLS: SkillCategory[] = [
         title: "Frontend",
     },
     {
+        description:
+            "Backend work here is Node.js with Express.js and NestJS, plus REST APIs and microservices. At Upachaar Nepal I used this stack for healthcare services, including Apache Kafka and Redis for event-driven communication and WebRTC for video consulting. Node.js also appears on later full stack product work at Plex Bit Infosystems.",
         icon: Server,
         skills: [
             { icon: Node, name: "Node.js" },
@@ -72,6 +76,8 @@ export const SKILLS: SkillCategory[] = [
         title: "Backend",
     },
     {
+        description:
+            "PostgreSQL and MongoDB are the primary datastores from Upachaar Nepal healthcare services. Redis supported event-driven flows with Kafka. Firebase is part of that same platform skill set. These databases are how product data, sessions, and async work actually persist — not only how the UI is rendered.",
         icon: Database,
         skills: [
             { icon: MongoDB, name: "MongoDB" },
@@ -82,6 +88,8 @@ export const SKILLS: SkillCategory[] = [
         title: "Database",
     },
     {
+        description:
+            "Git and GitHub are the daily version control workflow. At Fact Digi I used GitHub Actions, Docker, Nginx, and AWS EC2 to ship frontend apps. Linux, VS Code, Postman, and npm are the rest of the local and API toolchain. Figma is how UI collaboration happens. At Upachaar Nepal, npm and GitHub Packages were also how reusable UI libraries were published.",
         icon: Code,
         skills: [
             { icon: Linux, name: "Linux" },
@@ -97,3 +105,8 @@ export const SKILLS: SkillCategory[] = [
         title: "Tools & Others",
     },
 ];
+
+export const SKILLS_INTRO = [
+    "This is the technical stack I use as a full stack software developer in Nepal. It is grouped the way I actually work: frontend product UI, backend services, data stores, and the tools that wrap shipping and collaboration.",
+    "I do not treat these names as a bingo card. React, Next.js, Node.js, NestJS, TypeScript, and PostgreSQL are the core of recent production work at Plex Bit Infosystems and Upachaar Nepal. The rest of the list is what those products needed — payments, caching, CI/CD, or UI primitives.",
+] as const;

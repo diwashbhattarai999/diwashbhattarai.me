@@ -1,5 +1,6 @@
 import { ExternalLink, GraduationCap } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import BlurFade from "@/components/animations/blur-fade";
@@ -8,8 +9,11 @@ import { SectionWrapper } from "@/components/shared/section-items";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ROUTES } from "@/configs/routes";
-import { getEducationById } from "@/features/education/constants/education.constants";
+import { WRITING_LINKS } from "@/features/blogs/constants/writing-links.constants";
+import { EDUCATION_DETAILS, getEducationById } from "@/features/education/constants/education.constants";
 import { cn } from "@/lib/utils";
+
+const EDUCATION_LINK_CLASS = "text-primary underline-offset-4 hover:underline";
 
 interface EducationDetailPageProps {
     educationId: string;
@@ -106,6 +110,14 @@ export const EducationDetailPage = ({ educationId }: EducationDetailPageProps) =
 
             <BlurFade delay={0.14}>
                 <section className="mb-12">
+                    <h2 className="mb-4 font-bold text-2xl">Program and degree context</h2>
+                    <p className="text-muted-foreground leading-relaxed">{education.programContext}</p>
+                    <p className="mt-4 text-muted-foreground leading-relaxed">{education.description}</p>
+                </section>
+            </BlurFade>
+
+            <BlurFade delay={0.14}>
+                <section className="mb-12">
                     <h2 className="mb-4 font-bold text-2xl">Highlights</h2>
                     <ul className="space-y-4">
                         {education.highlights.map((highlight) => (
@@ -137,7 +149,13 @@ export const EducationDetailPage = ({ educationId }: EducationDetailPageProps) =
 
             <BlurFade delay={0.18}>
                 <section className="mb-12">
-                    <h2 className="mb-4 font-bold text-2xl">Focus Areas</h2>
+                    <h2 className="mb-4 font-bold text-2xl">Focus areas and technical knowledge</h2>
+                    <p className="mb-4 text-muted-foreground leading-relaxed">
+                        Study and practice at {education.institution} concentrated on{" "}
+                        {education.skills.slice(0, -1).join(", ")}
+                        {education.skills.length > 1 ? ", and " : ""}
+                        {education.skills.at(-1)}.
+                    </p>
                     <ul className="flex flex-wrap gap-2">
                         {education.skills.map((skill) => (
                             <li
@@ -151,10 +169,46 @@ export const EducationDetailPage = ({ educationId }: EducationDetailPageProps) =
                 </section>
             </BlurFade>
 
-            <section className="mb-12">
-                <h2 className="mb-4 font-bold text-2xl">Conclusion</h2>
-                <p className="text-muted-foreground">{education.conclusion}</p>
-            </section>
+            <BlurFade delay={0.2}>
+                <section className="mb-12">
+                    <h2 className="mb-4 font-bold text-2xl">How this stage connected to my career</h2>
+                    <p className="text-muted-foreground leading-relaxed">{education.conclusion}</p>
+                    <p className="mt-4 text-muted-foreground leading-relaxed">
+                        Related pages:{" "}
+                        <Link className={EDUCATION_LINK_CLASS} href={ROUTES.EDUCATION}>
+                            all education
+                        </Link>
+                        ,{" "}
+                        <Link className={EDUCATION_LINK_CLASS} href={ROUTES.EXPERIENCE}>
+                            experience
+                        </Link>
+                        ,{" "}
+                        <Link className={EDUCATION_LINK_CLASS} href={ROUTES.SKILLS}>
+                            skills
+                        </Link>
+                        , and{" "}
+                        <Link className={EDUCATION_LINK_CLASS} href={WRITING_LINKS.fullStackNepal.href}>
+                            {WRITING_LINKS.fullStackNepal.label}
+                        </Link>
+                        .
+                    </p>
+                    {EDUCATION_DETAILS.filter((item) => item.id !== education.id).length > 0 ? (
+                        <ul className="mt-4 space-y-2">
+                            {EDUCATION_DETAILS.filter((item) => item.id !== education.id).map((item) => (
+                                <li key={item.id}>
+                                    <Link
+                                        className={EDUCATION_LINK_CLASS}
+                                        href={ROUTES.EDUCATION_DETAIL(item.id)}
+                                    >
+                                        {item.institution}
+                                    </Link>
+                                    <span className="text-muted-foreground"> · {item.shortDegree}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : null}
+                </section>
+            </BlurFade>
         </SectionWrapper>
     );
 };

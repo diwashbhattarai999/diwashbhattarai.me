@@ -6,6 +6,7 @@ export interface Skill {
 }
 
 export interface SkillCategory {
+    description: string;
     icon: LucideIcon;
     skills: Skill[];
     title: string;

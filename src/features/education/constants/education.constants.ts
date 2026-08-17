@@ -28,6 +28,8 @@ export const EDUCATION_DETAILS: EducationDetail[] = [
         location: "Doodhpati, Bhaktapur, Nepal",
         overview:
             "Bhaktapur Multiple Campus is a government-owned constituent campus of Tribhuvan University in the historical city of Bhaktapur. Established in 2016 Kartik 19 B.S., it has grown into one of the valley's established public institutions for management, humanities, and science programs. I studied B.Sc. CSIT here from 2021 to 2025, building the computer science foundation that later shaped my full stack development work.",
+        programContext:
+            "The Bachelor of Science in Computer Science and Information Technology (B.Sc. CSIT) is a TU-affiliated undergraduate program. I completed it between April 2021 and June 2025 at this public campus in Doodhpati, Bhaktapur. Coursework covered programming, data structures, algorithms, databases, networking, and software engineering, with hands-on web development and system design projects alongside the theory.",
         programs: ["B.Sc. CSIT", "BCA", "BIT", "BIM", "BBM", "BBA", "Bachelor of Arts"],
         shortDegree: "B.Sc. CSIT",
         skills: [
@@ -59,9 +61,11 @@ export const EDUCATION_DETAILS: EducationDetail[] = [
         image: XavierInternationalCollegeImg,
         institution: "Xavier International College",
         links: [{ label: "College Website", url: "https://xaviercollege.edu.np/" }],
-        location: "Boudha, Tushal, Kathmandu, Nepal",
+        location: "Kalopul, Kathmandu, Nepal",
         overview:
-            "Xavier International College is a private college in Boudha, Kathmandu, known for undergraduate and graduate programs across business, science, and social work. During my 10+2 years from 2019 to 2021, I studied science with emphasis on Mathematics, Physics, and Computer Science. The college's structured curriculum, campus facilities, and student-focused environment helped strengthen my problem-solving skills before university-level computing.",
+            "Xavier International College is a private college in Kalopul, Kathmandu, known for undergraduate and graduate programs across business, science, and social work. During my 10+2 years from 2019 to 2021, I studied science with emphasis on Mathematics, Physics, and Computer Science. The college's structured curriculum, campus facilities, and student-focused environment helped strengthen my problem-solving skills before university-level computing.",
+        programContext:
+            "Higher Secondary Education (10+2) here was a science stream from April 2019 to April 2021. Mathematics, Physics, and Computer Science were the academic focus. That combination trained analytical thinking and was the direct step into B.Sc. CSIT rather than a sudden jump into university computing.",
         programs: [
             "10+2 Science",
             "BCA",
@@ -109,6 +113,8 @@ export const EDUCATION_DETAILS: EducationDetail[] = [
         location: "Nepal",
         overview:
             "Advanced English Boarding High School was my school-level foundation from 2015 to 2018. The institution emphasized English-medium education alongside core subjects like Mathematics and Nepali, while encouraging participation in extracurricular activities, sports, and community engagement. That mix of academic discipline and school-life involvement helped build confidence, communication, and consistency early on.",
+        programContext:
+            "I completed the School Leaving Certificate (SLC) here between 2015 and 2018. Core academic work included Mathematics, Nepali, and English in an English-medium, discipline-oriented boarding environment. Sports, extracurricular activities, leadership opportunities, and community programs sat alongside the classroom work.",
         shortDegree: "School Leaving Certificate (SLC)",
         skills: [
             "English",
@@ -120,6 +126,17 @@ export const EDUCATION_DETAILS: EducationDetail[] = [
         ],
     },
 ];
+
+export const EDUCATION_OVERVIEW = [
+    "This page is the academic path behind my work as a software developer in Nepal: school, higher secondary science, then a B.Sc. CSIT degree. It is not a substitute for the project and experience case studies — those show what I shipped — but it is the sequence that made that work possible.",
+    "I completed the School Leaving Certificate at Advanced English Boarding School, Higher Secondary Education (10+2) in science at Xavier International College in Kalopul, Kathmandu, and a Bachelor of Science in Computer Science and Information Technology at Bhaktapur Multiple Campus, a constituent campus of Tribhuvan University in Bhaktapur (April 2021 to June 2025).",
+] as const;
+
+export const EDUCATION_CAREER_CONNECTION = [
+    "CSIT coursework in programming (C, C++, Java), data structures and algorithms, database systems, software engineering, and web development is the academic layer under later professional stacks — React, Next.js, Node.js, NestJS, TypeScript, and PostgreSQL.",
+    "The 10+2 science years at Xavier International College, with Mathematics, Physics, and Computer Science, were the bridge into university computing. School-level English, Nepali, Mathematics, communication, and teamwork at Advanced English Boarding School came first.",
+    "I was already working in industry during the later CSIT years: a frontend internship at KSW Techzone, junior frontend work at Fact Digi, then full stack roles at Upachaar Nepal and Plex Bit Infosystems. The degree and the job history ran in parallel rather than one replacing the other.",
+] as const;
 
 /**
  * Finds an education record by its route identifier.

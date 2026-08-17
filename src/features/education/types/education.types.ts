@@ -19,6 +19,7 @@ export interface EducationDetail {
     links?: EducationLink[];
     location: string;
     overview: string;
+    programContext: string;
     programs?: string[];
     shortDegree: string;
     skills: string[];
