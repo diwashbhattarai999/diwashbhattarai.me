@@ -160,13 +160,33 @@ export function CustomCursor({
     const [smoothPosition, setSmoothPosition] = useState({ x: 0, y: 0 });
     const [isVisible, setIsVisible] = useState(false);
 
+    const [isDesktopCursor, setIsDesktopCursor] = useState(false);
+
     useEffect(() => {
+        const media = window.matchMedia("(min-width: 768px)");
+        const syncCursorMode = () => {
+            setIsDesktopCursor(media.matches);
+        };
+
+        syncCursorMode();
+        media.addEventListener("change", syncCursorMode);
+
+        return () => {
+            media.removeEventListener("change", syncCursorMode);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!isDesktopCursor) {
+            return;
+        }
+
         const handleMouseMove = (event: MouseEvent) => {
             setCursorPosition({
                 x: event.clientX,
                 y: event.clientY,
             });
-            if (!isVisible) setIsVisible(true);
+            setIsVisible(true);
         };
 
         const handleMouseLeave = () => {
@@ -186,9 +206,13 @@ export function CustomCursor({
             document.removeEventListener("mouseleave", handleMouseLeave);
             document.removeEventListener("mouseenter", handleMouseEnter);
         };
-    }, [isVisible]);
+    }, [isDesktopCursor]);
 
     useEffect(() => {
+        if (!isDesktopCursor) {
+            return;
+        }
+
         let animationFrameId: number;
 
         const updateSmoothPosition = () => {
@@ -210,10 +234,12 @@ export function CustomCursor({
         return () => {
             cancelAnimationFrame(animationFrameId);
         };
-    }, [cursorPosition]);
+    }, [cursorPosition, isDesktopCursor]);
 
     const { isMounted } = useIsMounted();
-    if (!isMounted) return null;
+    if (!(isMounted && isDesktopCursor)) {
+        return null;
+    }
 
     return (
         <div

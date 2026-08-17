@@ -10,9 +10,9 @@ import { getSiteMetadata } from "@/lib/site-metadata";
 
 import "@/styles/globals.css";
 
-const robotoFlex = League_Spartan({
+const leagueSpartan = League_Spartan({
     subsets: ["latin"],
-    weight: ["400", "500", "600", "700"],
+    display: "swap",
 });
 
 export const metadata: Metadata = getSiteMetadata();
@@ -24,7 +24,7 @@ interface LocaleLayoutProps {
 export default function LocaleLayout({ children }: LocaleLayoutProps) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={`${robotoFlex.className} antialiased`}>
+            <body className={`${leagueSpartan.className} antialiased`}>
                 <SpeedInsights />
                 <JsonLd data={getSiteJsonLd()} />
                 <Providers>

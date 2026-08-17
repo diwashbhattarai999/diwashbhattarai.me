@@ -1,26 +1,34 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-const LetsConnectButton = dynamic(
-    () => import("@/components/shared/lets-connect-btn").then((module) => module.LetsConnectButton),
-    {
-        ssr: false,
-        loading: () => (
-            <Button disabled type="button">
-                Loading calendar
-            </Button>
-        ),
-    }
-);
+const CAL_LINK = "diwash-bhattarai/let-s-connect";
+const CAL_NAMESPACE = "let-s-connect";
 
 /**
- * Defers the Cal.com embed until the contact section is interactive.
+ * Opens the Cal.com booking modal on the same click that loads the embed.
  */
-export const BookingCalendar = () => (
-    <LetsConnectButton link="diwash-bhattarai/let-s-connect" namespace="let-s-connect">
-        Book a call
-    </LetsConnectButton>
-);
+export const BookingCalendar = () => {
+    const [isOpening, setIsOpening] = useState(false);
+
+    const handleBookCall = async () => {
+        setIsOpening(true);
+
+        try {
+            const { openCalModal } = await import("@/components/shared/lets-connect-btn");
+            await openCalModal({ link: CAL_LINK, namespace: CAL_NAMESPACE });
+        } catch (error) {
+            console.error("Failed to open calendar", error);
+        } finally {
+            setIsOpening(false);
+        }
+    };
+
+    return (
+        <Button disabled={isOpening} onClick={handleBookCall} type="button">
+            {isOpening ? "Opening calendar…" : "Book a call"}
+        </Button>
+    );
+};

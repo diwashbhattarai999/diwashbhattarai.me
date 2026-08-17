@@ -35,13 +35,13 @@ export const SkillsPage = () => (
                                 className="flex flex-col items-center justify-center rounded-lg border border-input bg-muted/50 p-4"
                                 key={skill.name}
                             >
-                                <div className="mb-2 size-10">
+                                <div className="relative mb-2 size-10">
                                     <Image
                                         alt=""
-                                        className="size-full object-contain"
-                                        height={40}
+                                        className="object-contain"
+                                        fill
+                                        sizes="40px"
                                         src={skill.icon || "/placeholder.svg"}
-                                        width={40}
                                     />
                                 </div>
                                 <span className="text-center text-secondary-foreground text-sm">

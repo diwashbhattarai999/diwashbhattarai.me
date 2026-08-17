@@ -5,10 +5,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
     output: "standalone",
 
-    // Experimental features for Next.js 16.1
     experimental: {
-        // Better tree-shaking for large icon/utility libraries
-        optimizePackageImports: ["lucide-react", "date-fns", "recharts", "@base-ui/react"],
+        // Inline the Tailwind stylesheet so first paint is not blocked on a CSS request.
+        inlineCss: true,
+        optimizePackageImports: ["lucide-react", "framer-motion"],
     },
 
     // Image optimization for external images (GitHub avatars)

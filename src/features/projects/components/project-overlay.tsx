@@ -45,13 +45,13 @@ export const ProjectOverlay = ({ project, position }: { project: Project; positi
                         )}
                     </div>
                 </div>
-                <div className="relative h-75 overflow-hidden rounded-xl">
+                <div className="relative h-75 w-full overflow-hidden rounded-xl">
                     <Image
                         alt={project.title}
-                        className="size-full object-cover object-top transition-all duration-700"
-                        height={500}
+                        className="object-cover object-top transition-all duration-700"
+                        fill
+                        sizes="(min-width: 1280px) 50vw, 90vw"
                         src={project.image || "/placeholder.svg"}
-                        width={500}
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
                 </div>

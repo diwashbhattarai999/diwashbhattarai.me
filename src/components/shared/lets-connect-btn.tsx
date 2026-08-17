@@ -1,48 +1,21 @@
-"use client";
-
 import { getCalApi } from "@calcom/embed-react";
-import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-
-interface LetsConnectButtonProps {
-    children?: React.ReactNode;
-    className?: string;
-    config?: string;
+interface OpenCalModalOptions {
     link: string;
     namespace: string;
 }
 
-export const LetsConnectButton: React.FC<LetsConnectButtonProps> = ({
-    children,
-    namespace,
-    link,
-    config = '{"layout":"month_view"}',
-    className,
-}) => {
-    const [isCalApiReady, setIsCalApiReady] = useState(false);
+/**
+ * Loads the Cal.com embed API and opens the booking modal.
+ *
+ * @param options - Cal.com event link and namespace.
+ */
+export const openCalModal = async ({ link, namespace }: OpenCalModalOptions): Promise<void> => {
+    const cal = await getCalApi({ namespace });
 
-    useEffect(() => {
-        // Initialize Cal.com API
-        getCalApi({ namespace })
-            .then((cal) => {
-                cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
-                setIsCalApiReady(true);
-            })
-            .catch((error) => {
-                console.error("Failed to initialize Cal.com API", error);
-            });
-    }, [namespace]);
-
-    return (
-        <Button
-            className={className}
-            data-cal-config={config}
-            data-cal-link={link}
-            data-cal-namespace={namespace}
-            disabled={!isCalApiReady}
-        >
-            {isCalApiReady ? children || `Let's Connect` : "Loading..."}
-        </Button>
-    );
+    cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
+    cal("modal", {
+        calLink: link,
+        config: { layout: "month_view" },
+    });
 };

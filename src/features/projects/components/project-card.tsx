@@ -12,20 +12,21 @@ import { ExternalLinkButton } from "./external-link-button";
 import { ProjectOverlay } from "./project-overlay";
 import { ProjectTags } from "./project-tags";
 
+interface ProjectCardProps {
+    headingLevel?: "h2" | "h3";
+    index: number;
+    isHovered: boolean;
+    onHover: (id: string | null) => void;
+    project: Project;
+}
+
 export const ProjectCard = ({
     project,
     onHover,
     isHovered,
     index,
     headingLevel: Heading = "h3",
-}: {
-    project: Project;
-    headingLevel?: "h2" | "h3";
-    // eslint-disable-next-line no-unused-vars
-    onHover: (id: string | null) => void;
-    isHovered: boolean;
-    index: number;
-}) => {
+}: ProjectCardProps) => {
     const isMobile = useIsMobile();
     const cardRef = React.useRef<HTMLDivElement>(null);
     const [position, setPosition] = React.useState<"top" | "bottom">("top");
@@ -57,13 +58,13 @@ export const ProjectCard = ({
         >
             <div className="relative flex w-full flex-col gap-4 md:flex-row md:items-center md:gap-6">
                 <Link href={ROUTES.PROJECT(project.id)}>
-                    <div className="mb-4 h-64 w-full overflow-hidden rounded-xl md:hidden">
+                    <div className="relative mb-4 h-64 w-full overflow-hidden rounded-xl md:hidden">
                         <Image
                             alt={project.title}
-                            className="size-full object-cover object-top"
-                            height={800}
+                            className="object-cover object-top"
+                            fill
+                            sizes="100vw"
                             src={project.image || "/placeholder.svg"}
-                            width={800}
                         />
                     </div>
 

@@ -23,6 +23,12 @@
   },
   "license": "MIT",
   "type": "module",
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4"
+  ],
   "scripts": {
     "clean": "rm -rf .next playwright-report test-results",
     "dev": "next dev",
