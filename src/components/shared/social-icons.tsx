@@ -1,6 +1,5 @@
 "use client";
 
-import BlurFade from "@/components/animations/blur-fade";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { SOCIALS_LINKS } from "@/features/footer/constants/social-links.constants";
 import { cn } from "@/lib/utils";
@@ -20,7 +19,7 @@ export const SocialIcons = ({ className, iconClassName, titles }: SocialIconsPro
     const links = titles ? SOCIALS_LINKS.filter((item) => titles.includes(item.title)) : SOCIALS_LINKS;
 
     return (
-        <BlurFade className={cn("flex gap-2", className)} delay={0.1}>
+        <div className={cn("flex animate-blur-fade gap-2", className)} style={{ animationDelay: "0.14s" }}>
             <TooltipProvider>
                 {links.map(({ Icon, link, title }) => (
                     <Tooltip key={title}>
@@ -39,6 +38,6 @@ export const SocialIcons = ({ className, iconClassName, titles }: SocialIconsPro
                     </Tooltip>
                 ))}
             </TooltipProvider>
-        </BlurFade>
+        </div>
     );
 };

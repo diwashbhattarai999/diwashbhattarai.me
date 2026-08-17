@@ -21,15 +21,20 @@ export const BlogsPage = () => {
                 ]}
             />
             <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="font-bold text-3xl">Blog</h1>
-                    <SectionSubTitle className="mt-2 mb-8">
-                        Insights, tutorials, and thoughts on web development
-                    </SectionSubTitle>
-                </div>
+                <BlurFade delay={0.04}>
+                    <div>
+                        <h1 className="font-bold text-3xl">Blog</h1>
+                        <SectionSubTitle className="mt-2 mb-8">
+                            Insights, tutorials, and thoughts on web development
+                        </SectionSubTitle>
+                    </div>
+                </BlurFade>
 
-                {/* Total posts count */}
-                <div className="font-medium text-lg text-muted-foreground">{posts.length} total posts</div>
+                <BlurFade delay={0.08}>
+                    <div className="font-medium text-lg text-muted-foreground">
+                        {posts.length} total posts
+                    </div>
+                </BlurFade>
             </div>
 
             <div className="space-y-8">

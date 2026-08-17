@@ -179,6 +179,24 @@ body {
     }
 }
 
+@keyframes blur-fade-in {
+    from {
+        opacity: 0;
+        filter: blur(6px);
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+@utility animate-blur-fade {
+    animation: blur-fade-in 0.4s ease-out both;
+}
+
 @layer components {
     .line-glow {
         @apply via-primary/20 absolute top-1/2 left-0 h-1/2 w-px -translate-y-1/2 bg-linear-to-b from-transparent to-transparent;

@@ -1,61 +1,22 @@
-"use client";
-
-import { AnimatePresence, motion, useInView, type Variants } from "framer-motion";
-import { useRef } from "react";
+import { cn } from "@/lib/utils";
 
 interface BlurFadeProps {
-    blur?: string;
     children: React.ReactNode;
     className?: string;
     delay?: number;
-    duration?: number;
-    inView?: boolean;
-
-    inViewMargin?: `${number}${"px" | "%"}`;
-    variant?: {
-        hidden: { y: number };
-        visible: { y: number };
-    };
-    yOffset?: number;
 }
-const BlurFade = ({
-    children,
-    className,
-    variant,
-    duration = 0.4,
-    delay = 0,
-    yOffset = 6,
-    inView = false,
-    inViewMargin = "-50px",
-    blur = "6px",
-}: BlurFadeProps) => {
-    const ref = useRef(null);
-    const inViewResult = useInView(ref, { margin: inViewMargin, once: true });
-    const isInView = !inView || inViewResult;
-    const defaultVariants: Variants = {
-        hidden: { filter: `blur(${blur})`, opacity: 0, y: yOffset },
-        visible: { filter: "blur(0px)", opacity: 1, y: -yOffset },
-    };
-    const combinedVariants = variant || defaultVariants;
-    return (
-        <AnimatePresence>
-            <motion.div
-                animate={isInView ? "visible" : "hidden"}
-                className={className}
-                exit="hidden"
-                initial="hidden"
-                ref={ref}
-                transition={{
-                    delay: 0.04 + delay,
-                    duration,
-                    ease: "easeOut",
-                }}
-                variants={combinedVariants}
-            >
-                {children}
-            </motion.div>
-        </AnimatePresence>
-    );
-};
+
+/**
+ * Server-rendered entrance animation using CSS instead of a client motion tree.
+ *
+ * @param children - Content to reveal.
+ * @param className - Optional extra classes on the wrapper.
+ * @param delay - Additional delay in seconds after the shared 40ms offset.
+ */
+const BlurFade = ({ children, className, delay = 0 }: BlurFadeProps) => (
+    <div className={cn("animate-blur-fade", className)} style={{ animationDelay: `${0.04 + delay}s` }}>
+        {children}
+    </div>
+);
 
 export default BlurFade;

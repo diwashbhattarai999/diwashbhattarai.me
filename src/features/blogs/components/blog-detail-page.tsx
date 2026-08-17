@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 import BlurFade from "@/components/animations/blur-fade";
-import BlurFadeText from "@/components/animations/blur-fade-text";
 import { JsonLd } from "@/components/shared/json-ld";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
 import { Badge } from "@/components/ui/badge";
@@ -63,12 +62,12 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
                 </Link>
             </BlurFade> */}
 
-            <BlurFadeText
-                className="font-bold text-3xl leading-tight sm:text-4xl"
-                delay={0.04}
-                text={frontMatter.title}
-                yOffset={8}
-            />
+            <h1
+                className="animate-blur-fade font-bold text-3xl leading-tight sm:text-4xl"
+                style={{ animationDelay: "0.04s" }}
+            >
+                {frontMatter.title}
+            </h1>
 
             <BlurFade delay={0.08}>
                 <div className="flex items-center gap-4">
@@ -123,10 +122,6 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
                 </BlurFade>
             </div>
 
-            {/*
-              Do not wrap MDX in BlurFade: filter/blur on large articles (many CodeBlocks)
-              keeps content at opacity 0 or stalls the animation in the browser.
-            */}
             <BlurFade delay={0.2}>
                 <article className="prose xl:prose-lg dark:prose-invert prose-code:wrap-break-word [&_pre]:wrap-break-word mt-8 w-full min-w-0 max-w-full prose-pre:max-w-full overflow-x-auto prose-pre:overflow-x-auto prose-hr:border-input md:max-w-none [&_pre]:whitespace-pre-wrap">
                     <MDXRemote components={{ CodeBlock }} options={{ blockJS: false }} source={content} />

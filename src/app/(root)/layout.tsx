@@ -1,3 +1,4 @@
+import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { CustomCursor } from "@/components/shared/custom-cursor";
 import { SectionSeperator } from "@/components/shared/section-items";
 import { SiteFooter } from "@/features/footer/components/site-footer";
@@ -12,7 +13,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <main className="relative flex h-full min-h-screen flex-col overflow-hidden">
+        <div className="relative flex h-full min-h-screen flex-col overflow-hidden">
+            <ScrollToTop />
             <CustomCursor />
             <div className="max-container h-full">
                 <div className="mx-2 h-full border-input border-x border-dashed">
@@ -22,11 +24,11 @@ export default function RootLayout({
 
             <SectionSeperator />
 
-            <div className="max-container flex size-full min-w-0 flex-1 overflow-x-hidden">
+            <main className="max-container flex size-full min-w-0 flex-1 overflow-x-hidden">
                 <div className="mx-2 min-w-0 flex-1 overflow-x-hidden border-input border-x border-dashed">
                     {children}
                 </div>
-            </div>
+            </main>
 
             <SectionSeperator />
 
@@ -35,6 +37,6 @@ export default function RootLayout({
                     <SiteFooter />
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

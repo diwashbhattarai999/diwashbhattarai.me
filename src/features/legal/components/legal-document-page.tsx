@@ -91,21 +91,23 @@ export const LegalDocumentPage = ({ document, path }: LegalDocumentPageProps) =>
             </div>
 
             {relatedLinks.length > 0 ? (
-                <nav aria-label="Related legal pages" className="mt-12 max-w-3xl">
-                    <p className="mb-3 font-medium text-sm">Related</p>
-                    <ul className="flex flex-wrap gap-2">
-                        {relatedLinks.map((link) => (
-                            <li key={link.href}>
-                                <Link
-                                    className="inline-flex rounded-full border border-input/50 bg-card/50 px-3 py-1.5 text-muted-foreground text-sm transition-colors hover:border-primary/40 hover:text-primary"
-                                    href={link.href}
-                                >
-                                    {link.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
+                <BlurFade delay={0.16}>
+                    <nav aria-label="Related legal pages" className="mt-12 max-w-3xl">
+                        <p className="mb-3 font-medium text-sm">Related</p>
+                        <ul className="flex flex-wrap gap-2">
+                            {relatedLinks.map((link) => (
+                                <li key={link.href}>
+                                    <Link
+                                        className="inline-flex rounded-full border border-input/50 bg-card/50 px-3 py-1.5 text-muted-foreground text-sm transition-colors hover:border-primary/40 hover:text-primary"
+                                        href={link.href}
+                                    >
+                                        {link.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </BlurFade>
             ) : null}
         </SectionWrapper>
     );

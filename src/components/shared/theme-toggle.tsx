@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { MoonStar, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useCallback } from "react";
@@ -12,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * A component that allows the user to toggle between light and dark themes.
+ *
  * @returns The theme toggle component.
  */
 export const ThemeToggle = ({ className, iconClassName }: { className?: string; iconClassName?: string }) => {
@@ -23,7 +23,9 @@ export const ThemeToggle = ({ className, iconClassName }: { className?: string; 
     }, [isDark, setTheme]);
 
     const { isMounted } = useIsMounted();
-    if (!isMounted) return null;
+    if (!isMounted) {
+        return null;
+    }
 
     return (
         <TooltipProvider>
@@ -35,31 +37,20 @@ export const ThemeToggle = ({ className, iconClassName }: { className?: string; 
                         size="icon"
                         variant="ghost"
                     >
-                        <AnimatePresence mode="wait">
-                            {isDark ? (
-                                <motion.div
-                                    animate={{ rotate: 0, scale: 1 }}
-                                    className="absolute"
-                                    exit={{ rotate: -90, scale: 0 }}
-                                    initial={{ rotate: 90, scale: 0 }}
-                                    key="dark"
-                                    transition={{ duration: 0.1, ease: "easeInOut" }}
-                                >
-                                    <MoonStar className={cn("size-5", iconClassName)} />
-                                </motion.div>
-                            ) : (
-                                <motion.div
-                                    animate={{ rotate: 0, scale: 1 }}
-                                    className="absolute"
-                                    exit={{ rotate: 90, scale: 0 }}
-                                    initial={{ rotate: -90, scale: 0 }}
-                                    key="light"
-                                    transition={{ duration: 0.1, ease: "easeInOut" }}
-                                >
-                                    <Sun className={cn("size-5", iconClassName)} />
-                                </motion.div>
+                        <Sun
+                            aria-hidden
+                            className={cn(
+                                "size-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0",
+                                iconClassName
                             )}
-                        </AnimatePresence>
+                        />
+                        <MoonStar
+                            aria-hidden
+                            className={cn(
+                                "absolute size-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100",
+                                iconClassName
+                            )}
+                        />
                         <span className="sr-only">Toggle theme</span>
                     </Button>
                 </TooltipTrigger>

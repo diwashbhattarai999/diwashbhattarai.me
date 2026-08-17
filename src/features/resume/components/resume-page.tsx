@@ -1,6 +1,7 @@
 import { Download } from "lucide-react";
 import Link from "next/link";
 
+import BlurFade from "@/components/animations/blur-fade";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
 import { SectionWrapper } from "@/components/shared/section-items";
 import { buttonVariants } from "@/components/ui/button";
@@ -29,91 +30,108 @@ export const ResumePage = () => (
             ]}
         />
 
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-                <p className="text-primary">{ABOUT_ME.headline}</p>
-                <h1 className="mt-2 font-bold text-4xl">{ABOUT_ME.name}</h1>
+        <BlurFade delay={0.04}>
+            <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p className="text-primary">{ABOUT_ME.headline}</p>
+                    <h1 className="mt-2 font-bold text-4xl">{ABOUT_ME.name}</h1>
+                </div>
+                <a
+                    className={cn(buttonVariants({ variant: "outline" }))}
+                    href={ROUTES.RESUME_PDF}
+                    rel="noopener noreferrer"
+                >
+                    <Download className="size-4" />
+                    Download PDF resume
+                </a>
             </div>
-            <a
-                className={cn(buttonVariants({ variant: "outline" }))}
-                href={ROUTES.RESUME_PDF}
-                rel="noopener noreferrer"
-            >
-                <Download className="size-4" />
-                Download PDF resume
-            </a>
-        </div>
+        </BlurFade>
 
-        <section className="mb-10">
-            <h2 className="mb-3 font-semibold text-xl">Professional summary</h2>
-            <p className="max-w-3xl text-muted-foreground">{ABOUT_ME.description[0]}</p>
-        </section>
+        <BlurFade delay={0.08}>
+            <section className="mb-10">
+                <h2 className="mb-3 font-semibold text-xl">Professional summary</h2>
+                <p className="max-w-3xl text-muted-foreground">{ABOUT_ME.description[0]}</p>
+            </section>
+        </BlurFade>
 
-        <section className="mb-10">
-            <h2 className="mb-4 font-semibold text-xl">Experience</h2>
-            <ol className="space-y-6">
-                {EXPERIENCE_DETAILS.map((experience) => (
-                    <li key={experience.slug}>
-                        <Link
-                            className="font-medium hover:text-primary"
-                            href={ROUTES.EXPERIENCE_DETAIL(experience.slug)}
-                        >
-                            {experience.title} · {experience.company}
-                        </Link>
-                        <p className="text-muted-foreground text-sm">{experience.duration}</p>
-                        <p className="mt-2 text-muted-foreground">
-                            {getExperienceSummary(experience.description)}
+        <BlurFade delay={0.12}>
+            <section className="mb-10">
+                <h2 className="mb-4 font-semibold text-xl">Experience</h2>
+                <ol className="space-y-6">
+                    {EXPERIENCE_DETAILS.map((experience) => (
+                        <li key={experience.slug}>
+                            <Link
+                                className="font-medium hover:text-primary"
+                                href={ROUTES.EXPERIENCE_DETAIL(experience.slug)}
+                            >
+                                {experience.title} · {experience.company}
+                            </Link>
+                            <p className="text-muted-foreground text-sm">{experience.duration}</p>
+                            <p className="mt-2 text-muted-foreground">
+                                {getExperienceSummary(experience.description)}
+                            </p>
+                        </li>
+                    ))}
+                </ol>
+            </section>
+        </BlurFade>
+
+        <BlurFade delay={0.16}>
+            <section className="mb-10">
+                <h2 className="mb-4 font-semibold text-xl">Projects</h2>
+                <ul className="space-y-3">
+                    {PROJECTS.slice(0, 5).map((project) => (
+                        <li key={project.id}>
+                            <Link
+                                className="font-medium hover:text-primary"
+                                href={ROUTES.PROJECT(project.id)}
+                            >
+                                {project.title}
+                            </Link>
+                            <p className="text-muted-foreground text-sm">{project.description}</p>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </BlurFade>
+
+        <BlurFade delay={0.2}>
+            <section className="mb-10">
+                <h2 className="mb-4 font-semibold text-xl">Technical skills</h2>
+                <div className="space-y-3">
+                    {SKILLS.map((category) => (
+                        <p key={category.title}>
+                            <span className="font-medium">{category.title}: </span>
+                            <span className="text-muted-foreground">
+                                {category.skills.map((skill) => skill.name).join(" · ")}
+                            </span>
                         </p>
-                    </li>
-                ))}
-            </ol>
-        </section>
+                    ))}
+                </div>
+            </section>
+        </BlurFade>
 
-        <section className="mb-10">
-            <h2 className="mb-4 font-semibold text-xl">Projects</h2>
-            <ul className="space-y-3">
-                {PROJECTS.slice(0, 5).map((project) => (
-                    <li key={project.id}>
-                        <Link className="font-medium hover:text-primary" href={ROUTES.PROJECT(project.id)}>
-                            {project.title}
-                        </Link>
-                        <p className="text-muted-foreground text-sm">{project.description}</p>
-                    </li>
-                ))}
-            </ul>
-        </section>
+        <BlurFade delay={0.24}>
+            <section>
+                <h2 className="mb-4 font-semibold text-xl">Education</h2>
+                <ul className="space-y-3">
+                    {EDUCATION_DETAILS.map((education) => (
+                        <li key={education.id}>
+                            <p className="font-medium">{education.degree}</p>
+                            <p className="text-muted-foreground text-sm">
+                                {education.institution} · {education.duration}
+                            </p>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </BlurFade>
 
-        <section className="mb-10">
-            <h2 className="mb-4 font-semibold text-xl">Technical skills</h2>
-            <div className="space-y-3">
-                {SKILLS.map((category) => (
-                    <p key={category.title}>
-                        <span className="font-medium">{category.title}: </span>
-                        <span className="text-muted-foreground">
-                            {category.skills.map((skill) => skill.name).join(" · ")}
-                        </span>
-                    </p>
-                ))}
-            </div>
-        </section>
-
-        <section>
-            <h2 className="mb-4 font-semibold text-xl">Education</h2>
-            <ul className="space-y-3">
-                {EDUCATION_DETAILS.map((education) => (
-                    <li key={education.id}>
-                        <p className="font-medium">{education.degree}</p>
-                        <p className="text-muted-foreground text-sm">
-                            {education.institution} · {education.duration}
-                        </p>
-                    </li>
-                ))}
-            </ul>
-        </section>
-
-        <p className="mt-10 text-muted-foreground text-sm">
-            {siteConfig.contactEmail} · {siteConfig.social.github.replace("https://", "")} ·{" "}
-            {siteConfig.location}
-        </p>
+        <BlurFade delay={0.28}>
+            <p className="mt-10 text-muted-foreground text-sm">
+                {siteConfig.contactEmail} · {siteConfig.social.github.replace("https://", "")} ·{" "}
+                {siteConfig.location}
+            </p>
+        </BlurFade>
     </SectionWrapper>
 );

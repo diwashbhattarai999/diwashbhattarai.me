@@ -2,7 +2,6 @@ import { type LucideIcon, MoveRight } from "lucide-react";
 import Link from "next/link";
 
 import BlurFade from "@/components/animations/blur-fade";
-import BlurFadeText from "@/components/animations/blur-fade-text";
 import { BlinkingCircle } from "@/components/shared/blinking-circle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ROUTES } from "@/configs/routes";
@@ -22,8 +21,11 @@ interface SectionTitleProps {
  * @param as - Heading level. Use `h1` on dedicated listing pages and `h2` on the homepage.
  */
 export const SectionTitle = ({ as: Heading = "h2", children, className }: SectionTitleProps) => (
-    <Heading className={cn("relative font-bold", className)}>
-        <BlurFadeText className="text-3xl" delay={0.08} text={children} />
+    <Heading
+        className={cn("relative animate-blur-fade font-bold text-3xl", className)}
+        style={{ animationDelay: "0.08s" }}
+    >
+        {children}
 
         <span
             aria-hidden="true"
@@ -35,7 +37,9 @@ export const SectionTitle = ({ as: Heading = "h2", children, className }: Sectio
 );
 
 export const SectionSubTitle = ({ children, className }: { children: string; className?: string }) => (
-    <BlurFadeText className={cn("text-primary", className)} delay={0.1} text={children} />
+    <p className={cn("animate-blur-fade text-primary", className)} style={{ animationDelay: "0.1s" }}>
+        {children}
+    </p>
 );
 
 interface ISectionProps {

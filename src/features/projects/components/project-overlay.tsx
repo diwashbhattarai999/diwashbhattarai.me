@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -59,11 +58,9 @@ export const ProjectHoverPreview = ({ project, anchor }: ProjectHoverPreviewProp
     }
 
     return createPortal(
-        <motion.div
-            animate={{ top: layout.top }}
-            className="pointer-events-none fixed z-40 overflow-hidden rounded-xl shadow-2xl shadow-black/40"
-            style={{ height: PREVIEW_HEIGHT, right: layout.right, width: PREVIEW_WIDTH }}
-            transition={{ damping: 42, mass: 0.7, stiffness: 520, type: "spring" }}
+        <div
+            className="pointer-events-none fixed z-40 overflow-hidden rounded-xl shadow-2xl shadow-black/40 transition-[top] duration-200 ease-out"
+            style={{ height: PREVIEW_HEIGHT, right: layout.right, top: layout.top, width: PREVIEW_WIDTH }}
         >
             <Image
                 alt={project.title}
@@ -74,7 +71,7 @@ export const ProjectHoverPreview = ({ project, anchor }: ProjectHoverPreviewProp
                 src={project.image}
                 width={PREVIEW_WIDTH}
             />
-        </motion.div>,
+        </div>,
         document.body
     );
 };

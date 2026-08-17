@@ -26,17 +26,19 @@ export const HtmlSitemapPage = () => {
                 ]}
             />
 
-            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-                <div>
-                    <h1 className="font-bold text-3xl">Sitemap</h1>
-                    <p className="mt-2 max-w-2xl text-muted-foreground">
-                        A full list of pages on this site, grouped by section.
-                    </p>
+            <BlurFade delay={0.04}>
+                <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+                    <div>
+                        <h1 className="font-bold text-3xl">Sitemap</h1>
+                        <p className="mt-2 max-w-2xl text-muted-foreground">
+                            A full list of pages on this site, grouped by section.
+                        </p>
+                    </div>
+                    <Badge variant="secondary">
+                        {groups.reduce((total, group) => total + group.links.length, 0)} pages
+                    </Badge>
                 </div>
-                <Badge variant="secondary">
-                    {groups.reduce((total, group) => total + group.links.length, 0)} pages
-                </Badge>
-            </div>
+            </BlurFade>
 
             <div className="columns-1 gap-4 md:columns-2 xl:columns-3">
                 {groups.map((group, index) => {

@@ -1,6 +1,7 @@
 import { GraduationCap } from "lucide-react";
 import Link from "next/link";
 
+import BlurFade from "@/components/animations/blur-fade";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
 import { SectionCard, SectionWrapper } from "@/components/shared/section-items";
 import { ROUTES } from "@/configs/routes";
@@ -18,10 +19,13 @@ export const EducationPage = () => (
                 { label: "Education", path: ROUTES.EDUCATION },
             ]}
         />
-        <h1 className="mb-4 font-bold text-3xl">Education</h1>
-        <p className="mb-8 max-w-2xl text-muted-foreground">
-            Academic background supporting Diwash Bhattarai&apos;s work as a full stack software developer.
-        </p>
+        <BlurFade delay={0.04}>
+            <h1 className="mb-4 font-bold text-3xl">Education</h1>
+            <p className="mb-8 max-w-2xl text-muted-foreground">
+                Academic background supporting Diwash Bhattarai&apos;s work as a full stack software
+                developer.
+            </p>
+        </BlurFade>
         <div className="grid gap-8">
             {EDUCATION_DETAILS.map((education) => (
                 <SectionCard

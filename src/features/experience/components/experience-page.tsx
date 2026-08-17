@@ -1,3 +1,4 @@
+import BlurFade from "@/components/animations/blur-fade";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
 import { SectionWrapper } from "@/components/shared/section-items";
 import { ROUTES } from "@/configs/routes";
@@ -15,7 +16,9 @@ export const ExperiencePage = () => (
                 { label: "Experience", path: ROUTES.EXPERIENCE },
             ]}
         />
-        <h1 className="mb-8 font-bold text-3xl">Experience</h1>
+        <BlurFade delay={0.04}>
+            <h1 className="mb-8 font-bold text-3xl">Experience</h1>
+        </BlurFade>
         <ExperienceList />
     </SectionWrapper>
 );

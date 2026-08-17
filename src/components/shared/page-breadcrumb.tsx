@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Fragment } from "react";
 
+import BlurFade from "@/components/animations/blur-fade";
 import { JsonLd } from "@/components/shared/json-ld";
 import {
     Breadcrumb,
@@ -42,24 +43,26 @@ export const PageBreadcrumb = ({ items, className }: PageBreadcrumbProps) => {
                     }))
                 )}
             />
-            <Breadcrumb className={cn(className)}>
-                <BreadcrumbList>
-                    {items.map((item, index) => (
-                        <Fragment key={item.path}>
-                            <BreadcrumbItem>
-                                {index < lastIndex && item.href ? (
-                                    <BreadcrumbLink asChild>
-                                        <Link href={item.href}>{item.label}</Link>
-                                    </BreadcrumbLink>
-                                ) : (
-                                    <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                                )}
-                            </BreadcrumbItem>
-                            {index < lastIndex ? <BreadcrumbSeparator /> : null}
-                        </Fragment>
-                    ))}
-                </BreadcrumbList>
-            </Breadcrumb>
+            <BlurFade delay={0.02}>
+                <Breadcrumb className={cn(className)}>
+                    <BreadcrumbList>
+                        {items.map((item, index) => (
+                            <Fragment key={item.path}>
+                                <BreadcrumbItem>
+                                    {index < lastIndex && item.href ? (
+                                        <BreadcrumbLink asChild>
+                                            <Link href={item.href}>{item.label}</Link>
+                                        </BreadcrumbLink>
+                                    ) : (
+                                        <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                                    )}
+                                </BreadcrumbItem>
+                                {index < lastIndex ? <BreadcrumbSeparator /> : null}
+                            </Fragment>
+                        ))}
+                    </BreadcrumbList>
+                </Breadcrumb>
+            </BlurFade>
         </>
     );
 };

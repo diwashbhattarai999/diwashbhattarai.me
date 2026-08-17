@@ -28,13 +28,13 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
     );
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
-    return <div className={cn("font-semibold leading-none", className)} data-slot="card-title" {...props} />;
+function CardTitle({ className, ...props }: React.ComponentProps<"h3">) {
+    return <h3 className={cn("font-semibold leading-none", className)} data-slot="card-title" {...props} />;
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+function CardDescription({ className, ...props }: React.ComponentProps<"p">) {
     return (
-        <div
+        <p
             className={cn("text-muted-foreground text-sm", className)}
             data-slot="card-description"
             {...props}

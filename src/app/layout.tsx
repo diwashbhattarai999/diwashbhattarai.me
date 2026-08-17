@@ -1,7 +1,6 @@
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { League_Spartan } from "next/font/google";
-import { Toaster } from "sonner";
 
 import { Providers } from "@/components/layout/providers";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -27,10 +26,7 @@ export default function LocaleLayout({ children }: LocaleLayoutProps) {
             <body className={`${leagueSpartan.className} antialiased`}>
                 <SpeedInsights />
                 <JsonLd data={getSiteJsonLd()} />
-                <Providers>
-                    {children}
-                    <Toaster position="bottom-right" richColors />
-                </Providers>
+                <Providers>{children}</Providers>
             </body>
         </html>
     );

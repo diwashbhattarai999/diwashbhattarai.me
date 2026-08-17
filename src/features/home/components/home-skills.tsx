@@ -1,3 +1,4 @@
+import BlurFade from "@/components/animations/blur-fade";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { ROUTES } from "@/configs/routes";
 import { SKILLS } from "@/features/skills/constants/skills.constants";
@@ -16,8 +17,8 @@ export function HomeSkills() {
             title="Technical expertise"
         >
             <div className="grid gap-6 sm:grid-cols-2">
-                {SKILLS.map((category) => (
-                    <div key={category.title}>
+                {SKILLS.map((category, index) => (
+                    <BlurFade delay={0.04 + index * 0.05} key={category.title}>
                         <h3 className="mb-2 font-medium">{category.title}</h3>
                         <p className="text-muted-foreground text-sm">
                             {category.skills
@@ -25,7 +26,7 @@ export function HomeSkills() {
                                 .map((skill) => skill.name)
                                 .join(" · ")}
                         </p>
-                    </div>
+                    </BlurFade>
                 ))}
             </div>
         </SectionHeading>

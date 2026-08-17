@@ -1,3 +1,4 @@
+import BlurFade from "@/components/animations/blur-fade";
 import { SectionTitle, SectionWrapper } from "@/components/shared/section-items";
 import { SectionViewAllButton } from "@/components/shared/section-view-all-button";
 
@@ -25,9 +26,11 @@ export const SectionHeading = ({
         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <SectionTitle>{title}</SectionTitle>
             {actionHref && actionLabel ? (
-                <SectionViewAllButton href={actionHref} label={actionLabel} />
+                <BlurFade delay={0.08}>
+                    <SectionViewAllButton href={actionHref} label={actionLabel} />
+                </BlurFade>
             ) : null}
         </div>
-        {children}
+        <BlurFade delay={0.1}>{children}</BlurFade>
     </SectionWrapper>
 );

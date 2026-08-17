@@ -1,9 +1,7 @@
-import { AvatarFallback } from "@radix-ui/react-avatar";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -69,19 +67,13 @@ export const BlogCard = ({ post }: BlogCardProps) => {
 
                     <CardFooter className="flex items-center justify-between px-0">
                         <div className="flex items-center gap-2">
-                            <Avatar>
-                                <AvatarImage
-                                    alt={post.author}
-                                    className="object-cover"
-                                    fill
-                                    sizes="32px"
-                                    src={post.profile}
-                                />
-                                <AvatarFallback>
-                                    {post.author.charAt(0).toUpperCase() +
-                                        post.author.charAt(1).toUpperCase()}
-                                </AvatarFallback>
-                            </Avatar>
+                            <Image
+                                alt={post.author}
+                                className="size-8 rounded-full object-cover"
+                                height={32}
+                                src={post.profile}
+                                width={32}
+                            />
                             <span className="font-medium text-sm">{post.author}</span>
                         </div>
 

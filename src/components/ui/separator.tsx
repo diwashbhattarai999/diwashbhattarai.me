@@ -1,27 +1,32 @@
-"use client";
-
-// biome-ignore lint/performance/noNamespaceImport: needed for the separator component
-import * as SeparatorPrimitive from "@radix-ui/react-separator";
-import { forwardRef } from "react";
-
 import { cn } from "@/lib/utils";
 
-const Separator = forwardRef<
-    React.ComponentRef<typeof SeparatorPrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
->(({ className, orientation = "horizontal", decorative = true, ...props }, ref) => (
-    <SeparatorPrimitive.Root
+interface SeparatorProps extends React.ComponentProps<"div"> {
+    decorative?: boolean;
+    orientation?: "horizontal" | "vertical";
+}
+
+/**
+ * Lightweight visual divider that does not require a client Radix primitive.
+ *
+ * @param decorative - When true, the divider is ignored by assistive tech.
+ * @param orientation - Horizontal rule or vertical rule.
+ */
+const Separator = ({
+    className,
+    orientation = "horizontal",
+    decorative = true,
+    ...props
+}: SeparatorProps) => (
+    <div
+        aria-hidden={decorative ? true : undefined}
         className={cn(
             "shrink-0 bg-border",
             orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
             className
         )}
-        decorative={decorative}
-        orientation={orientation}
-        ref={ref}
+        role={decorative ? "none" : "separator"}
         {...props}
     />
-));
-Separator.displayName = SeparatorPrimitive.Root.displayName;
+);
 
 export { Separator };

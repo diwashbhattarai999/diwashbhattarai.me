@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+"use client";
+
 import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,16 +39,16 @@ export const ProjectCard = ({
     }, [onHover]);
 
     return (
-        <motion.div
-            animate={{ opacity: 1, y: 0 }}
+        // Hover on the row only positions a decorative desktop preview; the project link remains the interactive control.
+        // biome-ignore lint/a11y/noNoninteractiveElementInteractions: decorative hover preview
+        // biome-ignore lint/a11y/noStaticElementInteractions: decorative hover preview
+        <div
             className={cn(
                 "group relative flex cursor-pointer flex-col items-start justify-between border-border/40 border-b py-8",
                 isHovered ? "z-10" : "z-0"
             )}
-            initial={{ opacity: 0, y: 20 }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            transition={{ duration: 0.5 }}
         >
             <div className="relative flex w-full flex-col gap-4 md:flex-row md:items-center md:gap-6">
                 <Link href={ROUTES.PROJECT(project.id)}>
@@ -87,6 +88,6 @@ export const ProjectCard = ({
                     {index + 1}
                 </span>
             </div>
-        </motion.div>
+        </div>
     );
 };

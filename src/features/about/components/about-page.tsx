@@ -28,18 +28,22 @@ export const AboutPage = () => {
                     ]}
                 />
 
-                <p className="text-primary">{ABOUT_ME.headline}</p>
-                <h1 className="mt-2 font-bold text-4xl">{ABOUT_ME.name}</h1>
-                <p className="mt-4 text-muted-foreground">
-                    {ABOUT_ME.title}. I specialize in React, Next.js, Node.js, NestJS, and TypeScript, with a
-                    focus on clean architecture, performance, and developer experience.
-                </p>
+                <BlurFade delay={0.04}>
+                    <p className="text-primary">{ABOUT_ME.headline}</p>
+                    <h1 className="mt-2 font-bold text-4xl">{ABOUT_ME.name}</h1>
+                    <p className="mt-4 text-muted-foreground">
+                        {ABOUT_ME.title}. I specialize in React, Next.js, Node.js, NestJS, and TypeScript,
+                        with a focus on clean architecture, performance, and developer experience.
+                    </p>
+                </BlurFade>
 
-                <div className="mt-10 space-y-6 text-muted-foreground leading-relaxed">
-                    {ABOUT_ME.description.map((paragraph) => (
-                        <p key={paragraph.slice(0, 32)}>{paragraph}</p>
-                    ))}
-                </div>
+                <BlurFade delay={0.08}>
+                    <div className="mt-10 space-y-6 text-muted-foreground leading-relaxed">
+                        {ABOUT_ME.description.map((paragraph) => (
+                            <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+                        ))}
+                    </div>
+                </BlurFade>
 
                 <div className="mt-12 grid gap-10">
                     <BlurFade delay={0.08}>
@@ -85,9 +89,11 @@ export const AboutPage = () => {
                     </BlurFade>
                 </div>
 
-                <p className="mt-12 text-muted-foreground text-sm">
-                    {siteConfig.name} · {ABOUT_ME.headline} · {siteConfig.location}
-                </p>
+                <BlurFade delay={0.16}>
+                    <p className="mt-12 text-muted-foreground text-sm">
+                        {siteConfig.name} · {ABOUT_ME.headline} · {siteConfig.location}
+                    </p>
+                </BlurFade>
             </SectionWrapper>
             <SectionSeperator />
             <ContactSection />
