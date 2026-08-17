@@ -19,7 +19,7 @@ export interface Project {
     githubUrl?: string;
     id: string;
     image: StaticImageData;
-    liveUrl: string;
+    liveUrl?: string;
     liveUrls?: ProjectLink[];
     overview: string;
     poweredBy?: string;
