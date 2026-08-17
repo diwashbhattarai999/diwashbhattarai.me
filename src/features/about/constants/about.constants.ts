@@ -1,4 +1,4 @@
-import ProfileImg from "@/assets/images/profile2.png";
+import ProfileImg from "@/assets/images/profile2.webp";
 
 export const ABOUT_ME = {
     name: "Diwash Bhattarai",
