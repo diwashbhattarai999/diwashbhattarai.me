@@ -50,7 +50,7 @@ const nextConfig: NextConfig = {
             { hostname: "api.dicebear.com", protocol: "https" },
         ],
     },
-    output: "standalone",
+    // output: "standalone",
 
     // Strict mode for better development practices
     reactStrictMode: true,
