@@ -35,7 +35,7 @@ export const SkillsPage = () => {
             />
             <BlurFade delay={0.04}>
                 <h1 className="mb-4 font-bold text-3xl">Technical stack</h1>
-                <div className="mb-10 max-w-3xl space-y-4 text-muted-foreground leading-relaxed">
+                <div className="mb-10 space-y-4 text-muted-foreground leading-relaxed">
                     {SKILLS_INTRO.map((paragraph) => (
                         <p key={paragraph.slice(0, 40)}>{paragraph}</p>
                     ))}
@@ -43,7 +43,7 @@ export const SkillsPage = () => {
             </BlurFade>
 
             <BlurFade delay={0.08}>
-                <section className="mb-12 max-w-3xl space-y-4 text-muted-foreground leading-relaxed">
+                <section className="mb-12 space-y-4 text-muted-foreground leading-relaxed">
                     <h2 className="font-semibold text-2xl text-foreground">
                         How these technologies are used
                     </h2>
@@ -106,7 +106,7 @@ export const SkillsPage = () => {
                                 <category.icon className="size-5 text-primary" />
                                 <h2 className="font-medium text-xl tracking-tight">{category.title}</h2>
                             </div>
-                            <p className="mb-6 max-w-3xl text-muted-foreground leading-relaxed">
+                            <p className="mb-6 text-muted-foreground leading-relaxed">
                                 {category.description}
                             </p>
                             <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -136,7 +136,7 @@ export const SkillsPage = () => {
             </div>
 
             <BlurFade delay={0.32}>
-                <section className="mt-12 max-w-3xl space-y-4">
+                <section className="mt-12 space-y-4">
                     <h2 className="font-semibold text-2xl">Where to see this stack in context</h2>
                     <p className="text-muted-foreground leading-relaxed">
                         Skills without products are just a list. The{" "}
@@ -147,7 +147,11 @@ export const SkillsPage = () => {
                         <Link className={SKILLS_LINK_CLASS} href={ROUTES.EXPERIENCE}>
                             experience
                         </Link>{" "}
-                        pages show the same tools in shipped systems. Academic background is on{" "}
+                        pages show the same tools in shipped systems. I also publish{" "}
+                        <Link className={SKILLS_LINK_CLASS} href={ROUTES.PROJECTS_STARTERS}>
+                            starter templates
+                        </Link>{" "}
+                        for Next.js, TanStack Start, and Node.js / Express. Academic background is on{" "}
                         <Link className={SKILLS_LINK_CLASS} href={ROUTES.EDUCATION}>
                             education
                         </Link>
@@ -184,7 +188,7 @@ export const SkillsPage = () => {
                         <SectionViewAllButton href={ROUTES.ABOUT} label="About Diwash Bhattarai" />
                     </div>
                 </section>
-            </BlurFade>
-        </SectionWrapper>
+        </BlurFade>
+       </SectionWrapper>
     );
 };

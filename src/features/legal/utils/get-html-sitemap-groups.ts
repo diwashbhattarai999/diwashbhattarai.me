@@ -31,6 +31,10 @@ export const getHtmlSitemapGroups = (): SitemapGroup[] => [
         title: "Projects",
     },
     {
+        links: [{ href: ROUTES.PROJECTS_STARTERS, label: "Starters and templates" }],
+        title: "Starters",
+    },
+    {
         links: [
             { href: ROUTES.EXPERIENCE, label: "All experience" },
             ...EXPERIENCE_DETAILS.map((experience) => ({

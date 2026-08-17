@@ -38,4 +38,12 @@ export const WRITING_LINKS = {
         href: ROUTES.BLOG("How-to-scale-apis-with-nodejs"),
         label: "How to scale APIs with Node.js",
     },
+    tanstackDocker: {
+        href: ROUTES.BLOG("Dockerizing-tanstack-start-app"),
+        label: "Dockerizing a TanStack Start app",
+    },
+    tanstackStructure: {
+        href: ROUTES.BLOG("Structuring-production-grade-tanstack-start-app"),
+        label: "Structuring a production-grade TanStack Start app",
+    },
 } as const satisfies Record<string, WritingLink>;

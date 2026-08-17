@@ -18,6 +18,7 @@ import { WRITING_LINKS } from "@/features/blogs/constants/writing-links.constant
 import { ContactSection } from "@/features/contact/components/contact-section";
 import { EDUCATION_DETAILS } from "@/features/education/constants/education.constants";
 import { EXPERIENCE_DETAILS } from "@/features/experience/constants/experience.constants";
+import { STARTER_REPOS } from "@/features/projects/constants/starter-repos.constants";
 import { SKILLS } from "@/features/skills/constants/skills.constants";
 
 const ABOUT_LINK_CLASS = "text-primary underline-offset-4 hover:underline";
@@ -153,6 +154,35 @@ export const AboutPage = () => {
                     <section className="mt-10 space-y-4 text-muted-foreground leading-relaxed">
                         <h2 className="font-semibold text-foreground text-xl">Career focus</h2>
                         <p>{ABOUT_CAREER_FOCUS}</p>
+                    </section>
+                </BlurFade>
+
+                <BlurFade delay={0.19}>
+                    <section className="mt-10">
+                        <h2 className="mb-3 font-semibold text-xl">Starters and templates</h2>
+                        <p className="mb-3 text-muted-foreground leading-relaxed">
+                            I also maintain GitHub templates for the stacks I use as a Next.js developer, a
+                            TanStack Start developer, and a Node.js / Express backend developer. They live on
+                            the{" "}
+                            <Link className={ABOUT_LINK_CLASS} href={ROUTES.PROJECTS_STARTERS}>
+                                projects
+                            </Link>{" "}
+                            page.
+                        </p>
+                        <ul className="space-y-2">
+                            {STARTER_REPOS.map((starter) => (
+                                <li key={starter.id}>
+                                    <a
+                                        className={ABOUT_LINK_CLASS}
+                                        href={starter.githubUrl}
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        {starter.title}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
                     </section>
                 </BlurFade>
 

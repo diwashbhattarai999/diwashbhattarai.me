@@ -10,6 +10,7 @@ export const ROUTES = {
     PRIVACY_POLICY: "/privacy-policy",
     PROJECT: (projectId: string) => `/projects/${projectId}`,
     PROJECTS: "/projects",
+    PROJECTS_STARTERS: "/projects#starters",
     RESUME: "/resume",
     RESUME_PDF: "/resume.pdf",
     SITEMAP: "/sitemap",
