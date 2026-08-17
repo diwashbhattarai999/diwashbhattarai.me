@@ -80,7 +80,11 @@ export const BlogCard = ({ post }: BlogCardProps) => {
                         </div>
 
                         <Button asChild className="group/button hover:bg-primary/10" variant="ghost">
-                            <Link className="flex items-center gap-1" href={ROUTES.BLOG(post.slug)}>
+                            <Link
+                                aria-label={`Read more about ${post.title}`}
+                                className="flex items-center gap-1"
+                                href={ROUTES.BLOG(post.slug)}
+                            >
                                 Read More
                                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/button:translate-x-1" />
                             </Link>
