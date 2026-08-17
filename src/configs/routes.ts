@@ -7,9 +7,12 @@ export const ROUTES = {
     EXPERIENCE: "/experience",
     EXPERIENCE_DETAIL: (slug: string) => `/experience/${slug}`,
     HOME: "/",
+    PRIVACY_POLICY: "/privacy-policy",
     PROJECT: (projectId: string) => `/projects/${projectId}`,
     PROJECTS: "/projects",
     RESUME: "/resume",
     RESUME_PDF: "/resume.pdf",
+    SITEMAP: "/sitemap",
     SKILLS: "/skills",
+    TERMS: "/terms-and-conditions",
 } as const;

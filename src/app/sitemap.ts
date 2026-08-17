@@ -25,6 +25,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { changeFrequency: "monthly" as const, path: ROUTES.SKILLS, priority: 0.6 },
         { changeFrequency: "yearly" as const, path: ROUTES.EDUCATION, priority: 0.5 },
         { changeFrequency: "monthly" as const, path: ROUTES.RESUME, priority: 0.7 },
+        { changeFrequency: "yearly" as const, path: ROUTES.PRIVACY_POLICY, priority: 0.3 },
+        { changeFrequency: "yearly" as const, path: ROUTES.TERMS, priority: 0.3 },
+        { changeFrequency: "monthly" as const, path: ROUTES.SITEMAP, priority: 0.4 },
     ];
 
     const educationRoutes = EDUCATION_DETAILS.map((education) => ({
