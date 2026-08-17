@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import BlurFade from "@/components/animations/blur-fade";
 import {
@@ -12,21 +12,46 @@ import {
 import { SectionViewAllButton } from "@/components/shared/section-view-all-button";
 import { ROUTES } from "@/configs/routes";
 import { PROJECTS } from "@/features/projects/constants/project.constants";
+import type { Project } from "@/features/projects/types/project.types";
 
 import { ProjectCard } from "./project-card";
+import { ProjectHoverPreview } from "./project-overlay";
 
 interface ProjectsSectionProps {
     limit?: number;
     showViewAll?: boolean;
 }
 
+interface HoverState {
+    anchor: HTMLElement;
+    project: Project;
+}
+
 export const ProjectsSection = ({ showViewAll = false, limit }: ProjectsSectionProps) => {
-    const [hoveredId, setHoveredId] = useState<string | null>(null);
+    const [hovered, setHovered] = useState<HoverState | null>(null);
     const displayedProjects = limit ? PROJECTS.slice(0, limit) : PROJECTS;
     const isPreview = Boolean(limit);
 
+    const handleHover = useCallback(
+        (id: string | null, anchor: HTMLElement | null) => {
+            if (!(id && anchor)) {
+                setHovered(null);
+                return;
+            }
+
+            const project = displayedProjects.find((item) => item.id === id);
+            if (!project) {
+                return;
+            }
+
+            setHovered({ project, anchor });
+        },
+        [displayedProjects]
+    );
+
     return (
         <SectionWrapper id="projects">
+            <ProjectHoverPreview anchor={hovered?.anchor ?? null} project={hovered?.project ?? null} />
             <div className="mb-4 flex flex-col gap-2">
                 <div className="flex items-center justify-between gap-4">
                     <SectionTitle as={isPreview ? "h2" : "h1"}>
@@ -47,9 +72,9 @@ export const ProjectsSection = ({ showViewAll = false, limit }: ProjectsSectionP
                             <ProjectCard
                                 headingLevel={isPreview ? "h3" : "h2"}
                                 index={index}
-                                isHovered={hoveredId === project.id}
+                                isHovered={hovered?.project.id === project.id}
                                 key={project.id}
-                                onHover={setHoveredId}
+                                onHover={handleHover}
                                 project={project}
                             />
                             <SectionSeperator />

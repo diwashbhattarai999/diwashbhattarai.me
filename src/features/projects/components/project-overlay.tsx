@@ -1,61 +1,80 @@
+"use client";
+
 import { motion } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 import type { Project } from "@/features/projects/types/project.types";
 import { useIsDesktop } from "@/hooks/use-is-desktop";
 
-import { ExternalLinkButton } from "./external-link-button";
-import { ProjectTags } from "./project-tags";
+const PREVIEW_HEIGHT = 200;
+const PREVIEW_WIDTH = 320;
 
-export const ProjectOverlay = ({ project, position }: { project: Project; position: "top" | "bottom" }) => {
+interface ProjectHoverPreviewProps {
+    anchor: HTMLElement | null;
+    project: Project | null;
+}
+
+const getPreviewLayout = (anchor: HTMLElement) => {
+    const rect = anchor.getBoundingClientRect();
+    const contentRight = Math.max(24, (window.innerWidth - Math.min(window.innerWidth, 1024)) / 2 + 8);
+
+    return {
+        top: rect.top + (rect.height - PREVIEW_HEIGHT) / 2,
+        right: contentRight,
+    };
+};
+
+export const ProjectHoverPreview = ({ project, anchor }: ProjectHoverPreviewProps) => {
     const isDesktop = useIsDesktop();
+    const [mounted, setMounted] = useState(false);
+    const [layout, setLayout] = useState({ top: 0, right: 0 });
 
-    return (
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useLayoutEffect(() => {
+        if (!anchor) {
+            return;
+        }
+
+        const updateLayout = () => {
+            setLayout(getPreviewLayout(anchor));
+        };
+
+        updateLayout();
+        window.addEventListener("scroll", updateLayout, true);
+        window.addEventListener("resize", updateLayout);
+
+        return () => {
+            window.removeEventListener("scroll", updateLayout, true);
+            window.removeEventListener("resize", updateLayout);
+        };
+    }, [anchor]);
+
+    if (!(mounted && isDesktop && project && anchor)) {
+        return null;
+    }
+
+    return createPortal(
         <motion.div
-            animate={{
-                opacity: 1,
-                // biome-ignore lint/style/noNestedTernary: needed for the animation
-                y: isDesktop ? -200 : position === "top" ? -200 : -450,
-                scale: 1,
-            }}
-            className="absolute z-50 mt-2 overflow-hidden rounded-xl border border-border bg-card/95 shadow-2xl backdrop-blur-md xl:w-full xl:max-w-[90vw]"
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            initial={{ opacity: 0, y: 0, scale: 0.95, x: 100 }}
-            style={{ maxWidth: "90vw" }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            animate={{ top: layout.top }}
+            className="pointer-events-none fixed z-40 overflow-hidden rounded-xl shadow-2xl shadow-black/40"
+            style={{ right: layout.right, width: PREVIEW_WIDTH, height: PREVIEW_HEIGHT }}
+            transition={{ type: "spring", stiffness: 520, damping: 42, mass: 0.7 }}
         >
-            <div className="grid grid-cols-1 gap-8 p-8 xl:grid-cols-2">
-                <div className="flex flex-col justify-between gap-4">
-                    <p className="font-bold text-2xl text-foreground">{project.title}</p>
-                    <p className="line-clamp-4 max-w-md text-foreground/80 xl:max-w-full">
-                        {project.description}
-                    </p>
-                    <ProjectTags limit={6} tags={project.tags} />
-                    <div className="mt-6 flex gap-3">
-                        {project.githubUrl && (
-                            <ExternalLinkButton href={project.githubUrl} icon={Github} label="View Code" />
-                        )}
-                        {project.liveUrl && (
-                            <ExternalLinkButton
-                                href={project.liveUrl}
-                                icon={ExternalLink}
-                                label="Live Demo"
-                            />
-                        )}
-                    </div>
-                </div>
-                <div className="relative h-75 w-full overflow-hidden rounded-xl">
-                    <Image
-                        alt={project.title}
-                        className="object-cover object-top transition-all duration-700"
-                        fill
-                        sizes="(min-width: 1280px) 50vw, 90vw"
-                        src={project.image || "/placeholder.svg"}
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
-                </div>
-            </div>
-        </motion.div>
+            <Image
+                alt={project.title}
+                className="size-full object-cover object-top"
+                height={PREVIEW_HEIGHT}
+                key={project.id}
+                sizes={`${PREVIEW_WIDTH}px`}
+                src={project.image}
+                width={PREVIEW_WIDTH}
+            />
+        </motion.div>,
+        document.body
     );
 };

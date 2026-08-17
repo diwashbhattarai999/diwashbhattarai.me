@@ -79,13 +79,16 @@ export const ProjectDetailPage = ({ projectId }: ProjectDetailPageProps) => {
             </div>
 
             <BlurFade delay={0.1}>
-                <div className="relative mb-12 aspect-video overflow-hidden rounded-xl border">
+                <div
+                    className="relative mb-12 w-full overflow-hidden rounded-xl border"
+                    style={{ aspectRatio: `${project.image.width} / ${project.image.height}` }}
+                >
                     <Image
                         alt={project.title}
                         className="object-cover object-top"
                         fill
                         sizes="(min-width: 1024px) 1024px, 100vw"
-                        src={project.image || "/placeholder.svg"}
+                        src={project.image}
                     />
                 </div>
             </BlurFade>
@@ -135,13 +138,21 @@ export const ProjectDetailPage = ({ projectId }: ProjectDetailPageProps) => {
                     {project.screenshots?.map((screenshot, index) => (
                         // biome-ignore lint/suspicious/noArrayIndexKey: index is unique
                         <div className="space-y-2" key={index}>
-                            <div className="relative aspect-video overflow-hidden rounded-xl border">
+                            <div
+                                className="relative w-full overflow-hidden rounded-xl border"
+                                style={{
+                                    aspectRatio:
+                                        typeof screenshot.src === "string"
+                                            ? "16 / 9"
+                                            : `${screenshot.src.width} / ${screenshot.src.height}`,
+                                }}
+                            >
                                 <Image
                                     alt={screenshot.alt}
                                     className="object-cover object-top"
                                     fill
                                     sizes="(min-width: 1024px) 1024px, 100vw"
-                                    src={screenshot.src || "/placeholder.svg"}
+                                    src={screenshot.src}
                                 />
                             </div>
                             <p className="text-center text-sm text-zinc-400">{screenshot.caption}</p>

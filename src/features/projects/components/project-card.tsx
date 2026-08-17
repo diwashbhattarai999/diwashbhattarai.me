@@ -1,22 +1,20 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 import { ROUTES } from "@/configs/routes";
 import type { Project } from "@/features/projects/types/project.types";
-import { useIsMobile } from "@/hooks/use-is-mobile";
+import { cn } from "@/lib/utils";
 
 import { ExternalLinkButton } from "./external-link-button";
-import { ProjectOverlay } from "./project-overlay";
 import { ProjectTags } from "./project-tags";
 
 interface ProjectCardProps {
     headingLevel?: "h2" | "h3";
     index: number;
     isHovered: boolean;
-    onHover: (id: string | null) => void;
+    onHover: (id: string | null, anchor: HTMLElement | null) => void;
     project: Project;
 }
 
@@ -26,75 +24,55 @@ export const ProjectCard = ({
     isHovered,
     index,
     headingLevel: Heading = "h3",
-}: ProjectCardProps) => {
-    const isMobile = useIsMobile();
-    const cardRef = React.useRef<HTMLDivElement>(null);
-    const [position, setPosition] = React.useState<"top" | "bottom">("top");
+}: ProjectCardProps) => (
+    <motion.div
+        animate={{ opacity: 1, y: 0 }}
+        className={cn(
+            "group relative flex cursor-pointer flex-col items-start justify-between border-border/40 border-b py-8",
+            isHovered ? "z-10" : "z-0"
+        )}
+        initial={{ opacity: 0, y: 20 }}
+        onMouseEnter={(event) => onHover(project.id, event.currentTarget)}
+        onMouseLeave={() => onHover(null, null)}
+        transition={{ duration: 0.5 }}
+    >
+        <div className="relative flex w-full flex-col gap-4 md:flex-row md:items-center md:gap-6">
+            <Link href={ROUTES.PROJECT(project.id)}>
+                <Image
+                    alt={project.title}
+                    className="mb-4 h-auto w-full rounded-xl bg-muted/20 md:hidden"
+                    height={project.image.height}
+                    sizes="100vw"
+                    src={project.image}
+                    width={project.image.width}
+                />
 
-    // Check if the card's position
-    React.useEffect(() => {
-        if (cardRef.current) {
-            const { top, bottom } = cardRef.current.getBoundingClientRect();
-
-            const offset = 20;
-
-            if (top < 0) {
-                setPosition("top");
-            } else if (bottom > window.innerHeight - offset) {
-                setPosition("bottom");
-            }
-        }
-    }, []);
-
-    return (
-        <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            className="group relative flex cursor-pointer flex-col items-start justify-between border-border/40 border-b py-8"
-            initial={{ opacity: 0, y: 20 }}
-            onMouseEnter={() => onHover(project.id)}
-            onMouseLeave={() => onHover(null)}
-            ref={cardRef}
-            transition={{ duration: 0.5 }}
-        >
-            <div className="relative flex w-full flex-col gap-4 md:flex-row md:items-center md:gap-6">
-                <Link href={ROUTES.PROJECT(project.id)}>
-                    <div className="relative mb-4 h-64 w-full overflow-hidden rounded-xl md:hidden">
-                        <Image
-                            alt={project.title}
-                            className="object-cover object-top"
-                            fill
-                            sizes="100vw"
-                            src={project.image || "/placeholder.svg"}
-                        />
-                    </div>
-
-                    <Heading className="text-nowrap font-bold text-xl transition-colors group-hover:text-primary">
-                        {project.title}
-                    </Heading>
-
-                    <p className="line-clamp-2 md:hidden">{project.description}</p>
-                </Link>
-                <ProjectTags limit={8} tags={project.tags} />
-
-                <div className="mt-6 flex gap-3 md:hidden">
-                    {project.githubUrl && (
-                        <ExternalLinkButton href={project.githubUrl} icon={Github} label="View Code" />
+                <Heading
+                    className={cn(
+                        "text-nowrap font-bold text-xl transition-colors duration-300",
+                        isHovered ? "text-primary" : "text-foreground group-hover:text-primary"
                     )}
-                    {project.liveUrl && (
-                        <ExternalLinkButton href={project.liveUrl} icon={ExternalLink} label="Live Demo" />
-                    )}
-                </div>
+                >
+                    {project.title}
+                </Heading>
 
-                <span className="absolute top-1/2 right-0 -z-10 hidden -translate-y-1/2 text-7xl text-muted-foreground/5 md:inline">
-                    {index < 9 ? "0" : ""}
-                    {index + 1}
-                </span>
+                <p className="line-clamp-2 md:hidden">{project.description}</p>
+            </Link>
+            <ProjectTags limit={8} tags={project.tags} />
+
+            <div className="mt-6 flex gap-3 md:hidden">
+                {project.githubUrl && (
+                    <ExternalLinkButton href={project.githubUrl} icon={Github} label="View Code" />
+                )}
+                {project.liveUrl && (
+                    <ExternalLinkButton href={project.liveUrl} icon={ExternalLink} label="Live Demo" />
+                )}
             </div>
 
-            {/* Overlay should be inside the hovered ProjectCard */}
-            <AnimatePresence>
-                {!isMobile && isHovered && <ProjectOverlay position={position} project={project} />}
-            </AnimatePresence>
-        </motion.div>
-    );
-};
+            <span className="absolute top-1/2 right-0 -z-10 hidden -translate-y-1/2 text-7xl text-muted-foreground/5 md:inline">
+                {index < 9 ? "0" : ""}
+                {index + 1}
+            </span>
+        </div>
+    </motion.div>
+);
