@@ -33,8 +33,8 @@ export const SiteNavbar = () => {
                 "fixed top-5 left-1/2 z-40 h-[4rem] -translate-x-1/2 rounded-full border border-border/50 bg-background/60 shadow-lg backdrop-blur md:h-auto":
                     scrolled,
             })}
-            initial={{ y: 0, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+            initial={{ opacity: 0, y: 0 }}
+            transition={{ damping: 20, stiffness: 200, type: "spring" }}
         >
             <Logo
                 textClassName={cn({

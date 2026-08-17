@@ -3,19 +3,23 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const blinkingCircleSizeVariants = cva("relative inline-flex shrink-0", {
-    variants: {
-        size: {
-            sm: "size-1.5",
-            md: "size-2.5",
-            lg: "size-3.5",
-        },
-    },
     defaultVariants: {
         size: "md",
+    },
+    variants: {
+        size: {
+            lg: "size-3.5",
+            md: "size-2.5",
+            sm: "size-1.5",
+        },
     },
 });
 
 const BLINKING_CIRCLE_COLORS = {
+    blue: {
+        ping: "bg-blue-500",
+        solid: "bg-blue-600",
+    },
     green: {
         ping: "bg-green-500",
         solid: "bg-green-600",
@@ -27,10 +31,6 @@ const BLINKING_CIRCLE_COLORS = {
     yellow: {
         ping: "bg-yellow-500",
         solid: "bg-yellow-600",
-    },
-    blue: {
-        ping: "bg-blue-500",
-        solid: "bg-blue-600",
     },
 } as const;
 

@@ -16,43 +16,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const lastModified = new Date();
 
     const staticRoutes = [
-        { path: ROUTES.HOME, changeFrequency: "weekly" as const, priority: 1 },
-        { path: ROUTES.ABOUT, changeFrequency: "monthly" as const, priority: 0.8 },
-        { path: ROUTES.EXPERIENCE, changeFrequency: "monthly" as const, priority: 0.8 },
-        { path: ROUTES.PROJECTS, changeFrequency: "weekly" as const, priority: 0.9 },
-        { path: ROUTES.BLOGS, changeFrequency: "weekly" as const, priority: 0.7 },
-        { path: ROUTES.SKILLS, changeFrequency: "monthly" as const, priority: 0.6 },
-        { path: ROUTES.EDUCATION, changeFrequency: "yearly" as const, priority: 0.5 },
-        { path: ROUTES.RESUME, changeFrequency: "monthly" as const, priority: 0.7 },
+        { changeFrequency: "weekly" as const, path: ROUTES.HOME, priority: 1 },
+        { changeFrequency: "monthly" as const, path: ROUTES.ABOUT, priority: 0.8 },
+        { changeFrequency: "monthly" as const, path: ROUTES.EXPERIENCE, priority: 0.8 },
+        { changeFrequency: "weekly" as const, path: ROUTES.PROJECTS, priority: 0.9 },
+        { changeFrequency: "weekly" as const, path: ROUTES.BLOGS, priority: 0.7 },
+        { changeFrequency: "monthly" as const, path: ROUTES.SKILLS, priority: 0.6 },
+        { changeFrequency: "yearly" as const, path: ROUTES.EDUCATION, priority: 0.5 },
+        { changeFrequency: "monthly" as const, path: ROUTES.RESUME, priority: 0.7 },
     ];
 
     const experienceRoutes = EXPERIENCE_DETAILS.map((experience) => ({
-        url: `${origin}${ROUTES.EXPERIENCE_DETAIL(experience.slug)}`,
-        lastModified,
         changeFrequency: "monthly" as const,
+        lastModified,
         priority: 0.7,
+        url: `${origin}${ROUTES.EXPERIENCE_DETAIL(experience.slug)}`,
     }));
 
     const projectRoutes = PROJECTS.map((project) => ({
-        url: `${origin}${ROUTES.PROJECT(project.id)}`,
-        lastModified,
         changeFrequency: "monthly" as const,
+        lastModified,
         priority: 0.7,
+        url: `${origin}${ROUTES.PROJECT(project.id)}`,
     }));
 
     const blogRoutes = getAllPosts().map((post) => ({
-        url: `${origin}${ROUTES.BLOG(post.slug)}`,
-        lastModified: new Date(post.date),
         changeFrequency: "yearly" as const,
+        lastModified: new Date(post.date),
         priority: 0.6,
+        url: `${origin}${ROUTES.BLOG(post.slug)}`,
     }));
 
     return [
         ...staticRoutes.map((route) => ({
-            url: route.path === ROUTES.HOME ? origin : `${origin}${route.path}`,
-            lastModified,
             changeFrequency: route.changeFrequency,
+            lastModified,
             priority: route.priority,
+            url: route.path === ROUTES.HOME ? origin : `${origin}${route.path}`,
         })),
         ...experienceRoutes,
         ...projectRoutes,

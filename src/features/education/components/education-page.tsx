@@ -13,7 +13,7 @@ export const EducationPage = () => (
         <PageBreadcrumb
             className="mb-8"
             items={[
-                { label: "Home", href: ROUTES.HOME, path: ROUTES.HOME },
+                { href: ROUTES.HOME, label: "Home", path: ROUTES.HOME },
                 { label: "Education", path: ROUTES.EDUCATION },
             ]}
         />

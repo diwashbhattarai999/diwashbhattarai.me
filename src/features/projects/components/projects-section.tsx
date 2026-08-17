@@ -44,7 +44,7 @@ export const ProjectsSection = ({ showViewAll = false, limit }: ProjectsSectionP
                 return;
             }
 
-            setHovered({ project, anchor });
+            setHovered({ anchor, project });
         },
         [displayedProjects]
     );

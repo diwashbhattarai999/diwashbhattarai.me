@@ -30,11 +30,11 @@ const BlurFade = ({
     blur = "6px",
 }: BlurFadeProps) => {
     const ref = useRef(null);
-    const inViewResult = useInView(ref, { once: true, margin: inViewMargin });
+    const inViewResult = useInView(ref, { margin: inViewMargin, once: true });
     const isInView = !inView || inViewResult;
     const defaultVariants: Variants = {
-        hidden: { y: yOffset, opacity: 0, filter: `blur(${blur})` },
-        visible: { y: -yOffset, opacity: 1, filter: "blur(0px)" },
+        hidden: { filter: `blur(${blur})`, opacity: 0, y: yOffset },
+        visible: { filter: "blur(0px)", opacity: 1, y: -yOffset },
     };
     const combinedVariants = variant || defaultVariants;
     return (

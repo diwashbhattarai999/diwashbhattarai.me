@@ -38,27 +38,27 @@ const PageLoader = () => {
 
     // Letter animation variants
     const letterVariants: Variants = {
-        hidden: {
-            y: 50,
+        exit: (i: number) => ({
             opacity: 0,
+            transition: {
+                delay: 0.02 * i,
+                duration: 0.3,
+                ease: [0.22, 1, 0.36, 1],
+            },
+            y: -20,
+        }),
+        hidden: {
+            opacity: 0,
+            y: 50,
         },
         visible: (i: number) => ({
-            y: 0,
             opacity: 1,
             transition: {
-                duration: 0.4,
                 delay: 0.05 * i,
+                duration: 0.4,
                 ease: [0.22, 1, 0.36, 1],
             },
-        }),
-        exit: (i: number) => ({
-            y: -20,
-            opacity: 0,
-            transition: {
-                duration: 0.3,
-                delay: 0.02 * i,
-                ease: [0.22, 1, 0.36, 1],
-            },
+            y: 0,
         }),
     };
 
@@ -124,14 +124,14 @@ const PageLoader = () => {
                         <motion.div
                             animate={{
                                 opacity: 1,
-                                y: 0,
                                 transition: { delay: 0.3, duration: 0.4 },
+                                y: 0,
                             }}
                             className="mt-8 h-0.5 w-48 overflow-hidden bg-primary/20"
                             exit={{
                                 opacity: 0,
-                                y: -10,
                                 transition: { duration: 0.3 },
+                                y: -10,
                             }}
                             initial={{ opacity: 0, y: 10 }}
                         >

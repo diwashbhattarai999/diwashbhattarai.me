@@ -36,10 +36,10 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
         <div className="flex min-w-0 flex-col gap-5 px-5 py-10">
             <JsonLd
                 data={getArticleJsonLd({
-                    headline: frontMatter.title,
-                    description: frontMatter.description ?? frontMatter.excerpt,
-                    image: frontMatter.coverImage,
                     datePublished: frontMatter.date,
+                    description: frontMatter.description ?? frontMatter.excerpt,
+                    headline: frontMatter.title,
+                    image: frontMatter.coverImage,
                     path: ROUTES.BLOG(slug),
                 })}
             />
@@ -47,8 +47,8 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
             <PageBreadcrumb
                 className="mb-5"
                 items={[
-                    { label: "Home", href: ROUTES.HOME, path: ROUTES.HOME },
-                    { label: "Blog", href: ROUTES.BLOGS, path: ROUTES.BLOGS },
+                    { href: ROUTES.HOME, label: "Home", path: ROUTES.HOME },
+                    { href: ROUTES.BLOGS, label: "Blog", path: ROUTES.BLOGS },
                     { label: frontMatter.title, path: ROUTES.BLOG(slug) },
                 ]}
             />

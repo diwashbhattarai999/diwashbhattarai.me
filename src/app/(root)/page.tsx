@@ -12,9 +12,9 @@ import { ProjectsSection } from "@/features/projects/components/projects-section
 import { createPageMetadata } from "@/lib/site-metadata";
 
 export const metadata = createPageMetadata({
-    title: siteConfig.title,
     description: siteConfig.description,
     path: ROUTES.HOME,
+    title: siteConfig.title,
 });
 
 export default function HomePage() {

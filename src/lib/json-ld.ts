@@ -20,19 +20,19 @@ interface ArticleJsonLdInput {
  * @returns Schema.org Person graph node.
  */
 export const getPersonJsonLd = () => ({
-    "@type": "Person",
     "@id": `${getCanonicalUrl("/")}/#person`,
-    name: siteConfig.name,
-    url: getCanonicalUrl("/"),
-    image: getCanonicalUrl("/profile.webp"),
-    jobTitle: siteConfig.jobTitle,
-    email: siteConfig.contactEmail,
+    "@type": "Person",
     address: {
         "@type": "PostalAddress",
         addressCountry: "NP",
     },
-    sameAs: [siteConfig.social.github, siteConfig.social.linkedin, siteConfig.social.instagram],
+    email: siteConfig.contactEmail,
+    image: getCanonicalUrl("/profile.webp"),
+    jobTitle: siteConfig.jobTitle,
     knowsAbout: [...siteConfig.knowsAbout],
+    name: siteConfig.name,
+    sameAs: [siteConfig.social.github, siteConfig.social.linkedin, siteConfig.social.instagram],
+    url: getCanonicalUrl("/"),
 });
 
 /**
@@ -41,15 +41,15 @@ export const getPersonJsonLd = () => ({
  * @returns Schema.org WebSite graph node.
  */
 export const getWebSiteJsonLd = () => ({
-    "@type": "WebSite",
     "@id": `${getCanonicalUrl("/")}/#website`,
-    name: siteConfig.name,
-    url: getCanonicalUrl("/"),
+    "@type": "WebSite",
     description: siteConfig.description,
+    inLanguage: "en",
+    name: siteConfig.name,
     publisher: {
         "@id": `${getCanonicalUrl("/")}/#person`,
     },
-    inLanguage: "en",
+    url: getCanonicalUrl("/"),
 });
 
 /**
@@ -73,9 +73,9 @@ export const getBreadcrumbJsonLd = (items: readonly BreadcrumbItem[]) => ({
     "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => ({
         "@type": "ListItem",
-        position: index + 1,
-        name: item.name,
         item: getCanonicalUrl(item.path),
+        name: item.name,
+        position: index + 1,
     })),
 });
 
@@ -94,16 +94,16 @@ export const getArticleJsonLd = ({
 }: ArticleJsonLdInput) => ({
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline,
-    description,
-    image: image ? getCanonicalUrl(image) : getCanonicalUrl(siteConfig.seo.openGraph.image),
-    datePublished,
-    dateModified: datePublished,
     author: {
         "@id": `${getCanonicalUrl("/")}/#person`,
     },
+    dateModified: datePublished,
+    datePublished,
+    description,
+    headline,
+    image: image ? getCanonicalUrl(image) : getCanonicalUrl(siteConfig.seo.openGraph.image),
+    mainEntityOfPage: getCanonicalUrl(path),
     publisher: {
         "@id": `${getCanonicalUrl("/")}/#person`,
     },
-    mainEntityOfPage: getCanonicalUrl(path),
 });

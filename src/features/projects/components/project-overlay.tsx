@@ -21,15 +21,15 @@ const getPreviewLayout = (anchor: HTMLElement) => {
     const contentRight = Math.max(24, (window.innerWidth - Math.min(window.innerWidth, 1024)) / 2 + 8);
 
     return {
-        top: rect.top + (rect.height - PREVIEW_HEIGHT) / 2,
         right: contentRight,
+        top: rect.top + (rect.height - PREVIEW_HEIGHT) / 2,
     };
 };
 
 export const ProjectHoverPreview = ({ project, anchor }: ProjectHoverPreviewProps) => {
     const isDesktop = useIsDesktop();
     const [mounted, setMounted] = useState(false);
-    const [layout, setLayout] = useState({ top: 0, right: 0 });
+    const [layout, setLayout] = useState({ right: 0, top: 0 });
 
     useEffect(() => {
         setMounted(true);
@@ -62,8 +62,8 @@ export const ProjectHoverPreview = ({ project, anchor }: ProjectHoverPreviewProp
         <motion.div
             animate={{ top: layout.top }}
             className="pointer-events-none fixed z-40 overflow-hidden rounded-xl shadow-2xl shadow-black/40"
-            style={{ right: layout.right, width: PREVIEW_WIDTH, height: PREVIEW_HEIGHT }}
-            transition={{ type: "spring", stiffness: 520, damping: 42, mass: 0.7 }}
+            style={{ height: PREVIEW_HEIGHT, right: layout.right, width: PREVIEW_WIDTH }}
+            transition={{ damping: 42, mass: 0.7, stiffness: 520, type: "spring" }}
         >
             <Image
                 alt={project.title}

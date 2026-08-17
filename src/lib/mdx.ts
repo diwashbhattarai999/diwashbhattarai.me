@@ -10,17 +10,17 @@ const CONTENT_DIR = path.join(process.cwd(), "contents");
 
 const toBlogPost = (filename: string, data: Record<string, unknown>): BlogPost =>
     ({
-        slug: filename.replace(".mdx", ""),
-        title: data.title,
-        date: data.date,
         author: data.author,
-        profile: data.profile,
-        tags: data.tags,
-        description: data.description,
-        coverImage: data.coverImage,
-        readTime: data.readTime,
         category: data.category,
+        coverImage: data.coverImage,
+        date: data.date,
+        description: data.description,
         excerpt: data.excerpt,
+        profile: data.profile,
+        readTime: data.readTime,
+        slug: filename.replace(".mdx", ""),
+        tags: data.tags,
+        title: data.title,
     }) as BlogPost;
 
 /**
@@ -58,7 +58,7 @@ export const getPostBySlug = async (slug: string) => {
     const { content, data } = matter(fileContent);
     const mdxSource = await serialize(content, { blockJS: false });
 
-    return { source: mdxSource, frontMatter: data, content };
+    return { content, frontMatter: data, source: mdxSource };
 };
 
 const RELATED_POST_LIMIT = 3;

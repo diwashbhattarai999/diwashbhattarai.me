@@ -31,8 +31,8 @@ export const ProjectDetailPage = ({ projectId }: ProjectDetailPageProps) => {
                 <PageBreadcrumb
                     className="mb-8"
                     items={[
-                        { label: "Home", href: ROUTES.HOME, path: ROUTES.HOME },
-                        { label: "Projects", href: ROUTES.PROJECTS, path: ROUTES.PROJECTS },
+                        { href: ROUTES.HOME, label: "Home", path: ROUTES.HOME },
+                        { href: ROUTES.PROJECTS, label: "Projects", path: ROUTES.PROJECTS },
                         { label: project.title, path: ROUTES.PROJECT(project.id) },
                     ]}
                 />

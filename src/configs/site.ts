@@ -8,13 +8,13 @@ const SITE_ORIGIN = env.NEXT_PUBLIC_APP_URL.replace(TRAILING_SLASH_PATTERN, "");
 
 const PWA_MANIFEST_ICONS: MetadataRoute.Manifest["icons"] = [
     {
-        src: "/android-chrome-192x192.png",
         sizes: "192x192",
+        src: "/android-chrome-192x192.png",
         type: "image/png",
     },
     {
-        src: "/android-chrome-512x512.png",
         sizes: "512x512",
+        src: "/android-chrome-512x512.png",
         type: "image/png",
     },
 ];
@@ -23,15 +23,14 @@ const PWA_MANIFEST_ICONS: MetadataRoute.Manifest["icons"] = [
  * Site-wide configuration for metadata, PWA, and social links.
  */
 export const siteConfig: SiteConfig = {
-    name: "Diwash Bhattarai",
-    title: "Diwash Bhattarai | Full Stack Software Developer in Nepal",
-    shortTitle: "Diwash Bhattarai",
-    jobTitle: "Full Stack Software Developer",
-    location: "Nepal",
+    authors: [
+        { name: "Diwash Bhattarai", url: SITE_ORIGIN },
+        { name: "दिवस भट्टराई", url: "https://github.com/diwashbhattarai999" },
+    ],
+    contactEmail: "diwashb999@gmail.com",
     description:
         "Diwash Bhattarai is a full stack software developer from Nepal specializing in React, Next.js, Node.js, NestJS, TypeScript, PostgreSQL, and scalable web applications.",
-    url: SITE_ORIGIN,
-    contactEmail: "diwashb999@gmail.com",
+    jobTitle: "Full Stack Software Developer",
     knowsAbout: [
         "React",
         "Next.js",
@@ -45,10 +44,14 @@ export const siteConfig: SiteConfig = {
         "Microservices",
         "Software Architecture",
     ],
-    authors: [
-        { name: "Diwash Bhattarai", url: SITE_ORIGIN },
-        { name: "दिवस भट्टराई", url: "https://github.com/diwashbhattarai999" },
-    ],
+    location: "Nepal",
+    name: "Diwash Bhattarai",
+    pwa: {
+        backgroundColor: "#25252e",
+        display: "standalone",
+        icons: PWA_MANIFEST_ICONS,
+        themeColor: "#5e608f",
+    },
     seo: {
         keywords: [
             "Diwash Bhattarai",
@@ -64,32 +67,29 @@ export const siteConfig: SiteConfig = {
             "PostgreSQL",
         ],
         openGraph: {
-            type: "website",
             image: "/og-image.png",
-            imageWidth: 1200,
-            imageHeight: 630,
             imageAlt: "Diwash Bhattarai, Full Stack Software Developer",
+            imageHeight: 630,
+            imageWidth: 1200,
+            type: "website",
         },
     },
-    pwa: {
-        display: "standalone",
-        backgroundColor: "#25252e",
-        themeColor: "#5e608f",
-        icons: PWA_MANIFEST_ICONS,
-    },
+    shortTitle: "Diwash Bhattarai",
     social: {
-        github: "https://github.com/diwashbhattarai999",
-        linkedin: "https://www.linkedin.com/in/diwashb",
-        instagram: "https://www.instagram.com/diwash81/",
         email: "mailto:diwashb999@gmail.com",
+        github: "https://github.com/diwashbhattarai999",
+        instagram: "https://www.instagram.com/diwash81/",
+        linkedin: "https://www.linkedin.com/in/diwashb",
         resume: "https://drive.google.com/file/d/1dlgquCAYdXZ14LpVLHtSKFDKoqlQE1WJ/view?usp=sharing",
     },
+    title: "Diwash Bhattarai | Full Stack Software Developer in Nepal",
+    url: SITE_ORIGIN,
 };
 
 /**
  * Theme colors used in metadata and the document head.
  */
 export const META_THEME_COLORS: ThemeColors = {
-    light: "#ffffff",
     dark: "#09090b",
+    light: "#ffffff",
 } as const;

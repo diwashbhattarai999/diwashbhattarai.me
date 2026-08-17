@@ -1,16 +1,16 @@
 import ProfileImg from "@/assets/images/profile2.webp";
 
 export const ABOUT_ME = {
-    name: "Diwash Bhattarai",
-    initials: "DB",
-    title: "Full Stack Software Developer in Nepal",
-    headline: "Full Stack Software Developer",
-    location: "Nepal",
     description: [
         "A full-stack software developer with over 3.5 years of experience building scalable, production-ready web applications. I specialize in React, Next.js, Node.js, NestJS, and TypeScript, with a strong focus on clean architecture, performance, and developer experience. Open to full-time software engineering roles and collaboration.",
         "Currently shipping multi-tenant platforms and Stripe-powered products at Plex Bit Infosystems across sports, fitness, travel, ecommerce, and finance. Previously at Upachaar Nepal, I built healthcare portals, RESTful APIs, and microservices while publishing reusable UI components and mentoring interns.",
     ],
+    headline: "Full Stack Software Developer",
+    initials: "DB",
+    location: "Nepal",
+    name: "Diwash Bhattarai",
     profileImage: ProfileImg,
+    title: "Full Stack Software Developer in Nepal",
 } as const;
 
 /** Phrases emphasized in the homepage hero for scannability. */

@@ -11,7 +11,7 @@ export const ExperiencePage = () => (
         <PageBreadcrumb
             className="mb-8"
             items={[
-                { label: "Home", href: ROUTES.HOME, path: ROUTES.HOME },
+                { href: ROUTES.HOME, label: "Home", path: ROUTES.HOME },
                 { label: "Experience", path: ROUTES.EXPERIENCE },
             ]}
         />

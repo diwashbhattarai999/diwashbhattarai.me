@@ -3,7 +3,8 @@ import type { NextConfig } from "next";
 // import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
-    output: "standalone",
+    // Enable compression
+    compress: true,
 
     experimental: {
         // Inline the Tailwind stylesheet so first paint is not blocked on a CSS request.
@@ -11,36 +12,9 @@ const nextConfig: NextConfig = {
         optimizePackageImports: ["lucide-react", "framer-motion"],
     },
 
-    // Image optimization for external images (GitHub avatars)
-    images: {
-        remotePatterns: [
-            { protocol: "https", hostname: "images.unsplash.com" },
-            { protocol: "https", hostname: "api.dicebear.com" },
-        ],
-        formats: ["image/avif", "image/webp"],
-    },
-
-    // Enable compression
-    compress: true,
-
-    // Strict mode for better development practices
-    reactStrictMode: true,
-
-    // Security headers
-    async redirects() {
-        return [
-            {
-                source: "/contact",
-                destination: "/",
-                permanent: true,
-            },
-        ];
-    },
-
     async headers() {
         return [
             {
-                source: "/(.*)",
                 headers: [
                     {
                         key: "X-DNS-Prefetch-Control",
@@ -63,6 +37,31 @@ const nextConfig: NextConfig = {
                         value: "camera=(), microphone=(), geolocation=()",
                     },
                 ],
+                source: "/(.*)",
+            },
+        ];
+    },
+
+    // Image optimization for external images (GitHub avatars)
+    images: {
+        formats: ["image/avif", "image/webp"],
+        remotePatterns: [
+            { hostname: "images.unsplash.com", protocol: "https" },
+            { hostname: "api.dicebear.com", protocol: "https" },
+        ],
+    },
+    output: "standalone",
+
+    // Strict mode for better development practices
+    reactStrictMode: true,
+
+    // Security headers
+    async redirects() {
+        return [
+            {
+                destination: "/",
+                permanent: true,
+                source: "/contact",
             },
         ];
     },

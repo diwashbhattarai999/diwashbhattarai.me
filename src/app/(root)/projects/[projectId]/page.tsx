@@ -21,10 +21,10 @@ export const generateMetadata = async ({ params }: ProjectRouteProps): Promise<M
     }
 
     return createPageMetadata({
-        title: `${project.title} | Projects`,
         description: project.description,
-        path: ROUTES.PROJECT(projectId),
         image: project.image.src,
+        path: ROUTES.PROJECT(projectId),
+        title: `${project.title} | Projects`,
     });
 };
 

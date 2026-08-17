@@ -34,8 +34,8 @@ export const ExperienceDetailPage = ({ slug }: ExperienceDetailPageProps) => {
             <PageBreadcrumb
                 className="mb-12"
                 items={[
-                    { label: "Home", href: ROUTES.HOME, path: ROUTES.HOME },
-                    { label: "Experience", href: ROUTES.EXPERIENCE, path: ROUTES.EXPERIENCE },
+                    { href: ROUTES.HOME, label: "Home", path: ROUTES.HOME },
+                    { href: ROUTES.EXPERIENCE, label: "Experience", path: ROUTES.EXPERIENCE },
                     { label: experience.title, path: ROUTES.EXPERIENCE_DETAIL(experience.slug) },
                 ]}
             />

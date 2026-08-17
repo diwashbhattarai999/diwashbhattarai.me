@@ -2,10 +2,6 @@
   "name": "diwashbhattarai.me",
   "version": "1.0.0",
   "private": true,
-  "author": {
-    "name": "Diwash Bhattarai",
-    "email": "diwashb999@gmail.com"
-  },
   "keywords": [
     "nextjs",
     "portfolio",
@@ -22,26 +18,38 @@
     "url": "https://github.com/diwashbhattarai999/diwashbhattarai.me"
   },
   "license": "MIT",
+  "author": {
+    "name": "Diwash Bhattarai",
+    "email": "diwashb999@gmail.com"
+  },
   "type": "module",
+  "scripts": {
+    "build": "next build",
+    "clean": "rm -rf .next playwright-report test-results",
+    "commit": "git cz",
+    "dev": "next dev",
+    "lint:check": "ultracite check",
+    "lint:fix": "ultracite fix",
+    "prepare": "lefthook install || true",
+    "start": "next start",
+    "test": "vitest --reporter=verbose",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "type-check": "tsc -b"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
   "browserslist": [
     "chrome >= 111",
     "edge >= 111",
     "firefox >= 111",
     "safari >= 16.4"
   ],
-  "scripts": {
-    "clean": "rm -rf .next playwright-report test-results",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint:check": "ultracite check",
-    "lint:fix": "ultracite fix",
-    "prepare": "lefthook install || true",
-    "type-check": "tsc -b",
-    "commit": "git cz",
-    "test": "vitest --reporter=verbose",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+  "overrides": {
+    "react-syntax-highlighter": "15.0.0"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
@@ -102,13 +110,5 @@
     "ultracite": "^7.8.1",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.9"
-  },
-  "overrides": {
-    "react-syntax-highlighter": "15.0.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
   }
 }

@@ -24,9 +24,9 @@ export const generateMetadata = async ({ params }: ExperienceRouteProps): Promis
     }
 
     return createPageMetadata({
-        title: `${experience.title} at ${experience.company} | Diwash Bhattarai`,
         description: getExperienceSummary(experience.description),
         path: ROUTES.EXPERIENCE_DETAIL(slug),
+        title: `${experience.title} at ${experience.company} | Diwash Bhattarai`,
     });
 };
 

@@ -108,20 +108,20 @@ export const CodeBlock = ({ language, filename, code, highlightLines = [], tabs 
                     codeTagProps={{
                         style: {
                             display: "block",
-                            width: "100%",
                             maxWidth: "100%",
-                            whiteSpace: "pre-wrap",
-                            wordBreak: "break-word",
                             overflowWrap: "anywhere",
+                            whiteSpace: "pre-wrap",
+                            width: "100%",
+                            wordBreak: "break-word",
                         },
                     }}
                     customStyle={{
-                        margin: 0,
-                        padding: 0,
                         background: "transparent",
                         fontSize: "0.875rem",
+                        margin: 0,
                         maxWidth: "100%",
                         overflowX: "auto",
+                        padding: 0,
                         whiteSpace: "pre-wrap",
                         wordBreak: "break-word",
                     }}
@@ -132,9 +132,9 @@ export const CodeBlock = ({ language, filename, code, highlightLines = [], tabs 
                                 ? "rgba(255,255,255,0.1)"
                                 : "transparent",
                             display: "block",
-                            width: "100%",
                             maxWidth: "100%",
                             whiteSpace: "pre-wrap",
+                            width: "100%",
                             wordBreak: "break-word",
                         },
                     })}

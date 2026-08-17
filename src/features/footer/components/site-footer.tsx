@@ -1,4 +1,4 @@
-import { SOCIALS_LINKS } from "@/features/footer/constants/social-links.constants";
+import { SocialIcons } from "@/components/shared/social-icons";
 
 export const SiteFooter = () => (
     <footer className="border-border/40 border-t py-8">
@@ -7,21 +7,7 @@ export const SiteFooter = () => (
                 © {new Date().getFullYear()} Diwash Bhattarai. All rights reserved.
             </p>
 
-            <div className="flex gap-2">
-                {SOCIALS_LINKS.map(({ Icon, link, title }, index) => (
-                    <a
-                        className="rounded-full p-2 text-foreground/60 transition-colors hover:bg-muted hover:text-primary"
-                        href={link}
-                        // biome-ignore lint/suspicious/noArrayIndexKey: index is unique
-                        key={index}
-                        rel="noopener noreferrer"
-                        target={link.startsWith("mailto") ? "_self" : "_blank"}
-                    >
-                        <Icon className="size-4" />
-                        <span className="sr-only">{title}</span>
-                    </a>
-                ))}
-            </div>
+            <SocialIcons iconClassName="size-4" />
         </div>
     </footer>
 );

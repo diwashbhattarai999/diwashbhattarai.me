@@ -18,7 +18,7 @@ export const NotFoundComponent = () => {
                     {`It looks like you've found a missing page! No worries—it’s not you, it’s us. We're just a bunch of code monkeys and we make mistakes too.`}
                 </p>
                 <div className="mt-6">
-                    <Link className={buttonVariants({ variant: "default", size: "lg" })} href={ROUTES.HOME}>
+                    <Link className={buttonVariants({ size: "lg", variant: "default" })} href={ROUTES.HOME}>
                         Return to Home
                     </Link>
                 </div>

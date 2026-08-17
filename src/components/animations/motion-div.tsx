@@ -13,7 +13,7 @@ interface MotionDivProps {
 export const MotionDiv = ({
     children,
     delayOffset,
-    initial = { y: 50, opacity: 0 },
+    initial = { opacity: 0, y: 50 },
     className,
 }: MotionDivProps) => {
     const controls = useAnimation();
@@ -22,7 +22,7 @@ export const MotionDiv = ({
 
     useEffect(() => {
         if (isInView) {
-            controls.start({ y: 0, opacity: 1 });
+            controls.start({ opacity: 1, y: 0 });
         }
     }, [controls, isInView]);
 
@@ -33,12 +33,12 @@ export const MotionDiv = ({
             initial={initial}
             ref={ref}
             transition={{
-                type: "spring",
                 damping: 30,
-                stiffness: 200,
                 delay: delayOffset,
                 delayChildren: 0.3,
                 staggerChildren: 0.2,
+                stiffness: 200,
+                type: "spring",
             }}
         >
             {children}

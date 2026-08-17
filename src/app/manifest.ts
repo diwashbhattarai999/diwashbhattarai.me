@@ -9,13 +9,13 @@ import { siteConfig } from "@/configs/site";
  */
 export default function manifest(): MetadataRoute.Manifest {
     return {
+        background_color: siteConfig.pwa.backgroundColor,
+        description: siteConfig.description,
+        display: siteConfig.pwa.display,
+        icons: siteConfig.pwa.icons,
         name: siteConfig.title,
         short_name: siteConfig.shortTitle,
-        description: siteConfig.description,
         start_url: "/",
-        display: siteConfig.pwa.display,
-        background_color: siteConfig.pwa.backgroundColor,
         theme_color: siteConfig.pwa.themeColor,
-        icons: siteConfig.pwa.icons,
     };
 }

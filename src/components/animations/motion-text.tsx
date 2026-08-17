@@ -16,16 +16,16 @@ export const MotionText = ({ children, delayOffset = 0, className }: IMotionText
         <motion.div className={className}>
             {letters.map((letter, index) => (
                 <motion.span
-                    animate={{ y: 0, opacity: 1 }}
+                    animate={{ opacity: 1, y: 0 }}
                     className="inline-flex"
-                    initial={{ y: 10, opacity: 0 }}
+                    initial={{ opacity: 0, y: 10 }}
                     // biome-ignore lint/suspicious/noArrayIndexKey: index is unique
                     key={index}
                     transition={{
-                        delay: index * 0.03 + delayOffset,
-                        type: "spring",
                         damping: 15,
+                        delay: index * 0.03 + delayOffset,
                         stiffness: 400,
+                        type: "spring",
                     }}
                 >
                     {letter}

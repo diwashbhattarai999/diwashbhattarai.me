@@ -4,11 +4,11 @@ import { ROUTES } from "@/configs/routes";
 import type { NavbarItem } from "@/features/navbar/types/navbar.types";
 
 export const NAV_ITEMS: readonly NavbarItem[] = [
-    { name: "Home", path: ROUTES.HOME, icon: Home },
-    { name: "About", path: ROUTES.ABOUT, icon: User },
-    { name: "Projects", path: ROUTES.PROJECTS, icon: FolderKanban },
-    { name: "Experience", path: ROUTES.EXPERIENCE, icon: Briefcase },
-    { name: "Blog", path: ROUTES.BLOGS, icon: BookOpen },
+    { icon: Home, name: "Home", path: ROUTES.HOME },
+    { icon: User, name: "About", path: ROUTES.ABOUT },
+    { icon: FolderKanban, name: "Projects", path: ROUTES.PROJECTS },
+    { icon: Briefcase, name: "Experience", path: ROUTES.EXPERIENCE },
+    { icon: BookOpen, name: "Blog", path: ROUTES.BLOGS },
 ];
 
 export const NAV_ACTIONS: readonly NavbarItem[] = [];

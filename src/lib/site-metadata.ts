@@ -10,27 +10,27 @@ import type { PageMetadataInput } from "@/types/site";
  * @returns Application-wide metadata defaults.
  */
 export const getSiteMetadata = (): Metadata => ({
+    authors: [...siteConfig.authors],
+    description: siteConfig.description,
+    icons: [{ rel: "icon", url: "/favicon.png" }],
+    keywords: [...siteConfig.seo.keywords],
+    metadataBase: new URL(siteConfig.url),
+    openGraph: {
+        images: [
+            {
+                alt: siteConfig.seo.openGraph.imageAlt,
+                height: siteConfig.seo.openGraph.imageHeight,
+                url: siteConfig.seo.openGraph.image,
+                width: siteConfig.seo.openGraph.imageWidth,
+            },
+        ],
+        locale: "en_US",
+        siteName: siteConfig.name,
+        type: "website",
+    },
     title: {
         default: siteConfig.title,
         template: `%s | ${siteConfig.name}`,
-    },
-    metadataBase: new URL(siteConfig.url),
-    icons: [{ rel: "icon", url: "/favicon.png" }],
-    authors: [...siteConfig.authors],
-    description: siteConfig.description,
-    keywords: [...siteConfig.seo.keywords],
-    openGraph: {
-        type: "website",
-        siteName: siteConfig.name,
-        locale: "en_US",
-        images: [
-            {
-                url: siteConfig.seo.openGraph.image,
-                alt: siteConfig.seo.openGraph.imageAlt,
-                width: siteConfig.seo.openGraph.imageWidth,
-                height: siteConfig.seo.openGraph.imageHeight,
-            },
-        ],
     },
     twitter: {
         card: "summary_large_image",
@@ -55,33 +55,33 @@ export const createPageMetadata = ({
     const ogImage = image ?? siteConfig.seo.openGraph.image;
 
     return {
-        title: {
-            absolute: title,
-        },
-        description,
         alternates: {
             canonical: url,
         },
+        description,
         openGraph: {
-            title,
             description,
-            url,
-            siteName: siteConfig.name,
-            type,
             images: [
                 {
-                    url: ogImage,
                     alt: title,
-                    width: siteConfig.seo.openGraph.imageWidth,
                     height: siteConfig.seo.openGraph.imageHeight,
+                    url: ogImage,
+                    width: siteConfig.seo.openGraph.imageWidth,
                 },
             ],
+            siteName: siteConfig.name,
+            title,
+            type,
+            url,
             ...(publishedTime ? { publishedTime } : {}),
+        },
+        title: {
+            absolute: title,
         },
         twitter: {
             card: "summary_large_image",
-            title,
             description,
+            title,
         },
     };
 };

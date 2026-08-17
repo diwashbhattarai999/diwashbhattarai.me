@@ -11,8 +11,8 @@ import { getSiteMetadata } from "@/lib/site-metadata";
 import "@/styles/globals.css";
 
 const leagueSpartan = League_Spartan({
-    subsets: ["latin"],
     display: "swap",
+    subsets: ["latin"],
 });
 
 export const metadata: Metadata = getSiteMetadata();

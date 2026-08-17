@@ -23,12 +23,12 @@ export const generateMetadata = async ({ params }: BlogRouteProps): Promise<Meta
     const { frontMatter } = post;
 
     return createPageMetadata({
-        title: `${frontMatter.title} | Blog`,
         description: frontMatter.description ?? frontMatter.excerpt,
-        path: ROUTES.BLOG(slug),
         image: frontMatter.coverImage,
-        type: "article",
+        path: ROUTES.BLOG(slug),
         publishedTime: frontMatter.date,
+        title: `${frontMatter.title} | Blog`,
+        type: "article",
     });
 };
 

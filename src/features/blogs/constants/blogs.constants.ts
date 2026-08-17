@@ -1,13 +1,6 @@
 export const BLOG_POSTS = [
     {
-        id: "1",
-        title: "Building Responsive Layouts with Modern CSS Grid",
-        excerpt:
-            "Learn how to create complex, responsive layouts using CSS Grid. This comprehensive guide covers everything from basic grid concepts to advanced techniques for creating magazine-style layouts.",
-        coverImage: "/placeholder.svg?height=600&width=1200",
-        date: "March 15, 2024",
         category: "CSS",
-        readTime: "8 min read",
         content: `
       <h2>Introduction to CSS Grid</h2>
       <p>CSS Grid Layout is a two-dimensional layout system designed specifically for the web. It allows you to organize content into rows and columns and has many features that make building complex layouts straightforward.</p>
@@ -105,37 +98,44 @@ export const BLOG_POSTS = [
       
       <p>In this article, we've covered the fundamentals of CSS Grid and explored some advanced techniques. With practice, you'll be able to create complex layouts with ease.</p>
     `,
-        tags: ["CSS", "Web Design", "Responsive Design", "Frontend Development"],
+        coverImage: "/placeholder.svg?height=600&width=1200",
+        date: "March 15, 2024",
+        excerpt:
+            "Learn how to create complex, responsive layouts using CSS Grid. This comprehensive guide covers everything from basic grid concepts to advanced techniques for creating magazine-style layouts.",
+        id: "1",
+        readTime: "8 min read",
         relatedPosts: ["2", "3", "4"],
+        tags: ["CSS", "Web Design", "Responsive Design", "Frontend Development"],
+        title: "Building Responsive Layouts with Modern CSS Grid",
     },
     {
-        id: "2",
-        title: "State Management in React: Context API vs. Redux",
-        excerpt:
-            "Comparing two popular state management solutions in React. We'll explore when to use Context API for simpler applications and when Redux makes more sense for complex state requirements.",
+        category: "React",
         coverImage: "/placeholder.svg?height=600&width=1200",
         date: "February 28, 2024",
-        category: "React",
+        excerpt:
+            "Comparing two popular state management solutions in React. We'll explore when to use Context API for simpler applications and when Redux makes more sense for complex state requirements.",
+        id: "2",
         readTime: "10 min read",
+        title: "State Management in React: Context API vs. Redux",
     },
     {
-        id: "3",
-        title: "Optimizing Next.js Applications for Performance",
-        excerpt:
-            "Discover practical techniques to improve the performance of your Next.js applications. From image optimization to code splitting, learn how to create lightning-fast user experiences.",
+        category: "Next.js",
         coverImage: "/placeholder.svg?height=600&width=1200",
         date: "January 12, 2024",
-        category: "Next.js",
+        excerpt:
+            "Discover practical techniques to improve the performance of your Next.js applications. From image optimization to code splitting, learn how to create lightning-fast user experiences.",
+        id: "3",
         readTime: "12 min read",
+        title: "Optimizing Next.js Applications for Performance",
     },
     {
-        id: "4",
-        title: "Creating Accessible UI Components from Scratch",
-        excerpt:
-            "A deep dive into building UI components with accessibility in mind. Learn how to create components that are usable by everyone, including people with disabilities.",
+        category: "Accessibility",
         coverImage: "/placeholder.svg?height=600&width=1200",
         date: "December 5, 2023",
-        category: "Accessibility",
+        excerpt:
+            "A deep dive into building UI components with accessibility in mind. Learn how to create components that are usable by everyone, including people with disabilities.",
+        id: "4",
         readTime: "15 min read",
+        title: "Creating Accessible UI Components from Scratch",
     },
 ];
