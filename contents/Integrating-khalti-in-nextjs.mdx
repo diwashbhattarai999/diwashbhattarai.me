@@ -7,7 +7,7 @@ tags: ["NestJS", "Next.js", "Payments", "Khalti", "Nepal"]
 description: "A complete Khalti KPG-2 Web Checkout integration for Next.js and NestJS —
   merchant setup, initiate + pidx, return_url callback, lookup verification, and
   the status rules that decide whether you may fulfill an order."
-coverImage: "/contents/esewa-khalti-nextjs-nestjs.png"
+coverImage: "/contents/khalti-nextjs-nestjs-dark.png"
 readTime: "12 min read"
 category: "System Design"
 ---
@@ -319,6 +319,7 @@ setLoading(false);
 }
 
 return (
+
 <button disabled={loading} onClick={handlePay} type="button">
 {loading ? "Redirecting…" : "Pay with Khalti"}
 </button>

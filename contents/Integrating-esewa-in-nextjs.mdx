@@ -7,7 +7,7 @@ tags: ["NestJS", "Next.js", "Payments", "eSewa", "Nepal"]
 description: "A complete eSewa ePay v2 integration for Next.js and NestJS —
   HMAC signature generation, form redirect, callback decoding, response signature
   checks, and the status API you must call before marking an order paid."
-coverImage: "/contents/esewa-khalti-nextjs-nestjs.png"
+coverImage: "/contents/esewa-nextjs-nestjs-dark.png"
 readTime: "12 min read"
 category: "System Design"
 ---
@@ -297,6 +297,7 @@ form: EsewaForm;
 }
 
 return (
+
 <button disabled={loading} onClick={handlePay} type="button">
 {loading ? "Redirecting…" : "Pay with eSewa"}
 </button>
