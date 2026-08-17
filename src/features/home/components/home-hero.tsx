@@ -22,6 +22,8 @@ export function HomeHero() {
                             <AvatarImage
                                 alt={`${ABOUT_ME.name}, ${ABOUT_ME.headline}`}
                                 className="object-cover"
+                                fill
+                                sizes="144px"
                                 src={ABOUT_ME.profileImage.src}
                             />
                             <AvatarFallback>{ABOUT_ME.initials}</AvatarFallback>

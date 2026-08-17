@@ -1,6 +1,7 @@
 "use client";
 
-import { Fallback, Image, Root } from "@radix-ui/react-avatar";
+import { Fallback, Root } from "@radix-ui/react-avatar";
+import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 

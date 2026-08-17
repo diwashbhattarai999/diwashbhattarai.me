@@ -155,7 +155,7 @@
 
 body {
     z-index: 50;
-    background-image: url("../assets/images/noise.png");
+    background-image: url("../assets/images/noise.webp");
     background-position: 0 0;
     background-size: 200px 200px;
 }
@@ -169,7 +169,7 @@ body {
     }
     body {
         @apply bg-background text-foreground;
-        /* background-image: url('../../public/noise.png'); */
+        /* background-image: url('../../public/noise.webp'); */
         /* background-size: 200px 200px;
     background-position: 0 0; */
     }

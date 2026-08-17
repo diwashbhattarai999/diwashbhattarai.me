@@ -70,7 +70,13 @@ export const BlogCard = ({ post }: BlogCardProps) => {
                     <CardFooter className="flex items-center justify-between px-0">
                         <div className="flex items-center gap-2">
                             <Avatar>
-                                <AvatarImage alt={post.author} className="object-cover" src={post.profile} />
+                                <AvatarImage
+                                    alt={post.author}
+                                    className="object-cover"
+                                    fill
+                                    sizes="32px"
+                                    src={post.profile}
+                                />
                                 <AvatarFallback>
                                     {post.author.charAt(0).toUpperCase() +
                                         post.author.charAt(1).toUpperCase()}
