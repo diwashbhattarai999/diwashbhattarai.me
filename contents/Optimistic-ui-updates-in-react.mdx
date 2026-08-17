@@ -2,7 +2,7 @@
 title: "Optimistic UI Updates in React: Patterns, Rollbacks, and the Mistakes That Break Them"
 date: "2026-08-04"
 author: "Diwash Bhattarai"
-profile: "/profile.png"
+profile: "/profile.webp"
 tags: ["React", "Next.js", "TypeScript", "Frontend Architecture", "State Management"]
 description: "A practical guide to implementing optimistic UI updates in React —
   when they help, how to roll them back correctly, and the concurrency mistakes
@@ -116,6 +116,7 @@ const snapshot = { liked, count };
 }
 
 return (
+
 <button onClick={toggleLike} aria-pressed={liked}>
 {liked ? "♥" : "♡"} {count}
 </button>
@@ -174,6 +175,7 @@ const thisRequestId = ++requestIdRef.current;
 }
 
 return (
+
 <button onClick={toggleLike} aria-pressed={liked}>
 {liked ? "♥" : "♡"} {count}
 </button>

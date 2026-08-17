@@ -2,7 +2,7 @@
 title: "Building Permission-Driven Dashboards in Next.js"
 date: "2026-08-03"
 author: "Diwash Bhattarai"
-profile: "/profile.png"
+profile: "/profile.webp"
 tags: ["Next.js", "React", "TypeScript", "Software Architecture", "RBAC"]
 description: "A practical guide to designing role-based, permission-driven dashboards in
   Next.js — from access models and UI composition to common mistakes and trade-offs."
@@ -165,6 +165,7 @@ export function DashboardNav({ access }: { access: AccessContext }) {
   const items = NAV_ITEMS.filter((item) => can(access, item.permission));
 
 return (
+
 <nav>
 {items.map((item) => (
 <a href={item.href} key={item.href}>

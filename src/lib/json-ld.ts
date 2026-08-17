@@ -24,7 +24,7 @@ export const getPersonJsonLd = () => ({
     "@id": `${getCanonicalUrl("/")}/#person`,
     name: siteConfig.name,
     url: getCanonicalUrl("/"),
-    image: getCanonicalUrl("/profile.png"),
+    image: getCanonicalUrl("/profile.webp"),
     jobTitle: siteConfig.jobTitle,
     email: siteConfig.contactEmail,
     address: {

@@ -2,7 +2,7 @@
 title: "Integrating Khalti Web Checkout in a Next.js + NestJS App"
 date: "2026-08-05"
 author: "Diwash Bhattarai"
-profile: "/profile.png"
+profile: "/profile.webp"
 tags: ["NestJS", "Next.js", "Payments", "Khalti", "Nepal"]
 description: "A complete Khalti KPG-2 Web Checkout integration for Next.js and NestJS —
   merchant setup, initiate + pidx, return_url callback, lookup verification, and
@@ -154,34 +154,34 @@ import { HttpService } from "@nestjs/axios";
 import { firstValueFrom } from "rxjs";
 
 interface InitiateInput {
-  purchaseOrderId: string;
-  purchaseOrderName: string;
-  amountInRupees: number;
-  customer?: { name: string; email: string; phone: string };
+purchaseOrderId: string;
+purchaseOrderName: string;
+amountInRupees: number;
+customer?: { name: string; email: string; phone: string };
 }
 
 interface InitiateResponse {
-  pidx: string;
-  payment_url: string;
-  expires_at: string;
-  expires_in: number;
+pidx: string;
+payment_url: string;
+expires_at: string;
+expires_in: number;
 }
 
 @Injectable()
 export class KhaltiService {
-  private readonly secretKey: string;
-  private readonly baseUrl: string;
+private readonly secretKey: string;
+private readonly baseUrl: string;
 
-  constructor(
-    private readonly config: ConfigService,
-    private readonly http: HttpService,
-  ) {
-    this.secretKey = this.config.getOrThrow("KHALTI_SECRET_KEY");
-    this.baseUrl = this.config.getOrThrow("KHALTI_BASE_URL");
-  }
+constructor(
+private readonly config: ConfigService,
+private readonly http: HttpService,
+) {
+this.secretKey = this.config.getOrThrow("KHALTI_SECRET_KEY");
+this.baseUrl = this.config.getOrThrow("KHALTI_BASE_URL");
+}
 
-  async initiate(input: InitiateInput): Promise<InitiateResponse> {
-    const amountPaisa = Math.round(input.amountInRupees * 100);
+async initiate(input: InitiateInput): Promise<InitiateResponse> {
+const amountPaisa = Math.round(input.amountInRupees \* 100);
 
     if (amountPaisa < 1000) {
       throw new Error("Khalti minimum amount is Rs 10 (1000 paisa)");
@@ -208,21 +208,22 @@ export class KhaltiService {
     );
 
     return data;
-  }
 
-  async lookup(pidx: string) {
-    const { data } = await firstValueFrom(
-      this.http.post(
-        \`\${this.baseUrl}/epayment/lookup/\`,
-        { pidx },
-        {
-          headers: {
-            Authorization: \`Key \${this.secretKey}\`,
-            "Content-Type": "application/json",
-          },
-        },
-      ),
-    );
+}
+
+async lookup(pidx: string) {
+const { data } = await firstValueFrom(
+this.http.post(
+\`\${this.baseUrl}/epayment/lookup/\`,
+{ pidx },
+{
+headers: {
+Authorization: \`Key \${this.secretKey}\`,
+"Content-Type": "application/json",
+},
+},
+),
+);
 
     return data as {
       pidx: string;
@@ -232,7 +233,8 @@ export class KhaltiService {
       fee: number;
       refunded: boolean;
     };
-  }
+
+}
 }`}
 />
 
@@ -252,16 +254,16 @@ async initiateKhalti(
 ) {
   await this.ordersService.createPending(body.orderId, body.amountInRupees);
 
-  const session = await this.khaltiService.initiate({
-    purchaseOrderId: body.orderId,
-    purchaseOrderName: body.orderName,
-    amountInRupees: body.amountInRupees,
-  });
+const session = await this.khaltiService.initiate({
+purchaseOrderId: body.orderId,
+purchaseOrderName: body.orderName,
+amountInRupees: body.amountInRupees,
+});
 
-  // Persist pidx so reconciliation can look up without the browser callback
-  await this.ordersService.attachPidx(body.orderId, session.pidx);
+// Persist pidx so reconciliation can look up without the browser callback
+await this.ordersService.attachPidx(body.orderId, session.pidx);
 
-  return { paymentUrl: session.payment_url, pidx: session.pidx };
+return { paymentUrl: session.payment_url, pidx: session.pidx };
 }`}
 />
 
@@ -301,26 +303,26 @@ export function PayWithKhaltiButton({
 }) {
   const [loading, setLoading] = useState(false);
 
-  async function handlePay() {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/payments/khalti/initiate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId, amountInRupees, orderName }),
-      });
-      const { paymentUrl } = (await res.json()) as { paymentUrl: string };
-      window.location.assign(paymentUrl);
-    } catch {
-      setLoading(false);
-    }
-  }
+async function handlePay() {
+setLoading(true);
+try {
+const res = await fetch("/api/payments/khalti/initiate", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ orderId, amountInRupees, orderName }),
+});
+const { paymentUrl } = (await res.json()) as { paymentUrl: string };
+window.location.assign(paymentUrl);
+} catch {
+setLoading(false);
+}
+}
 
-  return (
-    <button disabled={loading} onClick={handlePay} type="button">
-      {loading ? "Redirecting…" : "Pay with Khalti"}
-    </button>
-  );
+return (
+<button disabled={loading} onClick={handlePay} type="button">
+{loading ? "Redirecting…" : "Pay with Khalti"}
+</button>
+);
 }`}
 />
 
@@ -394,27 +396,27 @@ async verifyKhalti(
     return res.redirect("/payment/failed");
   }
 
-  const lookup = await this.khaltiService.lookup(pidx);
+const lookup = await this.khaltiService.lookup(pidx);
 
-  if (lookup.status !== "Completed") {
-    return res.redirect("/payment/failed");
-  }
+if (lookup.status !== "Completed") {
+return res.redirect("/payment/failed");
+}
 
-  const expectedPaisa = await this.ordersService.getPendingAmountPaisa(
-    purchaseOrderId ?? lookup.pidx,
-  );
+const expectedPaisa = await this.ordersService.getPendingAmountPaisa(
+purchaseOrderId ?? lookup.pidx,
+);
 
-  if (lookup.total_amount !== expectedPaisa) {
-    return res.redirect("/payment/failed");
-  }
+if (lookup.total_amount !== expectedPaisa) {
+return res.redirect("/payment/failed");
+}
 
-  await this.ordersService.markPaidIfPending(
-    purchaseOrderId,
-    expectedPaisa / 100,
-    lookup.transaction_id,
-  );
+await this.ordersService.markPaidIfPending(
+purchaseOrderId,
+expectedPaisa / 100,
+lookup.transaction_id,
+);
 
-  return res.redirect(\`/payment/success?orderId=\${purchaseOrderId}\`);
+return res.redirect(\`/payment/success?orderId=\${purchaseOrderId}\`);
 }`}
 />
 
@@ -449,11 +451,11 @@ stored `pidx` values. Guard side effects:
     },
   });
 
-  if (result.count === 0) {
-    return;
-  }
+if (result.count === 0) {
+return;
+}
 
-  await this.notifications.sendPaymentConfirmation(purchaseOrderId);
+await this.notifications.sendPaymentConfirmation(purchaseOrderId);
 }`}
 />
 
@@ -474,13 +476,13 @@ export default async function PaymentSuccessPage({
   const { orderId } = await searchParams;
   if (!orderId) redirect("/");
 
-  const order = await getOrder(orderId);
+const order = await getOrder(orderId);
 
-  if (order.status !== "PAID") {
-    redirect("/payment/pending");
-  }
+if (order.status !== "PAID") {
+redirect("/payment/pending");
+}
 
-  return <OrderConfirmation order={order} />;
+return <OrderConfirmation order={order} />;
 }`}
 />
 
