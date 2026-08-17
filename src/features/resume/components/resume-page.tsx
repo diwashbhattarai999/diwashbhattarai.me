@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import BlurFade from "@/components/animations/blur-fade";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
+import { HomepageLink } from "@/components/shared/portfolio-home-note";
 import { SectionWrapper } from "@/components/shared/section-items";
 import { buttonVariants } from "@/components/ui/button";
 import { ROUTES } from "@/configs/routes";
@@ -34,7 +35,9 @@ export const ResumePage = () => (
             <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p className="text-primary">{ABOUT_ME.headline}</p>
-                    <h1 className="mt-2 font-bold text-4xl">{ABOUT_ME.name}</h1>
+                    <h1 className="mt-2 font-bold text-4xl">
+                        <HomepageLink className="text-foreground">{ABOUT_ME.name}</HomepageLink>
+                    </h1>
                 </div>
                 <a
                     className={cn(buttonVariants({ variant: "outline" }))}
@@ -129,6 +132,7 @@ export const ResumePage = () => (
 
         <BlurFade delay={0.28}>
             <p className="mt-10 text-muted-foreground text-sm">
+                This HTML resume matches the overview on <HomepageLink className="text-muted-foreground" />.{" "}
                 {siteConfig.contactEmail} · {siteConfig.social.github.replace("https://", "")} ·{" "}
                 {siteConfig.location}
             </p>

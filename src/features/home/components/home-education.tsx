@@ -11,7 +11,7 @@ import { EDUCATION_DETAILS } from "@/features/education/constants/education.cons
 export const HomeEducation = () => (
     <SectionHeading
         actionHref={ROUTES.EDUCATION}
-        actionLabel="View education"
+        actionLabel="View my CSIT education"
         id="education"
         title="Education"
     >

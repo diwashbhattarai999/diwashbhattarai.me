@@ -255,7 +255,7 @@ export const ProjectDetailPage = ({ projectId }: ProjectDetailPageProps) => {
                     <p className="mt-4 text-muted-foreground leading-relaxed">
                         More product work is on{" "}
                         <Link className={PROJECT_LINK_CLASS} href={ROUTES.PROJECTS}>
-                            projects
+                            all software projects
                         </Link>
                         {experience ? (
                             <>
@@ -269,6 +269,10 @@ export const ProjectDetailPage = ({ projectId }: ProjectDetailPageProps) => {
                                 </Link>
                             </>
                         ) : null}
+                        . Featured work is also previewed on{" "}
+                        <Link className={PROJECT_LINK_CLASS} href={ROUTES.HOME}>
+                            Diwash Bhattarai&apos;s homepage
+                        </Link>
                         .
                     </p>
                 </section>

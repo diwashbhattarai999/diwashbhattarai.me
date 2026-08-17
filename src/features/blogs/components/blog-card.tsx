@@ -2,6 +2,7 @@ import { ArrowRight, Calendar, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { HomepageLink } from "@/components/shared/portfolio-home-note";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,10 +10,17 @@ import { ROUTES } from "@/configs/routes";
 import type { BlogPost } from "@/features/blogs/types/blogs.types";
 
 interface BlogCardProps {
+    linkAuthorToHome?: boolean;
     post: BlogPost;
 }
 
-export const BlogCard = ({ post }: BlogCardProps) => {
+/**
+ * Blog listing card with title, excerpt, and author.
+ *
+ * @param linkAuthorToHome - When true, the author name links to the homepage. Disable on homepage previews.
+ * @param post - Blog post metadata.
+ */
+export const BlogCard = ({ linkAuthorToHome = true, post }: BlogCardProps) => {
     return (
         <Card className="group relative overflow-hidden rounded-xl border p-0 backdrop-blur-md">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] lg:grid-cols-[1fr_2fr]">
@@ -74,7 +82,13 @@ export const BlogCard = ({ post }: BlogCardProps) => {
                                 src={post.profile}
                                 width={32}
                             />
-                            <span className="font-medium text-sm">{post.author}</span>
+                            {linkAuthorToHome ? (
+                                <HomepageLink className="font-medium text-foreground text-sm">
+                                    {post.author}
+                                </HomepageLink>
+                            ) : (
+                                <span className="font-medium text-sm">{post.author}</span>
+                            )}
                         </div>
 
                         <Button asChild className="group/button hover:bg-primary/10" variant="ghost">
@@ -83,8 +97,7 @@ export const BlogCard = ({ post }: BlogCardProps) => {
                                 className="flex items-center gap-1"
                                 href={ROUTES.BLOG(post.slug)}
                             >
-                                <span className="sr-only">Read more about {post.title}</span>
-                                Read More
+                                Read article
                                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/button:translate-x-1" />
                             </Link>
                         </Button>

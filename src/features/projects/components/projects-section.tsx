@@ -1,5 +1,6 @@
 import BlurFade from "@/components/animations/blur-fade";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
+import { HomepageLink } from "@/components/shared/portfolio-home-note";
 import { SectionSubTitle, SectionTitle, SectionWrapper } from "@/components/shared/section-items";
 import { SectionViewAllButton } from "@/components/shared/section-view-all-button";
 import { ROUTES } from "@/configs/routes";
@@ -41,12 +42,17 @@ export const ProjectsSection = ({ showViewAll = false, limit }: ProjectsSectionP
                     </SectionTitle>
                     {showViewAll ? (
                         <BlurFade delay={0.08}>
-                            <SectionViewAllButton href={ROUTES.PROJECTS} label="View all projects" />
+                            <SectionViewAllButton
+                                href={ROUTES.PROJECTS}
+                                label="Explore my Next.js projects"
+                            />
                         </BlurFade>
                     ) : null}
                 </div>
                 {isPreview ? null : (
-                    <SectionSubTitle>Here are some of the projects I have worked on.</SectionSubTitle>
+                    <SectionSubTitle>
+                        Case studies of shipped products. Featured work is also previewed on <HomepageLink />.
+                    </SectionSubTitle>
                 )}
             </div>
             <ProjectsList headingLevel={isPreview ? "h3" : "h2"} projects={displayedProjects} />

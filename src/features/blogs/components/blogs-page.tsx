@@ -1,5 +1,6 @@
 import BlurFade from "@/components/animations/blur-fade";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
+import { HomepageLink } from "@/components/shared/portfolio-home-note";
 import { SectionSubTitle, SectionWrapper } from "@/components/shared/section-items";
 import { ROUTES } from "@/configs/routes";
 import { BlogCard } from "@/features/blogs/components/blog-card";
@@ -25,7 +26,8 @@ export const BlogsPage = () => {
                     <div>
                         <h1 className="font-bold text-3xl">Blog</h1>
                         <SectionSubTitle className="mt-2 mb-8">
-                            Insights, tutorials, and thoughts on web development
+                            Notes on React, Next.js, and Node.js. The rest of the portfolio is on{" "}
+                            <HomepageLink />.
                         </SectionSubTitle>
                     </div>
                 </BlurFade>

@@ -31,7 +31,14 @@ export const HtmlSitemapPage = () => {
                     <div>
                         <h1 className="font-bold text-3xl">Sitemap</h1>
                         <p className="mt-2 max-w-2xl text-muted-foreground">
-                            A full list of pages on this site, grouped by section.
+                            A full list of pages on this site, grouped by section. Start from{" "}
+                            <Link
+                                className="text-primary underline-offset-4 hover:underline"
+                                href={ROUTES.HOME}
+                            >
+                                Diwash Bhattarai&apos;s homepage
+                            </Link>{" "}
+                            for the main overview.
                         </p>
                     </div>
                     <Badge variant="secondary">

@@ -36,7 +36,13 @@ export const SectionTitle = ({ as: Heading = "h2", children, className }: Sectio
     </Heading>
 );
 
-export const SectionSubTitle = ({ children, className }: { children: string; className?: string }) => (
+export const SectionSubTitle = ({
+    children,
+    className,
+}: {
+    children: React.ReactNode;
+    className?: string;
+}) => (
     <p className={cn("animate-blur-fade text-primary", className)} style={{ animationDelay: "0.1s" }}>
         {children}
     </p>

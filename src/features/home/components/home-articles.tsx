@@ -19,14 +19,14 @@ export const HomeArticles = () => {
     return (
         <SectionHeading
             actionHref={ROUTES.BLOGS}
-            actionLabel="Read all articles"
+            actionLabel="Read articles on React and Next.js"
             id="articles"
             title="Latest articles"
         >
             <div className="space-y-8">
                 {posts.map((post, index) => (
                     <BlurFade delay={0.08 + index * 0.08} key={post.slug}>
-                        <BlogCard post={post} />
+                        <BlogCard linkAuthorToHome={false} post={post} />
                     </BlurFade>
                 ))}
             </div>

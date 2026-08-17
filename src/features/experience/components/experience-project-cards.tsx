@@ -28,7 +28,7 @@ export const ExperienceProjectCards = ({ projects }: ExperienceProjectCardsProps
             <div className="flex items-center justify-between">
                 <h2 className="font-semibold text-2xl">Projects</h2>
 
-                <SectionViewAllButton href={ROUTES.PROJECTS} label="View all projects" />
+                <SectionViewAllButton href={ROUTES.PROJECTS} label="Explore my Next.js projects" />
             </div>
             <div className="flex flex-col gap-4">
                 {projects.map((project, index) => (

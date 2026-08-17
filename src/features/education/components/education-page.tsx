@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import BlurFade from "@/components/animations/blur-fade";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
+import { HomepageLink } from "@/components/shared/portfolio-home-note";
 import { SectionCard, SectionWrapper } from "@/components/shared/section-items";
 import { SectionViewAllButton } from "@/components/shared/section-view-all-button";
 import { ROUTES } from "@/configs/routes";
@@ -76,17 +77,17 @@ export const EducationPage = () => (
                     <p key={paragraph.slice(0, 40)}>{paragraph}</p>
                 ))}
                 <p>
-                    For the professional side of the same story, see{" "}
+                    For the professional side of the same story, see <HomepageLink />,{" "}
                     <Link className={EDUCATION_LINK_CLASS} href={ROUTES.EXPERIENCE}>
-                        experience
+                        full-stack development experience
                     </Link>
                     , the{" "}
                     <Link className={EDUCATION_LINK_CLASS} href={ROUTES.SKILLS}>
-                        technical stack
+                        React, Next.js, and Node.js skills
                     </Link>
                     , and{" "}
                     <Link className={EDUCATION_LINK_CLASS} href={ROUTES.PROJECTS}>
-                        projects
+                        Next.js projects
                     </Link>
                     . I also wrote{" "}
                     <Link className={EDUCATION_LINK_CLASS} href={WRITING_LINKS.fullStackNepal.href}>

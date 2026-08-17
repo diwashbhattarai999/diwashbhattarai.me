@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import BlurFade from "@/components/animations/blur-fade";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
+import { HomepageLink } from "@/components/shared/portfolio-home-note";
 import { SectionWrapper } from "@/components/shared/section-items";
 import { SectionViewAllButton } from "@/components/shared/section-view-all-button";
 import { ROUTES } from "@/configs/routes";
@@ -139,13 +140,14 @@ export const SkillsPage = () => {
                 <section className="mt-12 space-y-4">
                     <h2 className="font-semibold text-2xl">Where to see this stack in context</h2>
                     <p className="text-muted-foreground leading-relaxed">
-                        Skills without products are just a list. The{" "}
+                        Skills without products are just a list. <HomepageLink /> previews the same stack in
+                        context. The{" "}
                         <Link className={SKILLS_LINK_CLASS} href={ROUTES.PROJECTS}>
-                            projects
+                            Next.js projects
                         </Link>{" "}
                         and{" "}
                         <Link className={SKILLS_LINK_CLASS} href={ROUTES.EXPERIENCE}>
-                            experience
+                            full-stack development experience
                         </Link>{" "}
                         pages show the same tools in shipped systems. I also publish{" "}
                         <Link className={SKILLS_LINK_CLASS} href={ROUTES.PROJECTS_STARTERS}>

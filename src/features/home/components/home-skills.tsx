@@ -12,7 +12,7 @@ export function HomeSkills() {
     return (
         <SectionHeading
             actionHref={ROUTES.SKILLS}
-            actionLabel="View full technical stack"
+            actionLabel="View my React, Next.js, and Node.js stack"
             id="skills"
             title="Technical expertise"
         >

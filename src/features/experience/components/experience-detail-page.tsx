@@ -118,11 +118,15 @@ export const ExperienceDetailPage = ({ slug }: ExperienceDetailPageProps) => {
                         {experience.current ? " and is current" : ""}. It is part of the same career path
                         documented on{" "}
                         <Link className={EXPERIENCE_LINK_CLASS} href={ROUTES.ABOUT}>
-                            about
-                        </Link>{" "}
-                        and{" "}
+                            the about page
+                        </Link>
+                        ,{" "}
                         <Link className={EXPERIENCE_LINK_CLASS} href={ROUTES.EXPERIENCE}>
-                            all experience
+                            all full-stack development experience
+                        </Link>
+                        , and{" "}
+                        <Link className={EXPERIENCE_LINK_CLASS} href={ROUTES.HOME}>
+                            Diwash Bhattarai&apos;s homepage
                         </Link>
                         .
                     </p>

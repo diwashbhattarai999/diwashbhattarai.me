@@ -5,10 +5,13 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import BlurFade from "@/components/animations/blur-fade";
 import { JsonLd } from "@/components/shared/json-ld";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
+import { HomepageLink } from "@/components/shared/portfolio-home-note";
 import { Badge } from "@/components/ui/badge";
 import { CodeBlock } from "@/components/ui/codeblock";
 import { ROUTES } from "@/configs/routes";
 import { RelatedBlogs } from "@/features/blogs/components/related-blogs";
+import { RelatedPortfolioLinks } from "@/features/blogs/components/related-portfolio-links";
+import { getRelatedPortfolioLinks } from "@/features/blogs/utils/get-related-portfolio-links";
 import { getArticleJsonLd } from "@/lib/json-ld";
 import { getPostBySlug, getRelatedPosts } from "@/lib/mdx";
 
@@ -29,7 +32,9 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
     }
 
     const { content, frontMatter } = post;
-    const relatedPosts = getRelatedPosts(slug, frontMatter.tags ?? [], frontMatter.category);
+    const tags = frontMatter.tags ?? [];
+    const relatedPosts = getRelatedPosts(slug, tags, frontMatter.category);
+    const relatedPortfolioLinks = getRelatedPortfolioLinks(slug, tags, frontMatter.category);
 
     return (
         <div className="flex min-w-0 flex-col gap-5 px-5 py-10">
@@ -79,7 +84,9 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
                             src={frontMatter.profile}
                             width={100}
                         />
-                        <span className="font-medium text-muted-foreground">{frontMatter.author}</span>
+                        <HomepageLink className="font-medium text-muted-foreground">
+                            {frontMatter.author}
+                        </HomepageLink>
                     </div>
 
                     <p className="text-muted-foreground text-sm">
@@ -128,6 +135,7 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
                 </article>
             </BlurFade>
 
+            <RelatedPortfolioLinks links={relatedPortfolioLinks} />
             <RelatedBlogs posts={relatedPosts} />
         </div>
     );

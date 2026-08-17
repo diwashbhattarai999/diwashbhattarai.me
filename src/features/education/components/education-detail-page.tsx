@@ -175,16 +175,20 @@ export const EducationDetailPage = ({ educationId }: EducationDetailPageProps) =
                     <p className="text-muted-foreground leading-relaxed">{education.conclusion}</p>
                     <p className="mt-4 text-muted-foreground leading-relaxed">
                         Related pages:{" "}
+                        <Link className={EDUCATION_LINK_CLASS} href={ROUTES.HOME}>
+                            Diwash Bhattarai&apos;s homepage
+                        </Link>
+                        ,{" "}
                         <Link className={EDUCATION_LINK_CLASS} href={ROUTES.EDUCATION}>
                             all education
                         </Link>
                         ,{" "}
                         <Link className={EDUCATION_LINK_CLASS} href={ROUTES.EXPERIENCE}>
-                            experience
+                            full-stack development experience
                         </Link>
                         ,{" "}
                         <Link className={EDUCATION_LINK_CLASS} href={ROUTES.SKILLS}>
-                            skills
+                            React, Next.js, and Node.js skills
                         </Link>
                         , and{" "}
                         <Link className={EDUCATION_LINK_CLASS} href={WRITING_LINKS.fullStackNepal.href}>

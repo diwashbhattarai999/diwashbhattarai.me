@@ -22,7 +22,10 @@ interface LegalDocumentPageProps {
  * @param path - Canonical path used in the breadcrumb.
  */
 export const LegalDocumentPage = ({ document, path }: LegalDocumentPageProps) => {
-    const relatedLinks = FOOTER_LEGAL_LINKS.filter((link) => link.href !== path);
+    const relatedLinks = [
+        { href: ROUTES.HOME, label: "Diwash Bhattarai's homepage" },
+        ...FOOTER_LEGAL_LINKS.filter((link) => link.href !== path),
+    ];
 
     return (
         <SectionWrapper id="legal">

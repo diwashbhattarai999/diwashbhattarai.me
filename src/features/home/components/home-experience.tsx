@@ -8,7 +8,7 @@ import { ExperienceList } from "@/features/experience/components/experience-list
 export const HomeExperience = () => (
     <SectionHeading
         actionHref={ROUTES.EXPERIENCE}
-        actionLabel="View all experience"
+        actionLabel="View my full-stack development experience"
         id="experience"
         title="Experience"
     >

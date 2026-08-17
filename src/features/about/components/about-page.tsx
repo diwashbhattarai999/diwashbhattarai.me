@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import BlurFade from "@/components/animations/blur-fade";
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
+import { HomepageLink } from "@/components/shared/portfolio-home-note";
 import { SectionSeperator, SectionWrapper } from "@/components/shared/section-items";
 import { SectionViewAllButton } from "@/components/shared/section-view-all-button";
 import { ROUTES } from "@/configs/routes";
@@ -47,7 +48,7 @@ export const AboutPage = () => {
                     <h1 className="mt-2 font-bold text-4xl">{ABOUT_ME.name}</h1>
                     <p className="mt-4 text-muted-foreground">
                         {ABOUT_ME.title}. Over 3.5 years building production web applications with React,
-                        Next.js, Node.js, NestJS, and TypeScript.
+                        Next.js, Node.js, NestJS, and TypeScript. A shorter overview is on <HomepageLink />.
                     </p>
                 </BlurFade>
 
@@ -204,7 +205,10 @@ export const AboutPage = () => {
                             ))}
                         </ul>
                         <div className="mt-4">
-                            <SectionViewAllButton href={ROUTES.EXPERIENCE} label="View full experience" />
+                            <SectionViewAllButton
+                                href={ROUTES.EXPERIENCE}
+                                label="View my full-stack development experience"
+                            />
                         </div>
                     </section>
                 </BlurFade>
@@ -261,7 +265,8 @@ export const AboutPage = () => {
 
                 <BlurFade delay={0.26}>
                     <p className="mt-12 text-muted-foreground text-sm">
-                        {siteConfig.name} · {ABOUT_ME.headline} · {siteConfig.location}
+                        <HomepageLink>{siteConfig.name}</HomepageLink> · {ABOUT_ME.headline} ·{" "}
+                        {siteConfig.location}
                     </p>
                 </BlurFade>
             </SectionWrapper>
