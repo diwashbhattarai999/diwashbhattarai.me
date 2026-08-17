@@ -20,10 +20,17 @@ export const BlogsPage = () => {
                     { label: "Blog", path: ROUTES.BLOGS },
                 ]}
             />
-            <h1 className="font-bold text-3xl">Blog</h1>
-            <SectionSubTitle className="mt-2 mb-8">
-                Insights, tutorials, and thoughts on web development
-            </SectionSubTitle>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="font-bold text-3xl">Blog</h1>
+                    <SectionSubTitle className="mt-2 mb-8">
+                        Insights, tutorials, and thoughts on web development
+                    </SectionSubTitle>
+                </div>
+
+                {/* Total posts count */}
+                <div className="font-medium text-lg text-muted-foreground">{posts.length} total posts</div>
+            </div>
 
             <div className="space-y-8">
                 {posts.map((post, index) => (
