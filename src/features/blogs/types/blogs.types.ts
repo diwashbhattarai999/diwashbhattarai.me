@@ -7,6 +7,7 @@ export interface BlogPost {
     excerpt: string;
     profile: string;
     readTime: string;
+    seoTitle?: string;
     slug: string;
     tags: string[];
     title: string;

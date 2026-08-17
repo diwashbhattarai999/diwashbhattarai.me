@@ -21,13 +21,14 @@ export const generateMetadata = async ({ params }: BlogRouteProps): Promise<Meta
     }
 
     const { frontMatter } = post;
+    const documentTitle = typeof frontMatter.seoTitle === "string" ? frontMatter.seoTitle : frontMatter.title;
 
     return createPageMetadata({
         description: frontMatter.description ?? frontMatter.excerpt,
         image: frontMatter.coverImage,
         path: ROUTES.BLOG(slug),
         publishedTime: frontMatter.date,
-        title: `${frontMatter.title} | Blog`,
+        title: `${documentTitle} | Blog`,
         type: "article",
     });
 };

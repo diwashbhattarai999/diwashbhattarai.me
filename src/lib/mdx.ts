@@ -18,6 +18,7 @@ const toBlogPost = (filename: string, data: Record<string, unknown>): BlogPost =
         excerpt: data.excerpt,
         profile: data.profile,
         readTime: data.readTime,
+        seoTitle: data.seoTitle,
         slug: filename.replace(".mdx", ""),
         tags: data.tags,
         title: data.title,
