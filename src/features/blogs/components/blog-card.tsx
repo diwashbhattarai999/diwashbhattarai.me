@@ -85,6 +85,7 @@ export const BlogCard = ({ post }: BlogCardProps) => {
                                 className="flex items-center gap-1"
                                 href={ROUTES.BLOG(post.slug)}
                             >
+                                <span className="sr-only">Read more about {post.title}</span>
                                 Read More
                                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/button:translate-x-1" />
                             </Link>
