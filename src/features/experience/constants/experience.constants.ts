@@ -173,7 +173,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
         projects: [
             { name: "E-commerce Platform" },
             { name: "Booking Application" },
-            { link: "https://kswtechzone.com.np/", name: "Portfolio Website" },
+            { name: "Portfolio Website" },
         ],
         responsibilities: [
             "Contribute to frontend development of e-commerce platforms, booking applications, and portfolio websites.",
@@ -186,7 +186,6 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
             "This internship is where I practiced HTML, CSS, JavaScript, React, and responsive design on e-commerce, booking, and portfolio surfaces, including tightening design-system consistency across those applications.",
         slug: "frontend-developer-intern-ksw-techzone",
         title: "Frontend Developer Intern",
-        website: "https://kswtechzone.com.np/",
     },
 ];
 

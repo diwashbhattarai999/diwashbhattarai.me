@@ -92,17 +92,19 @@ export const ExperienceDetailPage = ({ slug }: ExperienceDetailPageProps) => {
                     </div>
                 </BlurFade>
 
-                <BlurFade delay={0.16}>
-                    <a
-                        className={cn(buttonVariants({ variant: "outline" }))}
-                        href={experience.website}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        <ExternalLink className="size-4" />
-                        Visit Website
-                    </a>
-                </BlurFade>
+                {experience.website ? (
+                    <BlurFade delay={0.16}>
+                        <a
+                            className={cn(buttonVariants({ variant: "outline" }))}
+                            href={experience.website}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            <ExternalLink className="size-4" />
+                            Visit Website
+                        </a>
+                    </BlurFade>
+                ) : null}
             </div>
 
             <Separator className="my-10" />
@@ -231,17 +233,19 @@ export const ExperienceDetailPage = ({ slug }: ExperienceDetailPageProps) => {
                 </BlurFade>
             ) : null}
 
-            <BlurFade delay={0.22}>
-                <a
-                    className={cn(buttonVariants({ variant: "outline" }), "mt-10")}
-                    href={experience.website}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                >
-                    <ExternalLink className="size-4" />
-                    Visit Website
-                </a>
-            </BlurFade>
+            {experience.website ? (
+                <BlurFade delay={0.22}>
+                    <a
+                        className={cn(buttonVariants({ variant: "outline" }), "mt-10")}
+                        href={experience.website}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        <ExternalLink className="size-4" />
+                        Visit Website
+                    </a>
+                </BlurFade>
+            ) : null}
         </SectionWrapper>
     );
 };

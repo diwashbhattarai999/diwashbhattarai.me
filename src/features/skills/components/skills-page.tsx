@@ -188,7 +188,7 @@ export const SkillsPage = () => {
                         <SectionViewAllButton href={ROUTES.ABOUT} label="About Diwash Bhattarai" />
                     </div>
                 </section>
-        </BlurFade>
-       </SectionWrapper>
+            </BlurFade>
+        </SectionWrapper>
     );
 };

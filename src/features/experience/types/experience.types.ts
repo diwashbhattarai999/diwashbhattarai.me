@@ -21,5 +21,5 @@ export interface ExperienceDetail {
     skillsGained: string;
     slug: string;
     title: string;
-    website: string;
+    website?: string;
 }
