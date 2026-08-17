@@ -1,0 +1,202 @@
+---
+title: "Full Stack Developer Roadmap: What to Learn in 2026"
+date: "2026-08-17"
+author: "Diwash Bhattarai"
+profile: "/profile.webp"
+tags: ["Full Stack", "Career", "TypeScript", "Next.js", "Node.js"]
+description: "A 2026 full stack developer roadmap — what to learn, in what
+  order, which tools are worth your time, and how to stay employable without
+  chasing every new framework."
+coverImage: "/contents/full-stack-developer-roadmap-2026.png"
+readTime: "8 min read"
+category: "Career"
+---
+
+A full stack developer roadmap in 2026 is not “learn 40 tools.” It is a
+narrow spine: **TypeScript, a React-based UI, a Node API, a relational
+database, Git, and deploy.** Everything else is a branch you add when a job
+or a product requires it.
+
+This is a learning-order article. For Nepal-specific hiring context, use
+[How to Become a Full Stack Developer in Nepal](/blogs/How-to-become-a-full-stack-developer-in-nepal).
+For frontend-only depth, use
+[How to Become a React Developer](/blogs/How-to-become-a-react-developer).
+
+---
+
+## Who this roadmap is for
+
+- Students and career switchers who want a single map
+- Junior developers who know a bit of everything and cannot finish a product
+- Mid-level developers who need to fill a hole (usually SQL or TypeScript)
+
+It assumes you will work on **web products**: SaaS dashboards, marketing
+sites, internal tools. Embedded, data science, and iOS-native tracks are
+different maps.
+
+---
+
+## The 2026 spine (do this first)
+
+### 1. TypeScript
+
+Not optional on serious teams. Write it on both sides so your API types and
+UI types can eventually be shared. Stop converting every error to `unknown`
+and ignoring it.
+
+### 2. HTTP and REST (or a well-typed RPC)
+
+Status codes, JSON, idempotency, pagination. GraphQL is a later elective.
+
+### 3. React + Next.js
+
+React remains the hiring default. Next.js is how you ship SEO pages and
+apps together in 2026. Learn Server vs Client Components on purpose. See
+[How to Build SEO-Friendly Apps with Next.js](/blogs/How-to-build-seo-friendly-apps-with-nextjs)
+when you work on public pages.
+
+### 4. Node.js + NestJS (or Express, then NestJS)
+
+Node is still the shortest path from a JS frontend to a backend job. NestJS
+is what I reach for when the API will grow modules, guards, and multiple
+consumers. Express is a fine teaching tool. Production backends need
+structure.
+
+### 5. PostgreSQL
+
+Learn modeling, indexes, transactions, and migrations. MongoDB is useful for
+document-shaped data; it will not teach you relational thinking. Multi-tenant
+SaaS will force Postgres discipline —
+[this schema article](/blogs/Modeling-multi-tenant-data-in-postgresql)
+is the kind of problem you meet after CRUD tutorials.
+
+### 6. Auth
+
+Sessions or JWT, cookies, password hashing, role vs permission. UI that hides
+buttons is not security. Pair with
+[permission-driven dashboards](/blogs/Building-permission-driven-dashboards-in-nextjs).
+
+### 7. Git, CI, and one cloud deploy
+
+GitHub Actions or similar. Preview deploys. Environment variables. Docker
+when you outgrow “it runs on my laptop.”
+
+That is the roadmap. AI-assisted coding does not replace this spine. It
+makes a weak spine fail faster.
+
+---
+
+## Recommended order (about 9–12 months if you are consistent)
+
+| Phase | Focus | Output |
+| --- | --- | --- |
+| 1 | HTML, CSS, JS, Git | Static site, GitHub profile |
+| 2 | TypeScript + React | SPA or Next.js app with routing |
+| 3 | Next.js data + forms | Auth-aware pages, Zod validation |
+| 4 | Node API + Postgres | CRUD with real constraints |
+| 5 | Integrate | One repo or two, deployed, README |
+| 6 | Hardening | Tests on the risky paths, logging, pagination |
+
+Do not parallelize all six. Finish a phase with a URL.
+
+---
+
+## Tools that are worth learning in 2026
+
+**Worth it**
+
+- TypeScript, React, Next.js, Node.js, NestJS, PostgreSQL
+- TanStack Query for server state
+- Tailwind + accessible component primitives
+- Zod
+- Redis when you have a real cache or queue need
+- Docker for repeatable deploys
+
+**Learn when the job needs it**
+
+- Kafka / event buses — useful in distributed systems; not a junior filter
+- Kubernetes — ops role adjacent
+- React Native — a different product surface
+- GraphQL — if the team already has it
+
+**Skip as identity**
+
+- Rewriting your portfolio in every new meta-framework
+- Collecting 12 state libraries
+
+I use TanStack Query heavily in product UIs. I also keep a
+[skills](/skills) list honest: the tools I actually ship, not a conference
+agenda.
+
+---
+
+## Projects to build (one per phase)
+
+1. **Personal site** with MDX or a CMS — you need SEO practice anyway
+2. **Issue tracker or CRM slice** — lists, filters, permissions
+3. **API + Postgres** for that slice — no `SELECT *`
+4. **Payments or webhooks** — even a test-mode Stripe flow teaches idempotency
+5. **A second tenant or role** — so you cannot cheat with global queries
+
+Case studies on a [projects](/projects) page beat a wall of tutorial clones.
+Walk through one product in interviews the way you would
+[GymGrow](/projects/gymgrow): users, roles, money, and operational screens.
+
+---
+
+## What changed vs 2022 (and what did not)
+
+**Changed:** Server Components, more TypeScript-by-default, AI pair programming,
+more “full stack” job posts that are really Next.js plus a thin API.
+
+**Not changed:** SQL, HTTP, accessibility, naming, and reviewing diffs.
+
+If a course still starts with class components and a REST-less Firebase-only
+todo, it is a history lesson.
+
+---
+
+## Common mistakes on roadmaps
+
+**Infinite electives.** You do not need Rust this year.
+
+**No production build.** `npm run dev` is not a career.
+
+**Skipping CSS.** Full stack still ships UI.
+
+**Skipping SQL.** “I use Prisma so I don’t need to know joins” lasts until the
+slow query.
+
+**Tutorial projects with no README.** Interviewers open the repo on their
+phone.
+
+---
+
+## How to stay job-ready
+
+- Follow **one** production stack for 6 months
+- Read changelogs for Next.js and Node LTS — not every Twitter framework fight
+- Write down trade-offs in READMEs
+- Practice explaining a system on a whiteboard or paper
+- Apply before the roadmap feels complete
+
+Backend-heavy? Use
+[How to Become a Backend Developer with Node.js](/blogs/How-to-become-a-backend-developer-with-nodejs)
+and
+[How to Scale APIs with Node.js](/blogs/How-to-scale-apis-with-nodejs).
+Frontend-heavy? Stay on the React article until your UI is embarrassing in a
+good way — polished, typed, deployed.
+
+---
+
+## Conclusion
+
+The 2026 full stack developer roadmap is a spine: TypeScript, Next.js, Node,
+PostgreSQL, auth, deploy. Add Redis, queues, and extra cloud when a bottleneck
+appears — not when a YouTube thumbnail appears.
+
+If you want the Nepal-shaped version of hiring and local payments, read that
+guide next. If you want to work as a software engineer who can still design
+UI, keep shipping products you can demo in five minutes.
+
+Learn less. Finish more.

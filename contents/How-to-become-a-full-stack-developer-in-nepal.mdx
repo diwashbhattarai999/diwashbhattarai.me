@@ -1,0 +1,239 @@
+---
+title: "How to Become a Full Stack Developer in Nepal"
+date: "2026-08-17"
+author: "Diwash Bhattarai"
+profile: "/profile.webp"
+tags: ["Career", "Full Stack", "Nepal", "Next.js", "Node.js"]
+description: "A realistic path to becoming a full stack developer in Nepal —
+  what to learn, how local product and agency work differs, which projects help
+  you get hired, and how to build a portfolio that survives a real interview."
+coverImage: "/contents/how-to-become-a-full-stack-developer-in-nepal.png"
+readTime: "11 min read"
+category: "Career"
+---
+
+“Full stack developer in Nepal” is a search a lot of CSIT students and
+self-taught developers type when internships start appearing on Facebook groups
+and LinkedIn. The title is real. The job is not “know every framework.”
+
+In Nepal you will usually be hired to **ship features across the UI and the
+API** on a small team — agencies, product companies, and a growing number of
+remote roles. This article is a practical path: skills, learning order, local
+context, projects, and interview prep. No invented salary tables, no fake
+hiring statistics.
+
+---
+
+## Who this path is for
+
+This is for you if:
+
+- You are studying CSIT, BIT, BCA, or a related program — or you are switching
+  from another field
+- You can already build a simple website and want to own backend work too
+- You want jobs in Kathmandu (and increasingly Pokhara / remote) where “full
+  stack” means React or Next.js plus Node.js
+
+It is *not* a promise that one roadmap gets you a senior title. Full stack
+juniors are expected to be dangerous on one side (usually frontend) and
+competent on the other (APIs, Postgres, auth). Depth still wins.
+
+I studied [B.Sc. CSIT at Bhaktapur Multiple Campus](/education/bhaktapur-multiple-campus)
+and now work as a [full stack software developer](/experience). The degree
+helped with fundamentals. The portfolio and shipped products did the rest.
+
+---
+
+## What “full stack” means in Nepali teams
+
+In practice the stack is often:
+
+- **Frontend:** React, Next.js, TypeScript, Tailwind
+- **Backend:** Node.js, Express or NestJS, REST APIs
+- **Data:** PostgreSQL or MongoDB
+- **Auth & payments:** JWT/sessions, and for local products —
+  [Khalti](/blogs/Integrating-khalti-in-nextjs) or
+  [eSewa](/blogs/Integrating-esewa-in-nextjs)
+- **Deploy:** Vercel, a VPS, Docker, sometimes cPanel-era hosting you have to
+  reason about
+
+Service companies may put you on WordPress or a random PHP admin on Monday and
+a React dashboard on Thursday. Product companies tend to keep you on one
+codebase longer. Both exist. Read the job post: “full stack” can mean “we have
+five people and you will touch everything.”
+
+Remote work for foreign clients is available if your English, Git hygiene, and
+timezone communication are solid. That is a skill, not a buzzword.
+
+---
+
+## Skills to learn (in a hireable order)
+
+### 1. Web fundamentals
+
+HTML, CSS, JavaScript. If you cannot center a layout or explain `async`/`await`,
+React will only hide the gap until the first production bug.
+
+### 2. TypeScript
+
+Almost every serious codebase I join uses TypeScript on both sides. Learn it
+on small programs before you sprinkle `any` through a NestJS module.
+
+### 3. React, then Next.js
+
+React is still the frontend employers recognize. Next.js is how you ship
+marketing pages, SEO, and dashboards in one repo. Start with
+[How to Become a React Developer](/blogs/How-to-become-a-react-developer),
+then add App Router, Server Components, and metadata.
+
+### 4. Node.js APIs
+
+Express is fine to learn HTTP. NestJS shows up in production backends because
+modules, guards, and validation scale better than a single `server.js`. You
+do not need both on day one. You need one API with auth, validation, and a
+database.
+
+### 5. PostgreSQL
+
+Relational data is what invoices, memberships, and multi-tenant SaaS actually
+run on. MongoDB is useful; it is not a substitute for understanding joins,
+indexes, and transactions. I wrote about a pattern you will meet in SaaS:
+[modeling multi-tenant data in PostgreSQL](/blogs/Modeling-multi-tenant-data-in-postgresql).
+
+### 6. Git, Linux comfort, and deployment
+
+Pushing to GitHub is not DevOps. You should be able to:
+
+- Set environment variables
+- Run a production build
+- Read a deploy log
+- Know why a site that “works on your laptop” fails for a visitor in Nepal on
+  shared hosting — see
+  [why Nepali visitors get blocked](/blogs/Why-nepali-visitors-get-blocked-from-your-website-especially-on-hostinger)
+
+---
+
+## Recommended learning order
+
+A year-shaped plan, not a weekend:
+
+1. **Months 1–2:** HTML, CSS, JavaScript, Git
+2. **Months 3–4:** React + TypeScript, one deployed UI
+3. **Months 5–6:** Next.js App Router, forms, auth-aware pages
+4. **Months 7–8:** Node.js + PostgreSQL, REST, JWT or session auth
+5. **Months 9–10:** One full project that uses both sides, including payments
+   or file uploads
+6. **Ongoing:** Read other people’s PRs, write a short case study, apply while
+   you still feel 70% ready
+
+University labs will not replace this. Treat semester projects as portfolio
+pieces if you finish them like products — README, live URL, real validation.
+
+For a technology-first map without the Nepal-specific hiring notes, use the
+[Full Stack Developer Roadmap for 2026](/blogs/Full-stack-developer-roadmap-2026).
+
+---
+
+## Projects that work in this market
+
+Hiring managers here still click GitHub. They also ask “is it live?”
+
+### A Nepal-relevant product slice
+
+Examples that map to real work:
+
+- Clinic or pharmacy-style portal (I spent years in healthcare at
+  [Upachaar Nepal](/experience/full-stack-software-developer-upachaar-nepal))
+- Gym or coaching dashboard with roles
+- Travel or ecommerce catalog with an admin
+
+You do not need to clone a whole hospital. You need **auth, a list, a detail
+page, and an admin mutation** with validation.
+
+### Local payments
+
+Integrating Khalti or eSewa is a differentiator for Nepal-facing products.
+Foreign tutorials will not cover signature verification the way production
+does. Those two posts above are written from that constraint.
+
+### SEO + performance on a public site
+
+Agencies sell websites. If you can explain metadata, Core Web Vitals, and why
+a client-only React app ranks poorly, you are more useful than someone who
+only built a dashboard. Read
+[How to Build SEO-Friendly Apps with Next.js](/blogs/How-to-build-seo-friendly-apps-with-nextjs).
+
+Ship them. Put them on a [projects](/projects) page with a short write-up.
+
+---
+
+## Common mistakes I see locally
+
+**Collecting certificates instead of repos.** A Udemy completion PDF does not
+replace a deployed app.
+
+**Copy-pasting MERN tutorials with no types and no error handling.** Interviewers
+will ask what happens when the API returns 500.
+
+**Ignoring English and written communication.** Standups and client Slack are
+part of the job, including for Kathmandu offices.
+
+**Waiting for a “perfect” CSIT GPA.** Some teams care. Many care more that you
+can debug.
+
+**Applying only to FAANG-shaped job descriptions.** Most openings are smaller
+companies that want someone who can ship next week.
+
+**Never reading production constraints** — payments, permissions, multi-tenant
+data. Those are the tickets you will actually pick up. Look at
+[GymGrow](/projects/gymgrow) or [Striide](/projects/striide) as examples of
+product surface area, not as things you must clone.
+
+---
+
+## How to get job-ready in this market
+
+1. **Finish one full-stack project** with login, CRUD, and a deploy URL
+2. **Keep GitHub green with real commits**, not one dump before you apply
+3. **Write a short About page** — who you are, stack, what you want. Start
+   from how you present work on an [about](/about) page: stack, location,
+   intent
+4. **Do internships and freelance carefully.** Unpaid “exposure” with no
+   mentorship teaches you to normalize chaos. Prefer teams that review your PRs
+5. **Learn to estimate.** “It will take two days” is a skill. Track yourself
+
+CV: one page, live links on top, stack in the tools they use (React, Next.js,
+Node.js, PostgreSQL). Tailor the first bullet to the company.
+
+---
+
+## Interviews
+
+Typical rounds:
+
+- **HR / intro** — availability, notice, why this company
+- **Technical talk** — a project deep dive. They will poke the hardest part
+- **Live coding** — JS plus a small React component or an Express route
+- **Sometimes SQL** — `JOIN`, indexes at a basic level
+
+Prepare a 5-minute walkthrough of your best project: problem, users, schema,
+the nastiest bug, what you would redo.
+
+Do not memorize salary screenshots from Twitter. Compensation varies wildly by
+company size, remote vs on-site, and whether they bill in NPR or foreign
+currency. Ask peers you trust, not a blog post.
+
+---
+
+## Conclusion
+
+Becoming a full stack developer in Nepal is a craft path: TypeScript, React
+and Next.js, Node.js, PostgreSQL, then proof — live products, local payment
+literacy, and the ability to talk through a system.
+
+University gives you a foundation. GitHub and shipped work get you into the
+room. If you want the backend-heavy variant of this career, continue with
+[How to Become a Backend Developer with Node.js](/blogs/How-to-become-a-backend-developer-with-nodejs).
+
+Pick one product idea this month. Ship a thin slice. Then make it harder:
+roles, payments, or a second tenant.

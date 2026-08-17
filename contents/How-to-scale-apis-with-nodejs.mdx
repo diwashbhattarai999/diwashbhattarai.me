@@ -1,0 +1,243 @@
+---
+title: "How to Scale APIs with Node.js"
+date: "2026-08-17"
+author: "Diwash Bhattarai"
+profile: "/profile.webp"
+tags: ["Node.js", "NestJS", "PostgreSQL", "Backend Engineering", "Performance"]
+description: "A practical guide to scaling Node.js APIs — identifying real
+  bottlenecks, designing for load, caching, database access, and the architecture
+  choices that matter before you add more servers."
+coverImage: "/contents/how-to-scale-apis-with-nodejs.png"
+readTime: "10 min read"
+category: "Node.js"
+---
+
+Most Node.js APIs do not fail because Node “cannot scale.” They fail because
+the first version was a single process, a chatty database, and a route that
+does N+1 queries under a dashboard that 40 staff members open at 9:00.
+
+Scaling is not a Kubernetes certificate. It is a sequence: measure, remove
+obvious waste, protect the database, then add capacity. This article is the
+approach I use on NestJS and Express services that sit behind React and
+Next.js clients.
+
+---
+
+## The problem
+
+A typical v1 looks like this:
+
+- One Node process on a VPS
+- Every request hits PostgreSQL
+- Lists are `SELECT *` with no pagination
+- File uploads and PDF generation run on the same event loop as checkout
+- No timeouts, no idempotency, no cache
+
+It works for a demo and for the first paying tenant. Then a report endpoint
+locks rows, or a traffic spike from a campaign turns p95 latency into a
+support ticket.
+
+---
+
+## Why it matters
+
+Unscaled APIs show up as:
+
+- Timeouts in the Next.js app (which users blame on “the frontend”)
+- Connection pool exhaustion (`too many clients already`)
+- One slow tenant ruining everyone else on a shared schema
+- Duplicate charges because a webhook retried and your handler was not
+  idempotent
+
+If you are building SaaS — gyms, clinics, coaching platforms — you will hit
+this. The UI can be perfect and still feel broken.
+
+---
+
+## Measure before you multiply machines
+
+Add the cheap instrumentation first:
+
+- Request duration per route
+- Database query time and row counts
+- Error rate and timeout rate
+- Pool wait time
+
+You cannot scale what you cannot name. “It feels slow” is not a bottleneck.
+
+A simple pattern: log `route`, `status`, `ms`, and `tenantId` on every
+response. After a week you will know if the problem is `GET /members` or
+`POST /webhooks/stripe`.
+
+---
+
+## Core concepts that actually move the needle
+
+### 1. Node is great at I/O, bad at heavy CPU
+
+JSON parsing, crypto in reasonable amounts, and waiting on Postgres are fine.
+Video transcoding, huge CSV parses, and image pipelines should leave the
+request worker — queue them.
+
+### 2. Horizontal scale needs a stateless API
+
+If session state or uploads live in process memory, a second instance will
+lie. Store sessions in Redis or signed cookies. Store files in object storage.
+
+### 3. The database is usually the real ceiling
+
+Node can accept 2,000 concurrent connections. PostgreSQL will not happily run
+2,000 unindexed `ILIKE '%q%'` queries. Scale the query, then the instance
+count.
+
+For tenant-heavy products, isolation and indexes matter as much as RAM. See
+[Modeling Multi-Tenant Data in PostgreSQL](/blogs/Modeling-multi-tenant-data-in-postgresql).
+
+---
+
+## A practical order of work
+
+### Step 1: Make the hot path cheap
+
+- Pagination on every list (`cursor` or `limit/offset` with a cap)
+- Select only needed columns
+- Add indexes that match `WHERE tenant_id = $1 AND created_at DESC`
+- Kill N+1: one query for parents, one for children — or a join you explain
+  with `EXPLAIN ANALYZE`
+
+### Step 2: Cache what is read-heavy and slow to change
+
+Redis (or even an in-process LRU for a single box) for:
+
+- Permission catalogs
+- Public pricing pages
+- Dashboard aggregates that can be 30–60 seconds stale
+
+Do not cache user-specific billing pages without a key that includes `userId`
+and a clear invalidation path.
+
+### Step 3: Protect the process
+
+- Timeouts on outbound HTTP and DB queries
+- A queue (even a simple one) for email, webhooks fan-out, and reports
+- Rate limits on public and auth endpoints
+- Payload size limits
+
+### Step 4: Then add instances
+
+Put Node behind a load balancer. Use a connection pooler (PgBouncer) so 8 Node
+processes do not open 8 × 20 Postgres connections.
+
+Docker helps you ship the same artifact to two boxes. If you are containerizing
+the Node side of a JS app, the production-build discipline in
+[Dockerizing a TanStack Start app](/blogs/Dockerizing-tanstack-start-app)
+transfers: multi-stage builds, small runtime images, no leftover dev
+dependencies.
+
+---
+
+## Architecture that holds up
+
+A shape that works for NestJS services:
+
+1. **API layer** — guards, validation (Zod or class-validator), DTOs
+2. **Application layer** — use-cases, no HTTP types leaking in
+3. **Infrastructure** — Prisma/Drizzle, Redis, Stripe, email
+4. **Workers** — same codebase, different entrypoint, consume jobs
+
+Keep the Next.js app as a client of this API, not as the place you hide
+business rules “because it was faster.” Server Actions are fine for some
+mutations; they are not an excuse to skip transactions and authorization.
+
+Example: a list endpoint that refuses unbounded reads.
+
+<CodeBlock
+  language='ts'
+  filename='members.query.ts'
+  code={`const MAX_PAGE_SIZE = 50;
+
+interface MemberListQuery {
+  tenantId: string;
+  cursor?: string;
+  limit?: number;
+}
+
+export const parseMemberListQuery = (input: MemberListQuery) => {
+  const limit = Math.min(input.limit ?? 20, MAX_PAGE_SIZE);
+
+  return {
+    tenantId: input.tenantId,
+    cursor: input.cursor,
+    limit,
+  };
+};`}
+/>
+
+Boring code. That is the point.
+
+---
+
+## Performance considerations
+
+**Pooling:** One pool per process. Size it for the database, not for “more is
+faster.”
+
+**Serialization:** Huge JSON graphs are CPU. Paginate and slim payloads for
+mobile clients.
+
+**Compression:** Enable at the reverse proxy. Do not gzip twice.
+
+**Cold starts:** If you run serverless functions, a fat NestJS app may be the
+wrong unit. Long-running Node behind a proxy is still a valid, simpler scale
+story for many products.
+
+**Websockets:** Fan-out is a different problem than REST. Do not bolt chat onto
+the same process that generates invoices unless you know why.
+
+---
+
+## Common mistakes
+
+**Caching as a first move.** You will cache bugs.
+
+**`SELECT *` plus ORM default includes** that pull entire relation trees.
+
+**Doing reports in the request.** “Export CSV” on the same box as checkout.
+
+**Ignoring idempotency** on payments and webhooks. Stripe will retry.
+
+**Scaling to 12 microservices** before you have 12 users. A modular monolith
+(NestJS modules) is a scale strategy.
+
+**No tenant_id on the query.** You will leak data and you will not notice until
+a customer does. Pair this article with the PostgreSQL multi-tenant piece
+above.
+
+---
+
+## Best practices
+
+- Treat **p95 latency** as the number you manage, not average
+- Put **authorization next to the query**, not only in the React sidebar
+- Prefer **explicit transactions** for money and membership changes
+- Load-test the *real* hot route, not `/health`
+- Document the cache keys you invent — future you will invalidate the wrong
+  one
+
+When the API is the product behind dashboards like
+[GymGrow](/projects/gymgrow), the backend work is mostly this: correct tenant
+scoping, predictable lists, and payments that do not double-apply.
+
+---
+
+## Conclusion
+
+Scaling a Node.js API is mostly database design, bounded queries, queues for
+heavy work, and then horizontal instances with a pooler. Framework choice
+(Express vs NestJS) matters less than whether every list is bounded and every
+mutation is authorized.
+
+If you are still choosing a backend career path, read
+[How to Become a Backend Developer with Node.js](/blogs/How-to-become-a-backend-developer-with-nodejs).
+If you need the data model that makes scaling possible in SaaS, start with
+PostgreSQL tenancy — not with another process manager.

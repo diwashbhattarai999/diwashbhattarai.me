@@ -1,0 +1,223 @@
+---
+title: "How to Become a Backend Developer with Node.js"
+date: "2026-08-17"
+author: "Diwash Bhattarai"
+profile: "/profile.webp"
+tags: ["Node.js", "NestJS", "PostgreSQL", "Career", "Backend Engineering"]
+description: "A backend developer roadmap focused on Node.js — HTTP, databases,
+  NestJS, auth, testing, and the production habits that make you hireable beyond
+  tutorial CRUD."
+coverImage: "/contents/how-to-become-a-backend-developer-with-nodejs.png"
+readTime: "8 min read"
+category: "Career"
+---
+
+A Node.js backend developer is hired to **keep data correct under concurrent
+users**, not to print “Hello World” on port 3000. The career path is HTTP,
+modeling, auth, observability, and a calm production story.
+
+This guide is for people who like systems more than pixels — and for full
+stack developers who want the API side to stop being a weak spot. It overlaps
+with the
+[full stack roadmap](/blogs/Full-stack-developer-roadmap-2026) but goes deeper
+on server work.
+
+---
+
+## Who this path is for
+
+- You enjoy SQL, logs, and “why did this webhook fire twice?”
+- You are fine if the UI is someone else’s Figma
+- You want roles titled backend, API, or Node.js developer
+
+You still need enough HTTP-client empathy to design APIs that Next.js and
+mobile apps can consume. Backend is not isolation from users. It is isolation
+from CSS.
+
+---
+
+## What the job actually is
+
+On a product team you will:
+
+- Design tables and indexes
+- Write authorization that cannot be bypassed from the React app
+- Integrate payments and retries
+- Debug production with logs, not `console.log` left in a PR
+- Care about migrations and backward compatibility
+
+I do this work in NestJS services behind dashboards like
+[GymGrow](/projects/gymgrow) and healthcare portals from
+[Upachaar Nepal](/experience/full-stack-software-developer-upachaar-nepal).
+The UI changes. The invariants (money, membership, tenant isolation) do not.
+
+---
+
+## Skills to learn
+
+### 1. JavaScript/TypeScript on the server
+
+ES modules, `async`/`await`, streams at a basic level, error-first thinking.
+TypeScript for DTOs and domain types. If you skip types, you will ship
+`undefined` into Postgres.
+
+### 2. HTTP
+
+Methods, idempotency, status codes, pagination, file uploads, CORS as a
+conscious choice. REST is still the lingua franca of job interviews.
+
+### 3. PostgreSQL
+
+This is the hireable database. Learn:
+
+- Normalization vs when to denormalize
+- Indexes and `EXPLAIN`
+- Transactions
+- Migrations as code
+
+MongoDB is a tool. It is not a substitute for relational literacy. When you
+hit SaaS, read
+[Modeling Multi-Tenant Data in PostgreSQL](/blogs/Modeling-multi-tenant-data-in-postgresql).
+
+### 4. Node frameworks
+
+**Express** — understand middleware and routing.
+
+**NestJS** — modules, providers, guards, pipes. This is what many production
+Node teams use when the API is more than five routes.
+
+You can get a first job on Express. You will look more senior if you can
+structure a NestJS app without putting everything in `AppService`.
+
+### 5. Auth and security
+
+Password hashing, session vs JWT, cookies, CSRF where it applies, secrets in
+env files, SQL injection via ORMs used badly. OWASP top issues, not a
+certification badge.
+
+### 6. Testing the risky layer
+
+You do not need 90% coverage. You need tests on:
+
+- Authz (can tenant A read tenant B?)
+- Money and status transitions
+- Webhook signature verification
+
+### 7. Deploy and operate
+
+Process manager or containers, logs, health checks, migrations in CI.
+[Dockerizing](/blogs/Dockerizing-tanstack-start-app) is a frontend example,
+but multi-stage builds and small images apply to NestJS too.
+
+---
+
+## Recommended learning order
+
+1. TypeScript + HTTP with a tiny Express app
+2. Postgres + a migration tool (Prisma, Drizzle, or raw SQL — pick one)
+3. Auth (register/login) with hashed passwords
+4. NestJS rewrite or NestJS from scratch once Express feels messy
+5. Background jobs (email) so you do not block the request
+6. Redis if you need cache or rate limits
+7. Load basics: pooling, pagination — then
+   [How to Scale APIs with Node.js](/blogs/How-to-scale-apis-with-nodejs)
+
+Skip Kafka, Kubernetes, and “microservices” until a single well-modular
+NestJS app is boring.
+
+---
+
+## Tools
+
+- **NestJS** or Express
+- **PostgreSQL**
+- **Prisma or Drizzle** — still learn the SQL they emit
+- **Zod** or class-validator
+- **Redis** later
+- **OpenAPI** if other teams consume your API
+- **Postman / Bruno / REST Client** for manual checks
+- **GitHub Actions** for test + migrate + deploy
+
+Frontend-adjacent: enough Next.js to consume your own API. You do not need to
+be the CSS owner.
+
+---
+
+## Projects that get you interviews
+
+### 1. A resource API with tenancy
+
+`org_id` on every table. Tests that prove cross-org reads fail. This is the
+project that beats yet another blog API.
+
+### 2. Webhooks
+
+Stripe test mode or a fake provider. Replay events. Idempotency keys. This is
+closer to production than a second todo list.
+
+### 3. Local payments (if you target Nepal)
+
+[Khalti](/blogs/Integrating-khalti-in-nextjs) and
+[eSewa](/blogs/Integrating-esewa-in-nextjs) are backend problems: signatures,
+amount verification, and state machines. They also make your
+[Nepal full stack story](/blogs/How-to-become-a-full-stack-developer-in-nepal)
+more concrete.
+
+### 4. An admin export
+
+CSV or PDF generated in a worker, not in the HTTP process.
+
+Document each project: schema diagram, threat model in five bullets, how to
+run migrations.
+
+---
+
+## Common mistakes
+
+**Business logic in controllers.** Controllers should parse HTTP. Domain
+belongs in services.
+
+**No transactions** around “create invoice + decrement stock.”
+
+**Trusting the frontend** for `role: "admin"`.
+
+**Unbounded lists.** Your first scale incident is a table scan.
+
+**Tutorial folder structure** (`routes/`, `controllers/`) with no module
+boundaries once you have 40 endpoints.
+
+**Never reading logs in staging.** Backend work is operational.
+
+---
+
+## How to become job-ready
+
+- One deployed API with migrations and a README
+- OpenAPI or a written endpoint list
+- Tests on authorization
+- A story about a bug you found with `EXPLAIN` or a log line
+- Comfortable in Git and code review
+
+CV: Node.js, TypeScript, PostgreSQL, NestJS, REST. Link the repo. Link
+`/health` if it is live.
+
+Interviews: JS event loop (honest, not memorized TED-talk), SQL, “design a
+URL shortener” at junior-mid level, and a deep dive into *your* schema.
+
+For Nepal and mixed full stack roles, you will still be asked React questions.
+Be able to talk to the UI without pretending you want to own animations.
+
+---
+
+## Conclusion
+
+Becoming a backend developer with Node.js means TypeScript, HTTP, PostgreSQL,
+structured NestJS (or very disciplined Express), authz, and production habits.
+CRUD tutorials are the first week. Tenancy, webhooks, and bounded queries are
+the job.
+
+If you want the scaling playbook next, open the Node.js scaling article. If
+you still need the wider career map, stay on the 2026 full stack roadmap
+until your API and UI meet in one deployed product.
+
+Keep the data correct. The rest of the stack can be fashionable later.
