@@ -1,0 +1,326 @@
+---
+title: "Dockerizing a TanStack Start App: A Production-Grade Multi-Stage Build"
+date: "2026-08-16"
+author: "Diwash Bhattarai"
+profile: "/profile.png"
+tags: ["Docker", "TanStack Start", "DevOps", "Vite", "Node.js"]
+description: "A practical breakdown of a production Dockerfile for TanStack
+  Start — multi-stage builds, why Vite env vars have to be build-time ARGs,
+  and the mistakes that bloat images or leak config into the wrong layer."
+coverImage: "/contents/dockerizing-tanstack-start-app.png"
+readTime: "9 min read"
+category: "Docker"
+---
+
+The first Dockerfile I write for a Vite-based app is almost always wrong in
+one specific way: I set `VITE_API_URL` as a runtime environment variable on
+the container, the way I would for any Node backend, and then wonder why the
+deployed app is still calling the API URL from whichever `.env` was present
+at build time. Vite doesn't work that way — and that one misunderstanding
+shapes most of what a correct Dockerfile for a TanStack Start app has to do
+differently from a typical Node service.
+
+This article walks through a production Dockerfile for a TanStack Start app
+— the multi-stage structure, why the Vite env vars are `ARG`s and not just
+`ENV`, and the mistakes that either bloat the image or bake the wrong config
+into the build.
+
+---
+
+## Why this needs more thought than a generic Node Dockerfile
+
+TanStack Start apps have two things going on that a plain Express or NestJS
+service doesn't:
+
+1. **A client bundle built by Vite**, where environment variables prefixed
+   `VITE_` are inlined into the JavaScript at build time — not read at
+   runtime. Once the bundle is built, `import.meta.env.VITE_API_URL` is a
+   literal string baked into a `.js` file, not a lookup against the
+   container's environment.
+2. **A server output produced by Nitro** (`.output/server/index.mjs`), which
+   *is* a normal Node process and *does* read runtime environment variables
+   normally, for anything not prefixed `VITE_`.
+
+Treating both halves the same way is the single most common mistake in these
+Dockerfiles — passing `VITE_API_URL` as a runtime `docker run -e` variable
+and expecting the already-built client to pick it up.
+
+---
+
+## The four-stage shape
+
+<CodeBlock
+  language="dockerfile"
+  filename="Dockerfile"
+  code={`FROM node:24-alpine AS base
+# shared setup: pnpm, working directory
+
+FROM base AS deps
+# install dependencies only — cached independently of source changes
+
+FROM base AS builder
+# copy source + deps, run the actual build
+
+FROM node:24-alpine AS runner
+# copy only the build output + production node_modules
+`}
+/>
+
+Each stage exists to isolate something that changes at a different rate, so
+Docker's layer cache actually helps instead of getting invalidated on every
+commit:
+
+- **`deps`** only depends on `package.json` and the lockfile. It rebuilds
+  only when dependencies change — not on every source edit.
+- **`builder`** depends on the full source tree and produces the build
+  artifact. This layer rebuilds often; that's expected and fine, because it's
+  not the layer that ends up in the final image.
+- **`runner`** starts from a clean `node:24-alpine`, not from `builder`, and
+  copies in only what's needed to run the app. None of the build tooling,
+  dev dependencies, or source files that were needed to *produce* `.output`
+  end up in the image that actually runs in production.
+
+---
+
+## Pinning the base image
+
+`node:24-alpine`, not `node:alpine` or `node:latest`. Floating tags are the
+kind of thing that works fine for months and then breaks a build on a
+Tuesday because the underlying Node minor version shifted under you with no
+corresponding change in your repo. Alpine specifically buys a much smaller
+base image than the Debian-based `node:24` — worth it for a runner image
+where every extra layer is something that ships to production and needs to
+be pulled on every deploy.
+
+`corepack enable` in the base stage is what makes `pnpm` available without
+installing it as a separate dependency — Node ships Corepack, and enabling
+it activates whichever package manager the project's `packageManager` field
+in `package.json` specifies, at the exact version pinned there.
+
+---
+
+## Installing dependencies correctly
+
+<CodeBlock
+  language="dockerfile"
+  filename="Dockerfile (deps stage)"
+  code={`FROM base AS deps
+
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile --ignore-scripts`}
+/>
+
+Two flags matter here beyond the obvious "install dependencies":
+
+- **`--frozen-lockfile`** fails the build instead of silently updating the
+  lockfile if `package.json` and `pnpm-lock.yaml` have drifted apart. In CI
+  and Docker builds, that's the behavior you want — a mismatched lockfile
+  should be a build failure caught immediately, not a silent dependency
+  upgrade baked into a production image.
+- **`--ignore-scripts`** skips arbitrary `postinstall` scripts from
+  dependencies during this layer. Since this is a build environment building
+  an image that will be deployed, running third-party install scripts here
+  is unnecessary surface area — most packages that need a postinstall step
+  for actual functionality (native bindings, etc.) are handled at build time
+  anyway, and this flag limits what a compromised or malicious transitive
+  dependency can do during `pnpm install` in CI.
+
+Copying only `package.json` and the lockfile — not the full source — before
+running install is what makes this layer cacheable independently of source
+changes. Change a component file, and Docker reuses this entire layer from
+cache instead of reinstalling every dependency.
+
+---
+
+## Build-time ARGs for Vite environment variables
+
+This is the part that trips people up. Vite env vars have to be available
+**at build time**, inside the `builder` stage, as build arguments —
+`ENV` alone on the running container does nothing for a bundle that was
+already built and baked into static files.
+
+<CodeBlock
+  language="dockerfile"
+  filename="Dockerfile (builder stage)"
+  code={`FROM base AS builder
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+ENV NODE_OPTIONS=--max-old-space-size=4096
+
+ARG VITE_API_URL
+ARG VITE_APP_URL
+# ...other VITE_ args
+
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_APP_URL=$VITE_APP_URL
+# ...
+
+RUN pnpm build`}
+/>
+
+The `ARG` → `ENV` pairing is deliberate, not redundant: `ARG` makes the value
+available to instructions inside this build stage, and re-exporting it as
+`ENV` makes it visible to the `pnpm build` process the same way it would be
+if you'd run `vite build` locally with a `.env` file loaded. `docker-compose`
+or your CI pipeline passes the actual values in as `--build-arg` (or the
+`args:` block in Compose), sourced from whatever secret store or `.env` file
+that environment uses.
+
+`NODE_OPTIONS=--max-old-space-size=4096` is there because Vite/Rollup builds
+on larger apps can hit Node's default heap limit inside constrained CI
+runners — worth setting explicitly rather than debugging an
+out-of-memory build failure that only reproduces in CI.
+
+**The practical consequence:** if you need a different `VITE_API_URL` for
+staging versus production, that's a different image build for each — not
+the same image with different runtime environment variables. This is
+different from how most backend services are typically deployed, and it's
+worth making sure whoever owns the deploy pipeline knows it.
+
+---
+
+## The runner stage: what actually ships
+
+<CodeBlock
+  language="dockerfile"
+  filename="Dockerfile (runner stage)"
+  code={`FROM node:24-alpine AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/.output ./.output
+
+EXPOSE 3000
+
+CMD ["node", ".output/server/index.mjs"]`}
+/>
+
+Two `COPY --from` instructions are doing all the work: production
+`node_modules` from `deps` (not `builder`, which could in principle include
+extra dev-only side effects depending on your install setup), and the built
+Nitro server output from `builder`. No source files, no `pnpm`, no build
+tooling — the runner stage never even installs pnpm, because it doesn't need
+to run any package manager command at all.
+
+`ENV NODE_ENV=production` here matters for the server runtime — Nitro and
+any server-side code that branches on `NODE_ENV` behaves correctly — and is
+unrelated to the `VITE_` build-time variables above, which is exactly the
+distinction worth keeping straight.
+
+---
+
+## Wiring it up with Compose
+
+<CodeBlock
+  language="yaml"
+  filename="docker-compose.yml"
+  code={`services:
+  trading-fe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: \${VITE_API_URL}
+        VITE_APP_URL: \${VITE_APP_URL}
+        # ...
+    ports:
+      - "3000:3000"`}
+/>
+
+The `args:` block under `build:` is what forwards host-side environment
+variables (typically from a `.env` file Compose reads automatically) into
+the image as build arguments — the same mechanism as `docker build
+--build-arg`, just declared once instead of passed on every invocation. Any
+variable the app needs at *runtime* instead of build time (a database URL
+for a backend service, for instance) would go under `environment:` on the
+service instead — a different mechanism for a different lifecycle.
+
+---
+
+## Trade-offs
+
+### Alpine vs a slim Debian base
+
+Alpine images are smaller, which matters for pull time and image storage
+cost. The trade-off is musl libc instead of glibc, which occasionally causes
+subtle issues with native Node addons that expect glibc. For a TanStack
+Start app with a typical dependency set, this is rarely an issue in
+practice — worth testing once per project, not assuming universally safe.
+
+### Rebuilding per environment vs runtime config injection
+
+Baking `VITE_API_URL` in at build time means a genuinely different image per
+environment. Some teams instead fetch runtime config via a small
+`/config.json` endpoint the client loads on startup, keeping one image
+across environments. That adds a request and a layer of indirection in
+exchange for a single build artifact promoted through environments — a
+reasonable trade for teams with strict "build once, deploy everywhere"
+requirements, but more infrastructure than most projects need.
+
+### Copying `node_modules` from `deps` vs a fully bundled server output
+
+Some Nitro presets can produce a more self-contained server bundle that
+needs fewer `node_modules` copied in. Copying full production `node_modules`
+from the `deps` stage is simpler and more predictable across presets, at the
+cost of a slightly larger runner image than a fully bundled alternative
+would produce.
+
+---
+
+## Common mistakes
+
+1. **Setting `VITE_*` variables as runtime `environment:` instead of build
+   `args:`** — the client bundle silently keeps whatever value (or
+   `undefined`) was present at build time.
+2. **Using a floating base image tag** (`node:alpine`, `node:latest`)
+   instead of a pinned major version, causing builds to break without a
+   corresponding code change.
+3. **Copying the full source tree into the `deps` stage**, defeating the
+   dependency-layer cache — every source change forces a full reinstall.
+4. **Building the runner `FROM builder`** instead of a clean base image,
+   shipping build tooling and dev dependencies into production.
+5. **Forgetting `--frozen-lockfile`**, letting a Docker build silently
+   resolve different dependency versions than what's committed.
+6. **Not setting `NODE_ENV=production` in the runner**, missing framework
+   and library optimizations that key off it.
+
+---
+
+## Practical recommendations
+
+- Split `deps`, `builder`, and `runner` into separate stages, and build the
+  runner from a clean base image, not from `builder`.
+- Pin the Node major version in `FROM`, and revisit it deliberately rather
+  than letting it float.
+- Pass every `VITE_`-prefixed variable as a build `ARG`, re-exported as
+  `ENV` inside the `builder` stage only — never expect the running container
+  to supply them.
+- Use `--frozen-lockfile` in CI and Docker builds so a lockfile mismatch is
+  a build failure, not a silent version drift.
+- Keep `.dockerignore` current (`node_modules`, `.output`, `.env*`) so local
+  artifacts and secrets never get copied into the build context by
+  accident.
+- If you need one image across multiple environments, evaluate a runtime
+  config endpoint instead of rebuilding per environment — but only if that
+  requirement is real, not speculative.
+
+---
+
+## Conclusion
+
+Most of what makes a TanStack Start Dockerfile different from a generic Node
+Dockerfile comes down to one fact: Vite's client-side environment variables
+are compiled in, not read at runtime. Once that's internalized, the rest of
+the Dockerfile is standard multi-stage discipline — cache dependency
+installs separately from source changes, build in one stage, run from a
+clean minimal image, and never ship what you don't need to run the app.
+
+Get the `ARG`/`ENV` split right for the build stage, and everything else —
+image size, cache efficiency, deploy repeatability — falls out of applying
+the same multi-stage habits you'd use for any other Node service.
