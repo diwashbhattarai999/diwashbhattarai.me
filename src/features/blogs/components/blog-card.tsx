@@ -16,7 +16,7 @@ interface BlogCardProps {
 
 export const BlogCard = ({ post }: BlogCardProps) => {
     return (
-        <Card className="group relative overflow-hidden rounded-xl border bg-card/20 p-0 backdrop-blur-md">
+        <Card className="group relative overflow-hidden rounded-xl border p-0 backdrop-blur-md">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] lg:grid-cols-[1fr_2fr]">
                 {/* Image Section */}
                 <div className="relative aspect-3/2 w-full overflow-hidden bg-muted/20 md:aspect-auto md:h-full md:min-h-56">
