@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from "react";
 
 import BlurFade from "@/components/animations/blur-fade";
+import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
 import {
     SectionSeperator,
     SectionSubTitle,
@@ -51,6 +52,14 @@ export const ProjectsSection = ({ showViewAll = false, limit }: ProjectsSectionP
 
     return (
         <SectionWrapper id="projects">
+            <PageBreadcrumb
+                className="mb-8"
+                items={[
+                    { href: ROUTES.HOME, label: "Home", path: ROUTES.HOME },
+                    { label: "Projects", path: ROUTES.PROJECTS },
+                ]}
+            />
+
             <ProjectHoverPreview anchor={hovered?.anchor ?? null} project={hovered?.project ?? null} />
             <div className="mb-4 flex flex-col gap-2">
                 <div className="flex items-center justify-between gap-4">

@@ -6,7 +6,23 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    "includes": [
+      "**/src/**/*",
+      "**/.vscode/**/*",
+      "**/vite.config.ts",
+
+      "!**/src/routeTree.gen.ts",
+      "!src/assets",
+      "!src/styles",
+      "!src/paraglide",
+      "!**/api-docs",
+      "!coverage",
+      "!dist",
+      "!node_modules",
+      "!public",
+      "!.nitro"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -17,10 +33,15 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "style": {
-        "useBlockStatements": "off",
-        "noNestedTernary": "warn"
+        "useBlockStatements": "off"
+      },
+      "performance": {
+        "noJsxPropsBind": "off"
+      },
+      "correctness": {
+        "noChildrenProp": "off"
       }
     }
   },

@@ -1,4 +1,5 @@
 import { GraduationCap } from "lucide-react";
+import Link from "next/link";
 
 import { PageBreadcrumb } from "@/components/shared/page-breadcrumb";
 import { SectionCard, SectionWrapper } from "@/components/shared/section-items";
@@ -27,10 +28,18 @@ export const EducationPage = () => (
                     current={education.current}
                     description={education.description}
                     Icon={GraduationCap}
-                    key={education.institution}
+                    key={education.id}
                     skills={education.skills}
                     subtitle={`${education.degree} · ${education.duration}`}
-                    title={education.institution}
+                    title={
+                        <Link
+                            className="transition-colors hover:text-primary"
+                            href={ROUTES.EDUCATION_DETAIL(education.id)}
+                        >
+                            {education.institution}
+                        </Link>
+                    }
+                    website={education.links?.[0]?.url}
                 />
             ))}
         </div>

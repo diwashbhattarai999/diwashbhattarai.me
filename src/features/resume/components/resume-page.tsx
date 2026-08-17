@@ -101,7 +101,7 @@ export const ResumePage = () => (
             <h2 className="mb-4 font-semibold text-xl">Education</h2>
             <ul className="space-y-3">
                 {EDUCATION_DETAILS.map((education) => (
-                    <li key={education.institution}>
+                    <li key={education.id}>
                         <p className="font-medium">{education.degree}</p>
                         <p className="text-muted-foreground text-sm">
                             {education.institution} · {education.duration}

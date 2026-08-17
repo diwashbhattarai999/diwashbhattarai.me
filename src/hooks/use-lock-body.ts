@@ -32,6 +32,7 @@ const useLockBody = (options: IUseScrollLockOptions = {}): IUseScrollLockReturn 
     const originalStyle = useRef<IOriginalStyle | null>(null);
 
     const lock = useCallback(() => {
+        // biome-ignore lint/suspicious/noUnnecessaryConditions: needed for the lock function
         if (target.current) {
             const { overflow, paddingRight } = target.current.style;
 
@@ -59,6 +60,7 @@ const useLockBody = (options: IUseScrollLockOptions = {}): IUseScrollLockReturn 
     }, [widthReflow]);
 
     const unlock = useCallback(() => {
+        // biome-ignore lint/suspicious/noUnnecessaryConditions: needed for the unlock function
         if (target.current && originalStyle.current) {
             target.current.style.overflow = originalStyle.current.overflow;
 
@@ -82,6 +84,7 @@ const useLockBody = (options: IUseScrollLockOptions = {}): IUseScrollLockReturn 
                     : lockTarget;
         }
 
+        // biome-ignore lint/suspicious/noUnnecessaryConditions: needed for the lock and unlock functions
         if (!target.current) {
             target.current = document.body;
         }

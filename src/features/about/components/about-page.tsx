@@ -64,7 +64,7 @@ export const AboutPage = () => {
 
                     <BlurFade delay={0.12}>
                         <h2 className="mb-3 font-semibold text-xl">Recent roles</h2>
-                        <ul className="space-y-3">
+                        <ul className="space-y-5">
                             {EXPERIENCE_DETAILS.slice(0, 3).map((experience) => (
                                 <li key={experience.slug}>
                                     <Link
@@ -74,6 +74,8 @@ export const AboutPage = () => {
                                         {experience.title} at {experience.company}
                                     </Link>
                                     <p className="text-muted-foreground text-sm">{experience.duration}</p>
+
+                                    <SectionSeperator className="my-3" />
                                 </li>
                             ))}
                         </ul>

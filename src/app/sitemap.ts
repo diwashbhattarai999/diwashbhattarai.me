@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { ROUTES } from "@/configs/routes";
+import { EDUCATION_DETAILS } from "@/features/education/constants/education.constants";
 import { EXPERIENCE_DETAILS } from "@/features/experience/constants/experience.constants";
 import { PROJECTS } from "@/features/projects/constants/project.constants";
 import { getBaseUrl } from "@/lib/get-base-url";
@@ -25,6 +26,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { changeFrequency: "yearly" as const, path: ROUTES.EDUCATION, priority: 0.5 },
         { changeFrequency: "monthly" as const, path: ROUTES.RESUME, priority: 0.7 },
     ];
+
+    const educationRoutes = EDUCATION_DETAILS.map((education) => ({
+        changeFrequency: "yearly" as const,
+        lastModified,
+        priority: 0.5,
+        url: `${origin}${ROUTES.EDUCATION_DETAIL(education.id)}`,
+    }));
 
     const experienceRoutes = EXPERIENCE_DETAILS.map((experience) => ({
         changeFrequency: "monthly" as const,
@@ -54,6 +62,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: route.priority,
             url: route.path === ROUTES.HOME ? origin : `${origin}${route.path}`,
         })),
+        ...educationRoutes,
         ...experienceRoutes,
         ...projectRoutes,
         ...blogRoutes,

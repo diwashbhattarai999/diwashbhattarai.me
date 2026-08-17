@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { MoonStar, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -17,6 +18,10 @@ export const ThemeToggle = ({ className, iconClassName }: { className?: string; 
     const { setTheme, resolvedTheme } = useTheme();
     const isDark = resolvedTheme === "dark";
 
+    const handleSetTheme = useCallback(() => {
+        setTheme(isDark ? "light" : "dark");
+    }, [isDark, setTheme]);
+
     const { isMounted } = useIsMounted();
     if (!isMounted) return null;
 
@@ -26,7 +31,7 @@ export const ThemeToggle = ({ className, iconClassName }: { className?: string; 
                 <TooltipTrigger asChild>
                     <Button
                         className={cn("relative", className)}
-                        onClick={() => setTheme(isDark ? "light" : "dark")}
+                        onClick={handleSetTheme}
                         size="icon"
                         variant="ghost"
                     >

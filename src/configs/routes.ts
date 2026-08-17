@@ -3,6 +3,7 @@ export const ROUTES = {
     BLOG: (slug: string) => `/blogs/${slug}`,
     BLOGS: "/blogs",
     EDUCATION: "/education",
+    EDUCATION_DETAIL: (educationId: string) => `/education/${educationId}`,
     EXPERIENCE: "/experience",
     EXPERIENCE_DETAIL: (slug: string) => `/experience/${slug}`,
     HOME: "/",
