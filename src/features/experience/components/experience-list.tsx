@@ -43,11 +43,23 @@ interface ExperienceCardProps {
  * Single role card with optional compact homepage presentation.
  *
  * @param experience - Experience record from the shared data source.
- * @param compact - When true, omits projects and website links.
+ * @param compact - When true, omits projects and the Visit Website CTA.
  */
 const ExperienceCard = ({ experience, compact = false }: ExperienceCardProps) => {
     const description = compact ? getExperienceSummary(experience.description) : experience.description;
     const skills = compact ? experience.skills.slice(0, COMPACT_SKILL_LIMIT) : experience.skills;
+    const companyLabel = experience.website ? (
+        <a
+            className="transition-colors hover:underline"
+            href={experience.website}
+            rel="noopener noreferrer"
+            target="_blank"
+        >
+            {experience.company}
+        </a>
+    ) : (
+        experience.company
+    );
 
     return (
         <SectionCard
@@ -56,7 +68,11 @@ const ExperienceCard = ({ experience, compact = false }: ExperienceCardProps) =>
             Icon={Briefcase}
             projects={compact ? undefined : experience.projects}
             skills={skills}
-            subtitle={`${experience.company} · ${experience.duration}`}
+            subtitle={
+                <>
+                    {companyLabel} · {experience.duration}
+                </>
+            }
             title={
                 <Link
                     className="transition-colors hover:text-primary"

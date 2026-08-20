@@ -136,8 +136,10 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
         logo: "/company/fact-digi.png",
         projects: [
             { name: "Service Provider Application" },
-            { link: "https://factdigi.com", name: "Company Website" },
-            { link: "http://13.233.7.146", name: "Themjon Traders" },
+            // { link: "https://factdigi.com", name: "Company Website" },
+            // { link: "http://13.233.7.146", name: "Themjon Traders" },
+            { name: "Company Portfolio" },
+            { name: "Themjon Traders" },
             { name: "Korean Color Analysis" },
         ],
         responsibilities: [
@@ -161,7 +163,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
             "This role is where I practiced SEO-optimized React and Next.js frontends, REST API integration with error boundaries and suspense, and shipping through GitHub Actions, Docker, Nginx, and AWS EC2 on AI Color Analysis, Themjo Traders, the service provider app, and the company website.",
         slug: "junior-frontend-developer-fact-digi",
         title: "Junior Frontend Developer",
-        website: "https://factdigi.com",
+        // website: "https://factdigi.com",
     },
     {
         company: "KSW Techzone",
