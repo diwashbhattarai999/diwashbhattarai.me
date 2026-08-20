@@ -1,0 +1,438 @@
+---
+title: "How to Structure a Production Node.js Backend"
+date: "2026-08-17"
+author: "Diwash Bhattarai"
+profile: "/profile.png"
+tags: ["Node.js", "TypeScript", "Clean Architecture", "Backend Engineering", "Express"]
+description: "A practical breakdown of structuring a production Node.js
+  backend — modules, ports and adapters, dependency injection, and the
+  boundaries that keep an Express + TypeScript API maintainable at scale."
+coverImage: "/contents/production-nodejs-backend-structure.png"
+readTime: "12 min read"
+category: "Node.js"
+---
+
+Most Express starters answer "how do I add a route" and stop there. Six
+months into a real project, the actual questions are different: where does
+validation live versus business logic, how do you swap SendGrid for another
+email provider without touching five files, how do you test a use case
+without spinning up MongoDB, and how does a new engineer find "the code that
+sends the welcome email" without grepping the whole repo.
+
+This article walks through how I structure a production Node.js + TypeScript
+backend to answer those questions before they become problems — feature
+modules with clear internal layers, ports and adapters for anything external,
+and a small dependency-injection bootstrap that ties it together. I maintain
+this as an open starter template — [node-express-template on
+GitHub](https://github.com/diwashbhattarai999/node-express-template) — so the
+examples below are pulled directly from a structure you can clone and look at
+in full.
+
+---
+
+## The problem with a typical Express layout
+
+The default Express tutorial structure groups by technical type:
+
+```
+src/
+  routes/
+  controllers/
+  models/
+  services/
+```
+
+This is fine for a small API. It breaks down for the same reason type-based
+frontend structures do: understanding "how does password reset work" means
+opening four unrelated folders, business logic ends up scattered across
+controllers and services with no clear line between them, and nothing stops
+a controller from reaching directly into a database model — which is how
+"just swap the database" becomes a multi-week rewrite instead of an
+adapter swap.
+
+The fix is the same idea applied to a backend: organize by **feature module**,
+and inside each module, separate *what the business logic needs* from *how
+it's actually fulfilled*.
+
+---
+
+## The top-level shape
+
+<CodeBlock
+  language="text"
+  filename="src/"
+  code={`src/
+  app/              # Wiring: server bootstrap, DI container, env config, routing
+  contracts/        # Ports — interfaces the application layer depends on
+  infrastructure/   # Adapters — concrete implementations of those ports
+  modules/          # Feature modules, each internally layered
+  shared/           # Cross-cutting: errors, HTTP helpers, middleware, types
+  i18n/             # Translation resources
+  index.ts`}
+/>
+
+Two folders do the most structural work here: `contracts/` and
+`infrastructure/`. Everything else follows from the boundary they draw.
+
+---
+
+## Ports and adapters: contracts vs infrastructure
+
+The core idea, borrowed from hexagonal architecture: business logic should
+depend on an **interface** describing what it needs, never on a specific
+third-party library or service directly.
+
+<CodeBlock
+  language="ts"
+  filename="contracts/email/email.port.ts"
+  code={`export interface EmailPayload {
+  to: string;
+  subject: string;
+  html: string;
+}
+
+export interface EmailPort {
+  send(payload: EmailPayload): Promise<void>;
+}`}
+/>
+
+The actual implementation — SendGrid, in this case — lives entirely in
+`infrastructure/`, and knows nothing about the rest of the app beyond
+satisfying that interface:
+
+<CodeBlock
+  language="ts"
+  filename="infrastructure/email/sendgrid/sendgrid.adapter.ts"
+  code={`import sgMail from "@sendgrid/mail";
+import { EmailPayload, EmailPort } from "@/contracts/email/email.port";
+import { env } from "@/app/config/env";
+
+export class SendgridAdapter implements EmailPort {
+  constructor() {
+    sgMail.setApiKey(env.SENDGRID_API_KEY);
+  }
+
+  async send(payload: EmailPayload): Promise<void> {
+    await sgMail.send({
+      to: payload.to,
+      from: env.EMAIL_FROM,
+      subject: payload.subject,
+      html: payload.html,
+    });
+  }
+}`}
+/>
+
+The business logic that sends an email never imports `@sendgrid/mail`
+directly — it depends on `EmailPort`. Swapping SendGrid for SES or Resend
+later means writing one new adapter file and changing one line in the
+dependency-injection container. Nothing in `modules/` changes. This is the
+concrete payoff of the pattern, not an abstract architecture preference: the
+blast radius of a third-party swap becomes one file instead of "search the
+whole codebase for `sgMail`."
+
+The same pattern applies to `logging/`, `storage/`, and anything else that
+talks to something outside the process — a `LoggerPort` behind Winston, a
+`StoragePort` behind an S3 upload provider. The rule for what belongs in
+`contracts/` is simple: if a module needs it but doesn't need to know *how*
+it's fulfilled, it's a port.
+
+---
+
+## Anatomy of a feature module
+
+Each entry under `modules/` follows the same internal shape, regardless of
+what it does:
+
+<CodeBlock
+  language="text"
+  filename="modules/example/"
+  code={`example/
+  application/
+    dto/
+      example.dto.ts       # Input/output shapes for use cases
+    use-cases/
+      send-email.use-case.ts
+      run-metrics.use-case.ts
+  infrastructure/
+    factory/                # Wires this module's dependencies together
+  presentation/
+    controllers/
+      example.controller.ts # Translates HTTP <-> use case calls
+    routes/
+      example.routes.ts
+    schemas/
+      example.schema.ts     # Request validation (Zod)
+  index.ts                  # Public surface of the module`}
+/>
+
+**`application/use-cases`** is where business logic actually lives — one
+file per operation, doing one thing, with dependencies passed in rather than
+imported directly:
+
+<CodeBlock
+  language="ts"
+  filename="modules/example/application/use-cases/send-email.use-case.ts"
+  code={`import { EmailPort } from "@/contracts/email/email.port";
+import { SendEmailDto } from "../dto/example.dto";
+
+export class SendEmailUseCase {
+  constructor(private readonly emailPort: EmailPort) {}
+
+  async execute(dto: SendEmailDto): Promise<void> {
+    await this.emailPort.send({
+      to: dto.to,
+      subject: dto.subject,
+      html: \`<p>\${dto.message}</p>\`,
+    });
+  }
+}`}
+/>
+
+Because `SendEmailUseCase` depends on `EmailPort`, not `SendgridAdapter`, it
+can be unit tested with a fake implementation of `EmailPort` — no network
+call, no test SendGrid account, no flakiness.
+
+**`presentation/controllers`** stays thin — it's a translation layer between
+HTTP and the use case, nothing more:
+
+<CodeBlock
+  language="ts"
+  filename="modules/example/presentation/controllers/example.controller.ts"
+  code={`import { Request, Response } from "express";
+import { asyncHandler } from "@/shared/http/async-handler";
+import { HttpResponse } from "@/shared/http/http-response";
+import { SendEmailUseCase } from "../../application/use-cases/send-email.use-case";
+
+export class ExampleController {
+  constructor(private readonly sendEmailUseCase: SendEmailUseCase) {}
+
+  sendEmail = asyncHandler(async (req: Request, res: Response) => {
+    await this.sendEmailUseCase.execute(req.body);
+    return HttpResponse.success(res, { message: "Email sent" });
+  });
+}`}
+/>
+
+If a controller starts accumulating `if` statements that decide *what*
+should happen rather than just *how to respond*, that logic belongs in the
+use case, not the controller. The controller's job ends at calling the use
+case and shaping the HTTP response.
+
+**`infrastructure/factory`** inside each module is where that module's
+specific dependencies get wired together — instantiating the controller with
+its use case, the use case with its port implementation — keeping that
+wiring colocated with the module it serves rather than centralized in one
+giant file that every module modification has to touch.
+
+---
+
+## Tying it together with a DI container
+
+The wiring happens once, at startup, in `app/bootstrap`:
+
+<CodeBlock
+  language="ts"
+  filename="app/bootstrap/container.ts"
+  code={`import { SendgridAdapter } from "@/infrastructure/email/sendgrid/sendgrid.adapter";
+import { SendEmailUseCase } from "@/modules/example/application/use-cases/send-email.use-case";
+import { ExampleController } from "@/modules/example/presentation/controllers/example.controller";
+
+export function buildContainer() {
+  const emailPort = new SendgridAdapter();
+
+  const sendEmailUseCase = new SendEmailUseCase(emailPort);
+  const exampleController = new ExampleController(sendEmailUseCase);
+
+  return { exampleController };
+}`}
+/>
+
+This is intentionally a plain function, not a DI framework with decorators
+and reflection metadata. For most Node APIs, explicit manual wiring is
+easier to read and debug than a framework doing it implicitly — you can
+trace exactly what gets instantiated with what, in what order, by reading
+one file top to bottom.
+
+---
+
+## Shared: cross-cutting concerns, not a dumping ground
+
+`shared/` holds things genuinely used across every module — not a catch-all
+for anything that didn't fit elsewhere.
+
+<CodeBlock
+  language="ts"
+  filename="shared/http/http-response.ts"
+  code={`import { Response } from "express";
+
+export class HttpResponse {
+  static success(res: Response, data: unknown, status = 200) {
+    return res.status(status).json({ success: true, data });
+  }
+
+  static error(res: Response, message: string, status = 400) {
+    return res.status(status).json({ success: false, message });
+  }
+}`}
+/>
+
+<CodeBlock
+  language="ts"
+  filename="shared/errors/app.error.ts"
+  code={`export class AppError extends Error {
+  constructor(
+    public readonly message: string,
+    public readonly statusCode: number,
+    public readonly code: string,
+  ) {
+    super(message);
+    Object.setPrototypeOf(this, AppError.prototype);
+  }
+}`}
+/>
+
+Every module throws the same `AppError`, and one global handler in
+`shared/http/middlewares/global.error.handler.ts` is the only place that
+decides how an error becomes an HTTP response — logging it, shaping it
+consistently, and never leaking a stack trace to a client in production. A
+use case doesn't know or care whether it's being called from an HTTP
+controller, a queue consumer, or a test — it just throws `AppError` and lets
+whatever's calling it decide what to do with that.
+
+`async-handler.ts` is a small but important piece — wrapping every
+controller method so a rejected promise reaches Express's error handling
+instead of silently becoming an unhandled rejection, which is one of the
+more common ways an Express API produces a hung request instead of a clean
+error response.
+
+---
+
+## Infrastructure that doesn't fit a port
+
+Not everything under `infrastructure/` is a port implementation — database
+connection setup, repository base classes, and framework-level plugins live
+here too, because they're still "how we talk to something external," even
+without a matching `contracts/` interface.
+
+<CodeBlock
+  language="ts"
+  filename="infrastructure/database/repositories/base.repository.ts"
+  code={`import { Model, FilterQuery } from "mongoose";
+import { buildPagination } from "../helpers/build.pagination";
+
+export abstract class BaseRepository<T> {
+  constructor(protected readonly model: Model<T>) {}
+
+  async findMany(filter: FilterQuery<T>, page: number, limit: number) {
+    const { skip, take } = buildPagination(page, limit);
+    const [items, total] = await Promise.all([
+      this.model.find(filter).skip(skip).limit(take),
+      this.model.countDocuments(filter),
+    ]);
+    return { items, total };
+  }
+}`}
+/>
+
+A shared `BaseRepository` earns its place because pagination and basic query
+building are genuinely identical across every collection — this is the one
+place duplicating logic per-module would be pure cost with no benefit,
+unlike a shared component or schema, where premature sharing usually hurts
+more than it helps.
+
+---
+
+## Trade-offs
+
+### Layered modules vs a flatter MVC structure
+
+This structure has real upfront cost — more files, more indirection, a
+steeper first-week learning curve for a new contributor. It pays for itself
+once the app has enough modules that "where does this logic live" stops
+being obvious by default. For a small API with two or three endpoints, a
+flatter `routes/controllers/services` layout is genuinely simpler and the
+extra structure isn't worth it yet.
+
+### Manual DI vs a DI framework
+
+A framework like InversifyJS or tsyringe automates wiring and can reduce
+boilerplate as the dependency graph grows large. Manual wiring in one
+`container.ts` file stays simpler to trace and debug, and avoids the
+decorator/reflection metadata overhead — the trade-off shows up mainly at
+significant scale, where a manual container file can get long.
+
+### Ports for everything vs only where it's proven necessary
+
+Wrapping every single dependency behind an interface, including ones you'll
+realistically never swap, adds indirection without payoff. I reserve
+`contracts/` for things with a real chance of changing — email providers,
+storage backends, external APIs — not for, say, a utility library you're
+confident you'll never replace.
+
+---
+
+## Common mistakes
+
+1. **Business logic living in controllers** instead of use cases, making it
+   untestable without spinning up an HTTP server.
+2. **Modules importing directly from another module's internals** instead of
+   through its `index.ts` public surface, recreating the tangled coupling
+   feature-based structure is meant to avoid.
+3. **Adapters that leak implementation details through the port interface**
+   — an `EmailPort.send()` that accepts a SendGrid-specific options object
+   isn't actually abstracting the provider.
+4. **A `shared/` folder that becomes a dumping ground** for anything that
+   didn't obviously belong somewhere else, rather than genuinely
+   cross-cutting concerns.
+5. **Skipping the async handler wrapper** on a controller method, letting a
+   rejected promise become an unhandled rejection instead of a clean error
+   response.
+6. **Over-engineering a small API with the full pattern** before there's
+   enough surface area to justify it — this structure is a response to real
+   growing pains, not a default for every project regardless of size.
+
+---
+
+## Practical recommendations
+
+- Separate *what business logic needs* (`contracts/`) from *how it's
+  fulfilled* (`infrastructure/`) for anything talking to an external
+  service.
+- Keep controllers thin — translation between HTTP and a use case, nothing
+  that makes a business decision.
+- One use case per operation, depending on ports, not concrete
+  implementations, so it stays testable in isolation.
+- Wire dependencies explicitly in one bootstrap file rather than reaching
+  for a DI framework until the manual version genuinely gets unwieldy.
+- Reserve `shared/` for things every module actually needs — errors, HTTP
+  helpers, middleware — not a catch-all.
+- Scale the structure to the project. A three-endpoint internal tool
+  doesn't need this; a production API with a growing team does.
+
+---
+
+## Try the starter
+
+I maintain this structure as an open starter template with the module
+pattern, DI container, error handling, i18n, and observability wiring
+already in place:
+
+**[node-express-template](https://github.com/diwashbhattarai999/node-express-template)**
+
+It's meant to be cloned and adapted, not treated as gospel — the module
+boundaries and port/adapter split are the parts worth keeping regardless of
+what you swap out underneath.
+
+---
+
+## Conclusion
+
+A production Node.js backend doesn't need an exotic architecture — it needs
+a small number of consistent boundaries that hold as the codebase grows:
+business logic that doesn't know which third-party library fulfills its
+dependencies, controllers that stay thin, and modules that are self-contained
+enough to understand, test, and delete independently. Ports and adapters,
+feature modules, and explicit dependency wiring are three ways of enforcing
+the same underlying discipline — the framework and library choices
+underneath are the least important part of getting this right.
