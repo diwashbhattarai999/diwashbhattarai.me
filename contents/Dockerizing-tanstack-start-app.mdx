@@ -1,7 +1,7 @@
 ---
 title: "Dockerizing a TanStack Start App: A Production-Grade Multi-Stage Build"
 seoTitle: "Dockerizing a TanStack Start App"
-date: "2026-08-16"
+date: "2026-08-08"
 author: "Diwash Bhattarai"
 profile: "/profile.png"
 tags: ["Docker", "TanStack Start", "DevOps", "Vite", "Node.js"]
@@ -39,7 +39,7 @@ service doesn't:
    literal string baked into a `.js` file, not a lookup against the
    container's environment.
 2. **A server output produced by Nitro** (`.output/server/index.mjs`), which
-   *is* a normal Node process and *does* read runtime environment variables
+   _is_ a normal Node process and _does_ read runtime environment variables
    normally, for anything not prefixed `VITE_`.
 
 Treating both halves the same way is the single most common mistake in these
@@ -57,13 +57,17 @@ and expecting the already-built client to pick it up.
 # shared setup: pnpm, working directory
 
 FROM base AS deps
+
 # install dependencies only — cached independently of source changes
 
 FROM base AS builder
+
 # copy source + deps, run the actual build
 
 FROM node:24-alpine AS runner
+
 # copy only the build output + production node_modules
+
 `}
 />
 
@@ -78,7 +82,7 @@ commit:
   not the layer that ends up in the final image.
 - **`runner`** starts from a clean `node:24-alpine`, not from `builder`, and
   copies in only what's needed to run the app. None of the build tooling,
-  dev dependencies, or source files that were needed to *produce* `.output`
+  dev dependencies, or source files that were needed to _produce_ `.output`
   end up in the image that actually runs in production.
 
 ---
@@ -153,10 +157,12 @@ ENV NODE_OPTIONS=--max-old-space-size=4096
 
 ARG VITE_API_URL
 ARG VITE_APP_URL
-# ...other VITE_ args
+
+# ...other VITE\_ args
 
 ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_APP_URL=$VITE_APP_URL
+
 # ...
 
 RUN pnpm build`}
@@ -238,7 +244,7 @@ The `args:` block under `build:` is what forwards host-side environment
 variables (typically from a `.env` file Compose reads automatically) into
 the image as build arguments — the same mechanism as `docker build
 --build-arg`, just declared once instead of passed on every invocation. Any
-variable the app needs at *runtime* instead of build time (a database URL
+variable the app needs at _runtime_ instead of build time (a database URL
 for a backend service, for instance) would go under `environment:` on the
 service instead — a different mechanism for a different lifecycle.
 
