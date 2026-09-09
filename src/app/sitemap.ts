@@ -4,16 +4,10 @@ import { ROUTES } from "@/configs/routes";
 import { EDUCATION_DETAILS } from "@/features/education/constants/education.constants";
 import { EXPERIENCE_DETAILS } from "@/features/experience/constants/experience.constants";
 import { PROJECTS } from "@/features/projects/constants/project.constants";
-import { getBaseUrl } from "@/lib/get-base-url";
+import { getCanonicalUrl } from "@/lib/get-base-url";
 import { getAllPosts } from "@/lib/mdx";
 
-/**
- * Generates the sitemap for all indexable portfolio routes.
- *
- * @returns Sitemap entries for search engines.
- */
 export default function sitemap(): MetadataRoute.Sitemap {
-    const origin = getBaseUrl();
     const lastModified = new Date();
 
     const staticRoutes = [
@@ -27,47 +21,42 @@ export default function sitemap(): MetadataRoute.Sitemap {
         { changeFrequency: "monthly" as const, path: ROUTES.RESUME, priority: 0.7 },
         { changeFrequency: "yearly" as const, path: ROUTES.PRIVACY_POLICY, priority: 0.3 },
         { changeFrequency: "yearly" as const, path: ROUTES.TERMS, priority: 0.3 },
-        { changeFrequency: "monthly" as const, path: ROUTES.SITEMAP, priority: 0.4 },
     ];
 
     const educationRoutes = EDUCATION_DETAILS.map((education) => ({
         changeFrequency: "yearly" as const,
         lastModified,
         priority: 0.5,
-        url: `${origin}${ROUTES.EDUCATION_DETAIL(education.id)}`,
+        url: getCanonicalUrl(ROUTES.EDUCATION_DETAIL(education.id)),
     }));
 
     const experienceRoutes = EXPERIENCE_DETAILS.map((experience) => ({
         changeFrequency: "monthly" as const,
         lastModified,
         priority: 0.7,
-        url: `${origin}${ROUTES.EXPERIENCE_DETAIL(experience.slug)}`,
+        url: getCanonicalUrl(ROUTES.EXPERIENCE_DETAIL(experience.slug)),
     }));
 
     const projectRoutes = PROJECTS.map((project) => ({
         changeFrequency: "monthly" as const,
         lastModified,
         priority: 0.7,
-        url: `${origin}${ROUTES.PROJECT(project.id)}`,
+        url: getCanonicalUrl(ROUTES.PROJECT(project.id)),
     }));
 
     const blogRoutes = getAllPosts().map((post) => ({
         changeFrequency: "yearly" as const,
         lastModified: new Date(post.date),
         priority: 0.6,
-        url: `${origin}${ROUTES.BLOG(post.slug)}`,
+        url: getCanonicalUrl(ROUTES.BLOG(post.slug)),
     }));
 
-    return [
-        ...staticRoutes.map((route) => ({
-            changeFrequency: route.changeFrequency,
-            lastModified,
-            priority: route.priority,
-            url: route.path === ROUTES.HOME ? origin : `${origin}${route.path}`,
-        })),
-        ...educationRoutes,
-        ...experienceRoutes,
-        ...projectRoutes,
-        ...blogRoutes,
-    ];
+    const staticSitemapRoutes = staticRoutes.map((route) => ({
+        changeFrequency: route.changeFrequency,
+        lastModified,
+        priority: route.priority,
+        url: getCanonicalUrl(route.path),
+    }));
+
+    return [...staticSitemapRoutes, ...educationRoutes, ...experienceRoutes, ...projectRoutes, ...blogRoutes];
 }
