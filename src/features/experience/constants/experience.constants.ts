@@ -7,7 +7,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
         company: "Plex Bit Infosystems",
         current: true,
         description:
-            "Built and shipped production web platforms for sports, fitness, travel, ecommerce, and finance clients using React, Next.js, TypeScript, and Tailwind CSS. Designed GymGrow as a multi-tenant gym management system covering memberships, class scheduling, programming, finances, and Stripe Express payouts. Delivered Coach HQ and Striide as permission-driven coaching platforms with content workflows, subscriptions, and monetization. Launched marketing sites and dashboards for Euro Tours, Finance 360, and Luxe, and redesigned the Plex Bit homepage.",
+            "Built and shipped production web platforms for sports, fitness, travel, ecommerce, and finance clients using React, Next.js, TypeScript, and Tailwind CSS. Designed GymGrow as a gym operations suite with superadmin onboarding, branch-wise Grow HQ operations, and a TV programming display — covering memberships, classes, finances, and Stripe Express. Delivered Coach HQ and Striide as permission-driven coaching platforms with content workflows, subscriptions, and monetization. Launched marketing sites and dashboards for Euro Tours, Finance 360, and Luxe, and redesigned the Plex Bit homepage.",
         duration: "Jan 2026 - Present",
         logo: "/company/plexbit.png",
         projects: [
@@ -25,7 +25,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
         ],
         responsibilities: [
             "Build and ship production web platforms for sports, fitness, travel, ecommerce, and finance clients using React, Next.js, TypeScript, and Tailwind CSS.",
-            "Design GymGrow as a multi-tenant gym management system covering memberships, class scheduling, programming, finances, and Stripe Express payouts.",
+            "Design GymGrow as a gym operations suite with superadmin onboarding, branch-wise Grow HQ operations, TV programming display, memberships, classes, finances, and Stripe Express.",
             "Deliver Coach HQ and Striide as permission-driven coaching platforms with content workflows, subscriptions, and monetization.",
             "Launch marketing sites and dashboards for Euro Tours, Finance 360, and Luxe.",
             "Redesign the Plex Bit homepage.",
@@ -44,7 +44,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
             "Role-based Access",
         ],
         skillsGained:
-            "This is where I practiced shipping multi-tenant gym and coaching products, Stripe Express payouts, permission-driven dashboards, and client marketing sites in React, Next.js, TypeScript, and Tailwind CSS. GymGrow, Coach HQ, Striide, and the Plex Bit homepage redesign are the systems that work produced.",
+            "This is where I practiced shipping gym and coaching products, Stripe Express payouts, permission-driven dashboards, and client marketing sites in React, Next.js, TypeScript, and Tailwind CSS. GymGrow, Coach HQ, Striide, and the Plex Bit homepage redesign are the systems that work produced.",
         slug: "full-stack-software-developer-plexbit",
         title: "Full Stack Software Developer",
         website: "https://pbinfosystems.com",

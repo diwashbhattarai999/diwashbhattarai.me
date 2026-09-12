@@ -44,7 +44,7 @@ export const getRelatedPortfolioLinks = (
     }
 
     if (includesAny(haystack, ["rbac", "permission", "multi-tenant", "saas"])) {
-        addLink(ROUTES.PROJECT("gymgrow"), "GymGrow multi-tenant gym platform");
+        addLink(ROUTES.PROJECT("gymgrow"), "GymGrow gym operations platform");
         addLink(
             ROUTES.EXPERIENCE_DETAIL("full-stack-software-developer-plexbit"),
             "Full-stack work at Plex Bit Infosystems"

@@ -25,24 +25,31 @@ import type { Project } from "@/features/projects/types/project.types";
 export const PROJECTS: Project[] = [
     {
         conclusion:
-            "GymGrow is the largest product I shipped at Plex Bit — a full gym operations suite spanning platform onboarding, day-to-day gym management, and wall-ready programming displays.",
+            "GymGrow is the largest product I shipped at Plex Bit — three connected apps covering platform administration, branch-level gym operations, and wall-ready programming displays for the gym floor.",
         description:
-            "A multi-tenant gym management platform spanning superadmin onboarding, gym-owner operations, and a public TV programming display — with memberships, classes, finances, and Stripe Express payouts.",
+            "A gym operations suite with three apps: a superadmin platform for onboarding gym owners, a Grow HQ gym-owner dashboard for branch-wise operations, and a TV programming display members see on gym screens.",
         developmentChallenges:
-            "The hardest parts were modeling multi-tenant gyms with branch-level data, keeping role and permission checks consistent across every screen, wiring Stripe Express so owners could onboard and take payments without mixing accounts, and keeping the TV display readable from across a gym floor while staying in sync with published programming.",
+            "The hardest parts were scoping gym owners by how many branches they can run, keeping the entire Grow HQ dashboard branch-aware without mixing data across locations, wiring Stripe Express so each gym can take payments and open its Express dashboard from Grow HQ, modeling highly customizable memberships with freezes and cancellations, and keeping the TV display synced to published programming while staying readable from across a gym floor.",
         features: [
-            "Superadmin console for creating and managing gym owners",
-            "Name-change requests, profile settings, and email templates",
-            "Multi-branch gym management with members, staff, and subscriptions",
-            "Membership lifecycle including visits, payments, documents, activity, and freeze",
-            "Staff roles and permissions per gym",
-            "Class scheduling, recurring classes, and calendar views",
-            "Class programming shared to a public TV webapp",
-            "Finance tools for revenue, expenses, tax, transactions, and refunds",
-            "Memberships, leaderboards, and custom email communications",
-            "Settings for booking, gym hours, payments, waivers, profile, and training spaces",
-            "Stripe Express connection for payouts and transaction management",
-            "TV display with date/session selectors and on-screen size scaling",
+            "Superadmin: add gym owners and assign how many gym branches each owner can manage",
+            "Superadmin: review, verify, and approve gym name-change requests",
+            "Superadmin: broadcast communications to everyone on the platform",
+            "Superadmin: customize email templates for welcome, password setup, and other system emails",
+            "Gym owner: add multiple gym branches and run the full dashboard branch by branch",
+            "Gym owner: manage training spaces and set up gym branch profiles",
+            "Gym owner: control memberships and waivers shown to users before they sign up",
+            "Gym owner: connect Stripe Express and open the Stripe Express dashboard from Grow HQ",
+            "Gym owner: gym time settings — opening hours, timezones, special hours, reduced hours, and closings",
+            "Gym owner: booking settings — booking window, cancellation rules, no-show policy, capacity, and waitlist",
+            "Gym owner: membership freezes plus reusable class types for faster class creation",
+            "Gym owner: full calendar views with one-off and recurring classes, branch-wise",
+            "Gym owner: day-by-day programming management and reusable programming libraries",
+            "Gym owner: memberships — recurring, one-off, and free trials with freezes, cancellations, and highly customizable plans",
+            "Gym owner: finance dashboard — revenue, members, tax, expenses, transactions, and refunds",
+            "Gym owner: RBAC staff management with role-controlled dashboards",
+            "Gym owner: member management — branch assignment, subscriptions, visits, activity, and legal documents",
+            "TV display: enter a gym ID from the branch profile to show today's programming on big screens",
+            "TV display: date and class filters sized for gym-floor viewing",
         ],
         id: "gymgrow",
         image: GymGrowImg,
@@ -54,25 +61,26 @@ export const PROJECTS: Project[] = [
             { label: "TV Display", url: "https://uat-gymgrow.pbinfosystems.com" },
         ],
         overview:
-            "GymGrow (Grow HQ) is a multi-tenant gym operating system with three connected surfaces. Superadmins onboard gym owners and manage platform settings. Gym owners run branches, members, staff, classes, programming, and finances with role-based permissions. A public TV webapp displays session programming on gym screens. Together they cover the full loop from platform onboarding to floor-ready workouts.",
+            "GymGrow (Grow HQ) is a gym operations product built as three connected apps. The superadmin platform onboards gym owners, caps how many branches each owner can manage, reviews gym name-change requests, sends broadcast messages, and customizes system email templates. The gym-owner platform is where day-to-day work happens: owners add multiple branches and use the whole dashboard branch by branch — training spaces, profiles, memberships and waivers, Stripe Express, hours and booking rules, class types, calendars, programming libraries, finances, RBAC staff, and member lifecycle tracking. The TV programming portal is the floor-facing surface: a branch copies its gym ID, opens the TV site on a screen, enters that ID, and gets today's programming with date and class filters sized for big displays.",
         poweredBy:
-            "Gyms connect a Stripe Express account to collect payments and manage transactions, refunds, and payouts. Programming created in the gym dashboard publishes to the TV display for members.",
+            "Gym owners connect Stripe Express from Grow HQ to collect payments and jump into their Stripe Express dashboard for transactions, refunds, and payouts. Programming published in the gym dashboard is what the TV site shows after a branch enters its gym ID.",
         screenshots: [
             {
                 alt: "GymGrow superadmin gym owners dashboard",
-                caption: "Superadmin console for onboarding and managing gym owners across the platform.",
+                caption:
+                    "Superadmin console for gym owners, branch limits, name-change review, broadcasts, and email templates.",
                 src: GymGrowSuperadminImg,
             },
             {
                 alt: "GymGrow gym owner dashboard",
                 caption:
-                    "Gym-owner dashboard with revenue metrics, today's classes, member health, and branch operations.",
+                    "Grow HQ gym-owner dashboard — branch-wise operations, classes, members, and finance overview.",
                 src: GymGrowGymImg,
             },
             {
                 alt: "GymGrow TV programming display",
                 caption:
-                    "Public TV webapp showing warmup, strength, and metcon blocks scaled for gym screens.",
+                    "TV programming portal unlocked by gym ID, with date and class filters for gym-floor screens.",
                 src: GymGrowTVImg,
             },
         ],
