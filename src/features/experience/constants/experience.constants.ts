@@ -7,7 +7,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
         company: "Plex Bit Infosystems",
         current: true,
         description:
-            "Built and shipped production web platforms for sports, fitness, travel, ecommerce, and finance clients using React, Next.js, TypeScript, and Tailwind CSS. Designed GymGrow as a gym operations suite with superadmin onboarding, branch-wise Grow HQ operations, and a TV programming display — covering memberships, classes, finances, and Stripe Express. Delivered Coach HQ and Striide as permission-driven coaching platforms with content workflows, subscriptions, and monetization. Launched marketing sites and dashboards for Euro Tours, Finance 360, and Luxe, and redesigned the Plex Bit homepage.",
+            "Built and shipped production web platforms for sports, fitness, travel, ecommerce, and finance clients using React, Next.js, TypeScript, and Tailwind CSS. Designed GymGrow as a gym operations suite with superadmin onboarding, branch-wise Grow HQ operations, and a TV programming display — covering memberships, classes, finances, and Stripe Express. Delivered Coach HQ as a role-based coaching platform with fine-grained permissions, streaming drills, AI-assisted lesson plans, webinars, and Stripe/invoice billing, plus Striide as a permission-driven coaching product with content workflows, subscriptions, and monetization. Launched marketing sites and dashboards for Euro Tours, Finance 360, and Luxe, and redesigned the Plex Bit homepage.",
         duration: "Jan 2026 - Present",
         logo: "/company/plexbit.png",
         projects: [
@@ -26,7 +26,7 @@ export const EXPERIENCE_DETAILS: ExperienceDetail[] = [
         responsibilities: [
             "Build and ship production web platforms for sports, fitness, travel, ecommerce, and finance clients using React, Next.js, TypeScript, and Tailwind CSS.",
             "Design GymGrow as a gym operations suite with superadmin onboarding, branch-wise Grow HQ operations, TV programming display, memberships, classes, finances, and Stripe Express.",
-            "Deliver Coach HQ and Striide as permission-driven coaching platforms with content workflows, subscriptions, and monetization.",
+            "Deliver Coach HQ as a role-based coaching platform with fine-grained permissions, streaming-ready drills, AI-assisted lesson plans and playlists, webinars, subscriptions, vouchers, and Stripe or pay-by-invoice billing; deliver Striide as a permission-driven coaching product with content workflows, subscriptions, and monetization.",
             "Launch marketing sites and dashboards for Euro Tours, Finance 360, and Luxe.",
             "Redesign the Plex Bit homepage.",
         ],
