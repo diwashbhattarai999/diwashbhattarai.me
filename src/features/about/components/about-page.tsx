@@ -47,8 +47,8 @@ export const AboutPage = () => {
                     <p className="text-primary">{ABOUT_ME.headline}</p>
                     <h1 className="mt-2 font-bold text-4xl">{ABOUT_ME.name}</h1>
                     <p className="mt-4 text-muted-foreground">
-                        {ABOUT_ME.title}. Over 3.5 years building production web applications with React,
-                        Next.js, Node.js, NestJS, and TypeScript. A shorter overview is on <HomepageLink />.
+                        <HomepageLink>{ABOUT_ME.title}</HomepageLink>. Over 3.5 years building production web
+                        applications with React, Next.js, Node.js, NestJS, and TypeScript.
                     </p>
                 </BlurFade>
 

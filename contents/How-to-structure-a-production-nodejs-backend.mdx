@@ -12,12 +12,14 @@ readTime: "12 min read"
 category: "Node.js"
 ---
 
-Most Express starters answer "how do I add a route" and stop there. Six
+Most [Express Developers](https://www.diwashb.com.np) answer "how do I add a route" and stop there. Six
 months into a real project, the actual questions are different: where does
 validation live versus business logic, how do you swap SendGrid for another
 email provider without touching five files, how do you test a use case
 without spinning up MongoDB, and how does a new engineer find "the code that
 sends the welcome email" without grepping the whole repo.
+
+For developers working on production APIs, these architectural decisions become increasingly important as systems and teams grow. A [Senior Full-Stack Developer](https://www.sajanacharya7.com.np) working across frontend and backend systems will often need to think beyond individual features and establish boundaries that keep the entire application maintainable.
 
 This article walks through how I structure a production Node.js + TypeScript
 backend to answer those questions before they become problems — feature
@@ -51,8 +53,8 @@ a controller from reaching directly into a database model — which is how
 adapter swap.
 
 The fix is the same idea applied to a backend: organize by **feature module**,
-and inside each module, separate *what the business logic needs* from *how
-it's actually fulfilled*.
+and inside each module, separate _what the business logic needs_ from _how
+it's actually fulfilled_.
 
 ---
 
@@ -112,14 +114,14 @@ export class SendgridAdapter implements EmailPort {
     sgMail.setApiKey(env.SENDGRID_API_KEY);
   }
 
-  async send(payload: EmailPayload): Promise<void> {
-    await sgMail.send({
-      to: payload.to,
-      from: env.EMAIL_FROM,
-      subject: payload.subject,
-      html: payload.html,
-    });
-  }
+async send(payload: EmailPayload): Promise<void> {
+await sgMail.send({
+to: payload.to,
+from: env.EMAIL_FROM,
+subject: payload.subject,
+html: payload.html,
+});
+}
 }`}
 />
 
@@ -134,7 +136,7 @@ whole codebase for `sgMail`."
 The same pattern applies to `logging/`, `storage/`, and anything else that
 talks to something outside the process — a `LoggerPort` behind Winston, a
 `StoragePort` behind an S3 upload provider. The rule for what belongs in
-`contracts/` is simple: if a module needs it but doesn't need to know *how*
+`contracts/` is simple: if a module needs it but doesn't need to know _how_
 it's fulfilled, it's a port.
 
 ---
@@ -179,13 +181,13 @@ import { SendEmailDto } from "../dto/example.dto";
 export class SendEmailUseCase {
   constructor(private readonly emailPort: EmailPort) {}
 
-  async execute(dto: SendEmailDto): Promise<void> {
-    await this.emailPort.send({
-      to: dto.to,
-      subject: dto.subject,
-      html: \`<p>\${dto.message}</p>\`,
-    });
-  }
+async execute(dto: SendEmailDto): Promise<void> {
+await this.emailPort.send({
+to: dto.to,
+subject: dto.subject,
+html: \`<p>\${dto.message}</p>\`,
+});
+}
 }`}
 />
 
@@ -207,15 +209,15 @@ import { SendEmailUseCase } from "../../application/use-cases/send-email.use-cas
 export class ExampleController {
   constructor(private readonly sendEmailUseCase: SendEmailUseCase) {}
 
-  sendEmail = asyncHandler(async (req: Request, res: Response) => {
-    await this.sendEmailUseCase.execute(req.body);
-    return HttpResponse.success(res, { message: "Email sent" });
-  });
+sendEmail = asyncHandler(async (req: Request, res: Response) => {
+await this.sendEmailUseCase.execute(req.body);
+return HttpResponse.success(res, { message: "Email sent" });
+});
 }`}
 />
 
-If a controller starts accumulating `if` statements that decide *what*
-should happen rather than just *how to respond*, that logic belongs in the
+If a controller starts accumulating `if` statements that decide _what_
+should happen rather than just _how to respond_, that logic belongs in the
 use case, not the controller. The controller's job ends at calling the use
 case and shaping the HTTP response.
 
@@ -241,10 +243,10 @@ import { ExampleController } from "@/modules/example/presentation/controllers/ex
 export function buildContainer() {
   const emailPort = new SendgridAdapter();
 
-  const sendEmailUseCase = new SendEmailUseCase(emailPort);
-  const exampleController = new ExampleController(sendEmailUseCase);
+const sendEmailUseCase = new SendEmailUseCase(emailPort);
+const exampleController = new ExampleController(sendEmailUseCase);
 
-  return { exampleController };
+return { exampleController };
 }`}
 />
 
@@ -271,9 +273,9 @@ export class HttpResponse {
     return res.status(status).json({ success: true, data });
   }
 
-  static error(res: Response, message: string, status = 400) {
-    return res.status(status).json({ success: false, message });
-  }
+static error(res: Response, message: string, status = 400) {
+return res.status(status).json({ success: false, message });
+}
 }`}
 />
 
@@ -324,14 +326,14 @@ import { buildPagination } from "../helpers/build.pagination";
 export abstract class BaseRepository<T> {
   constructor(protected readonly model: Model<T>) {}
 
-  async findMany(filter: FilterQuery<T>, page: number, limit: number) {
-    const { skip, take } = buildPagination(page, limit);
-    const [items, total] = await Promise.all([
-      this.model.find(filter).skip(skip).limit(take),
-      this.model.countDocuments(filter),
-    ]);
-    return { items, total };
-  }
+async findMany(filter: FilterQuery<T>, page: number, limit: number) {
+const { skip, take } = buildPagination(page, limit);
+const [items, total] = await Promise.all([
+this.model.find(filter).skip(skip).limit(take),
+this.model.countDocuments(filter),
+]);
+return { items, total };
+}
 }`}
 />
 
@@ -396,8 +398,8 @@ confident you'll never replace.
 
 ## Practical recommendations
 
-- Separate *what business logic needs* (`contracts/`) from *how it's
-  fulfilled* (`infrastructure/`) for anything talking to an external
+- Separate _what business logic needs_ (`contracts/`) from _how it's
+  fulfilled_ (`infrastructure/`) for anything talking to an external
   service.
 - Keep controllers thin — translation between HTTP and a use case, nothing
   that makes a business decision.

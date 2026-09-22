@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 
 import BlurFade from "@/components/animations/blur-fade";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -131,7 +132,16 @@ export const BlogDetailPage = async ({ slug }: BlogDetailPageProps) => {
 
             <BlurFade delay={0.2}>
                 <article className="prose xl:prose-lg dark:prose-invert prose-code:wrap-break-word [&_pre]:wrap-break-word mt-8 w-full min-w-0 max-w-full prose-pre:max-w-full overflow-x-auto prose-pre:overflow-x-auto prose-hr:border-input md:max-w-none [&_pre]:whitespace-pre-wrap">
-                    <MDXRemote components={{ CodeBlock }} options={{ blockJS: false }} source={content} />
+                    <MDXRemote
+                        components={{ CodeBlock }}
+                        options={{
+                            blockJS: false,
+                            mdxOptions: {
+                                remarkPlugins: [remarkGfm],
+                            },
+                        }}
+                        source={content}
+                    />
                 </article>
             </BlurFade>
 

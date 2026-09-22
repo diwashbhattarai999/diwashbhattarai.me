@@ -50,8 +50,10 @@ export const ProjectsSection = ({ showViewAll = false, limit }: ProjectsSectionP
                     ) : null}
                 </div>
                 {isPreview ? null : (
-                    <SectionSubTitle>
-                        Case studies of shipped products. Featured work is also previewed on <HomepageLink />.
+                    <SectionSubTitle className="text-muted-foreground">
+                        Case studies of shipped products by a{" "}
+                        <HomepageLink>Full Stack Developer</HomepageLink>. Explore featured work, projects,
+                        and real-world solutions built across modern web technologies.
                     </SectionSubTitle>
                 )}
             </div>

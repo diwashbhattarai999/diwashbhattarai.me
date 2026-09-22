@@ -25,9 +25,10 @@ export const BlogsPage = () => {
                 <BlurFade delay={0.04}>
                     <div>
                         <h1 className="font-bold text-3xl">Blog</h1>
-                        <SectionSubTitle className="mt-2 mb-8">
-                            Notes on React, Next.js, and Node.js. The rest of the portfolio is on{" "}
-                            <HomepageLink />.
+                        <SectionSubTitle className="mt-2 mb-8 text-muted-foreground">
+                            Notes on <HomepageLink>React, Next.js, and Node.js</HomepageLink>, covering
+                            practical development, architecture, performance, and lessons from building
+                            production applications.
                         </SectionSubTitle>
                     </div>
                 </BlurFade>

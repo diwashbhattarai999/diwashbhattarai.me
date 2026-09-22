@@ -20,8 +20,9 @@ export const ExperiencePage = () => (
         <BlurFade delay={0.04}>
             <h1 className="mb-4 font-bold text-3xl">Experience</h1>
             <p className="mb-8 max-w-3xl text-muted-foreground leading-relaxed">
-                Full-stack software development roles in Nepal, from internships through current product work.
-                The shorter career overview lives on <HomepageLink />.
+                <HomepageLink>Full-stack software development</HomepageLink> roles in Nepal, from internships
+                to current product work. Explore Diwash Bhattarai’s experience across modern web technologies
+                and shipped products.
             </p>
         </BlurFade>
         <ExperienceList />
