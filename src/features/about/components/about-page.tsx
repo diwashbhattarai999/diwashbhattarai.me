@@ -56,7 +56,11 @@ export const AboutPage = () => {
                     <section className="mt-10 space-y-4 text-muted-foreground leading-relaxed">
                         <h2 className="font-semibold text-foreground text-xl">Professional introduction</h2>
                         {ABOUT_INTRODUCTION.map((paragraph) => (
-                            <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+                            <p
+                                // biome-ignore lint/security/noDangerouslySetInnerHtml: controlled markup from about constants
+                                dangerouslySetInnerHTML={{ __html: paragraph }}
+                                key={paragraph.slice(0, 40)}
+                            />
                         ))}
                     </section>
                 </BlurFade>

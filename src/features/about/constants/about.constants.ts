@@ -1,4 +1,5 @@
 import ProfileImg from "@/assets/images/profile2.webp";
+import { WRITING_LINKS } from "@/features/blogs/constants/writing-links.constants";
 
 export const ABOUT_ME = {
     description: [
@@ -14,7 +15,7 @@ export const ABOUT_ME = {
 } as const;
 
 export const ABOUT_INTRODUCTION = [
-    "I am Diwash Bhattarai, a software developer based in Nepal. I work as a full stack software engineer on production web applications — the public sites people land on, the dashboards teams run day to day, and the APIs that keep those products in sync.",
+    `I am Diwash Bhattarai, a software developer based in Nepal. I work as a <a class="text-primary underline-offset-4 hover:underline" href="${WRITING_LINKS.fullStackNepal.href}">full stack software engineer</a> on production web applications — the public sites people land on, the dashboards teams run day to day, and the APIs that keep those products in sync.`,
     "Most of my recent work is as a React and Next.js developer on the frontend, with Node.js and NestJS on the backend. I care about typed TypeScript codebases, permission-aware interfaces, and shipping features that stay maintainable after launch.",
 ] as const;
 
