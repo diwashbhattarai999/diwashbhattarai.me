@@ -15,6 +15,7 @@ const leagueSpartan = League_Spartan({
     subsets: ["latin"],
 });
 
+const GA_MEASUREMENT_ID = "G-FEDGC18Y2N";
 const GTM_ID = "GTM-T56MLZDS";
 
 export const metadata: Metadata = getSiteMetadata();
@@ -33,6 +34,17 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${GTM_ID}');`}
+                </Script>
+                <Script
+                    async
+                    src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+                    strategy="afterInteractive"
+                />
+                <Script id="google-analytics" strategy="afterInteractive">
+                    {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
                 </Script>
             </head>
             <body className={`${leagueSpartan.className} antialiased`} suppressHydrationWarning>
